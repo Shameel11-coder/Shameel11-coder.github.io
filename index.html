@@ -14,7 +14,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Shameel's Tic-Tac-Toe</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -25,546 +25,61 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #09090b 70%, #030712 100%);
+      background: #030712;
       color: #f8fafc;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px;
       overflow-x: hidden;
     }
 
-    .screen {
-      width: 100%;
-      max-width: 390px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: zoomIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    .hidden { display: none !important; }
 
-    .hidden {
-      display: none !important;
-    }
-
-    @keyframes zoomIn {
-      from { opacity: 0; transform: scale(0.95) translateY(10px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    /* 3D TITLE & BADGE */
-    .brand-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* POSTER WRAPPER */
+    #start-screen {
+      width: 100vw;
+      max-width: 430px;
+      height: 100vh;
+      max-height: 932px;
       position: relative;
-      margin-bottom: 20px;
-    }
-
-    .crown-icon {
-      font-size: 2.2rem;
-      filter: drop-shadow(0 0 12px #fbbf24);
-      animation: float 2.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0px) rotate(-4deg); }
-      100% { transform: translateY(-8px) rotate(4deg); }
-    }
-
-    .xo-logo {
-      width: 90px;
-      height: 90px;
-      background: linear-gradient(145deg, #0284c7, #2563eb);
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: #ffffff;
-      border: 3px solid #38bdf8;
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.65), inset 0 3px 6px rgba(255,255,255,0.4);
-      margin-top: -6px;
-    }
-
-    .main-title {
-      font-size: 2.6rem;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      background: linear-gradient(180deg, #ffffff 10%, #38bdf8 65%, #0284c7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 4px 15px rgba(2, 132, 199, 0.5));
-      margin-top: 10px;
-      text-transform: uppercase;
-    }
-
-    .tagline {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: #e2e8f0;
-      text-align: center;
-      margin-top: 4px;
-      line-height: 1.4;
-    }
-
-    .tagline-sub {
-      color: #facc15;
-      font-weight: 700;
-      display: block;
-      margin-top: 2px;
-      filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.5));
-    }
-
-    /* GLASS CARD CONTROLS */
-    .menu-card {
-      width: 100%;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1.5px solid rgba(56, 189, 248, 0.25);
-      backdrop-filter: blur(16px);
-      border-radius: 28px;
-      padding: 22px 18px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      background: url('file_0000000074188208aabdc190d10e5f39.png') no-repeat center center;
+      background-size: cover;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.8);
     }
 
-    .section-label {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #94a3b8;
+    /* INVISIBLE / GLOWING CLICKABLE OVERLAYS MATCHING THE IMAGE */
+    .overlay-controls {
+      position: absolute;
+      bottom: 7%;
+      left: 7.5%;
+      right: 7.5%;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .toggle-container {
-      background: #090d16;
-      border-radius: 18px;
-      padding: 5px;
+    .touch-row {
       display: flex;
-      border: 1.5px solid #1e293b;
-      gap: 6px;
+      height: 48px;
+      gap: 10px;
     }
 
-    .toggle-btn {
+    .touch-btn {
       flex: 1;
-      padding: 12px 10px;
       border: none;
-      background: transparent;
-      color: #94a3b8;
-      font-size: 0.88rem;
-      font-weight: 700;
+      background: rgba(2, 132, 199, 0.01);
+      cursor: pointer;
       border-radius: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
     }
 
-    .toggle-btn.active {
-      background: linear-gradient(145deg, #0284c7, #0ea5e9);
-      color: #ffffff;
-      box-shadow: 0 4px 18px rgba(14, 165, 233, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
+    .touch-btn.active {
+      border: 2px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.25);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
     }
 
-    /* 3D YELLOW START BUTTON */
-    .btn-start-game {
-      width: 100%;
-      margin-top: 10px;
-      padding: 16px 20px;
-      background: linear-gradient(180deg, #fde047 0%, #eab308 50%, #ca8a04 100%);
-      border: none;
-      border-radius: 9999px;
-      font-size: 1.25rem;
-      font-weight: 900;
-      color: #0f172a;
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(234, 179, 8, 0.45), inset 0 2px 4px rgba(255,255,255,0.7), inset 0 -3px 4px rgba(161, 98, 7, 0.6);
-      transition: all 0.15s ease;
-    }
-
-    .btn-start-game:active {
-      transform: scale(0.97) translateY(2px);
-      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);
-    }
-
-    .good-luck-text {
-      margin-top: 16px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #38bdf8;
-      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5));
-      letter-spacing: 0.5px;
-    }
-
-    /* GAME PLAY SCREEN */
-    .game-top-bar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .nav-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #94a3b8;
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .scoreboard-box {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .score-card {
-      flex: 1;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid #334155;
-      padding: 10px 4px;
-      border-radius: 16px;
-      text-align: center;
-    }
-
-    .score-title { font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
-    .score-val { font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin-top: 2px; }
-
-    .game-status-bubble {
-      background: #1e293b;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 8px 18px;
-      border-radius: 9999px;
-      font-weight: 700;
-      color: #e2e8f0;
-      margin-bottom: 14px;
-      font-size: 0.95rem;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    .game-board {
-      width: 100%;
-      aspect-ratio: 1/1;
-      background: rgba(15, 23, 42, 0.9);
-      border: 2px solid rgba(56, 189, 248, 0.3);
-      border-radius: 26px;
-      padding: 12px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    }
-
-    .cell {
-      background: #090d16;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      font-weight: 900;
-      cursor: pointer;
-      border: 1px solid #1e293b;
-      transition: all 0.15s ease;
-      user-select: none;
-    }
-
-    .cell:active { transform: scale(0.94); }
-    .cell.x {
-      color: #38bdf8;
-      text-shadow: 0 0 16px rgba(56, 189, 248, 0.8);
-    }
-    .cell.o {
-      color: #ec4899;
-      text-shadow: 0 0 16px rgba(236, 72, 153, 0.8);
-    }
-
-    .cell.win-cell {
-      background: #1e3a5f;
-      border-color: #38bdf8;
-      animation: pulseWin 0.8s infinite alternate;
-    }
-
-    @keyframes pulseWin {
-      0% { transform: scale(0.98); }
-      100% { transform: scale(1.04); }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- WELCOME / THUMBNAIL SCREEN -->
-  <div id="start-screen" class="screen">
-    <div class="brand-section">
-      <div class="crown-icon">👑</div>
-      <div class="xo-logo">XO</div>
-      <h1 class="main-title">Tic-Tac-Toe</h1>
-      <p class="tagline">
-        കളിക്കാൻ റെഡിയാണോ? 
-        <span class="tagline-sub">മോഡ് തിരഞ്ഞെടുത്ത് തുടങ്ങാം!</span>
-      </p>
-    </div>
-
-    <div class="menu-card">
-      <div>
-        <div class="section-label">🎮 നിങ്ങളുടെ മോഡ് തിരഞ്ഞെടുക്കുക</div>
-        <div class="toggle-container">
-          <button class="toggle-btn active" id="btn-mode-ai" onclick="selectMode('ai')">
-            🤖 Unbeatable AI
-          </button>
-          <button class="toggle-btn" id="btn-mode-2p" onclick="selectMode('2p')">
-            👥 2 Players
-          </button>
-        </div>
-      </div>
-
-      <div id="symbol-selection-block">
-        <div class="section-label">👤 നിങ്ങളുടെ പേര് / ചിഹ്നം</div>
-        <div class="toggle-container">
-          <button class="toggle-btn active" id="btn-sym-x" onclick="selectSymbol('X')">
-            X (ആദ്യം കളിക്കുക)
-          </button>
-          <button class="toggle-btn" id="btn-sym-o" onclick="selectSymbol('O')">
-            O (രണ്ടാമത്)
-          </button>
-        </div>
-      </div>
-
-      <button class="btn-start-game" onclick="launchGame()">
-        <span>🚀</span> START GAME <span>➔</span>
-      </button>
-    </div>
-
-    <div class="good-luck-text">~ Good Luck! ~</div>
-  </div>
-
-  <!-- GAME PLAY SCREEN -->
-  <div id="game-screen" class="screen hidden">
-    <div class="game-top-bar">
-      <button class="nav-btn" onclick="goToHome()">⬅️ Back</button>
-      <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Unbeatable AI</span>
-      <button class="nav-btn" onclick="resetCurrentGame()">🔄 Restart</button>
-    </div>
-
-    <div class="scoreboard-box">
-      <div class="score-card">
-        <div class="score-title" id="p1-name">You (X)</div>
-        <div class="score-val" id="val-score-p1">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title">Draw</div>
-        <div class="score-val" id="val-score-draw">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title" id="p2-name">AI (O)</div>
-        <div class="score-val" id="val-score-p2">0</div>
-      </div>
-    </div>
-
-    <div class="game-status-bubble" id="game-status">നിങ്ങളുടെ ഊഴം (X)</div>
-
-    <div class="game-board" id="board">
-      <div class="cell" onclick="handleMove(0)"></div>
-      <div class="cell" onclick="handleMove(1)"></div>
-      <div class="cell" onclick="handleMove(2)"></div>
-      <div class="cell" onclick="handleMove(3)"></div>
-      <div class="cell" onclick="handleMove(4)"></div>
-      <div class="cell" onclick="handleMove(5)"></div>
-      <div class="cell" onclick="handleMove(6)"></div>
-      <div class="cell" onclick="handleMove(7)"></div>
-      <div class="cell" onclick="handleMove(8)"></div>
-    </div>
-  </div>
-
-  <script>
-    let mode = 'ai';
-    let humanSymbol = 'X';
-    let aiSymbol = 'O';
-    let board = ["", "", "", "", "", "", "", "", ""];
-    let currentTurn = "X";
-    let isGamePlayable = true;
-    let scores = { p1: 0, draw: 0, p2: 0 };
-
-    const winCombos = [
-      [0,1,2], [3,4,5], [6,7,8],
-      [0,3,6], [1,4,7], [2,5,8],
-      [0,4,8], [2,4,6]
-    ];
-
-    function selectMode(m) {
-      mode = m;
-      document.getElementById('btn-mode-ai').classList.toggle('active', m === 'ai');
-      document.getElementById('btn-mode-2p').classList.toggle('active', m === '2p');
-      document.getElementById('symbol-selection-block').style.display = (m === 'ai') ? 'block' : 'none';
-    }
-
-    function selectSymbol(sym) {
-      humanSymbol = sym;
-      aiSymbol = (sym === 'X') ? 'O' : 'X';
-      document.getElementById('btn-sym-x').classList.toggle('active', sym === 'X');
-      document.getElementById('btn-sym-o').classList.toggle('active', sym === 'O');
-    }
-
-    function launchGame() {
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('game-screen').classList.remove('hidden');
-
-      if (mode === 'ai') {
-        document.getElementById('label-game-mode').textContent = "Unbeatable AI";
-        document.getElementById('p1-name').textContent = `You (${humanSymbol})`;
-        document.getElementById('p2-name').textContent = `AI (${aiSymbol})`;
-      } else {
-        document.getElementById('label-game-mode').textContent = "2 Players";
-        document.getElementById('p1-name').textContent = "Player (X)";
-        document.getElementById('p2-name').textContent = "Player (O)";
-      }
-
-      resetCurrentGame();
-    }
-
-    function goToHome() {
-      document.getElementById('game-screen').classList.add('hidden');
-      document.getElementById('start-screen').classList.remove('hidden');
-    }
-
-    function handleMove(idx) {
-      if (board[idx] !== "" || !isGamePlayable) return;
-
-      playStep(idx, currentTurn);
-
-      if (checkWin(board, currentTurn)) {
-        finishGame(currentTurn);
-        return;
-      }
-
-      if (board.every(cell => cell !== "")) {
-        finishGame("draw");
-        return;
-      }
-
-      if (mode === 'ai') {
-        currentTurn = aiSymbol;
-        isGamePlayable = false;
-        document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
-        
-        setTimeout(() => {
-          const aiBest = getBestMove();
-          playStep(aiBest, aiSymbol);
-
-          if (checkWin(board, aiSymbol)) {
-            finishGame(aiSymbol);
-          } else if (board.every(c => c !== "")) {
-            finishGame("draw");
-          } else {
-            currentTurn = humanSymbol;
-            isGamePlayable = true;
-            document.getElementById('game-status').textContent = `നിങ്ങളുടെ ഊഴം (${humanSymbol})`;
-          }
-        }, 400);
-      } else {
-        currentTurn = (currentTurn === "X") ? "O" : "X";
-        document.getElementById('game-status').textContent = `പ്ലെയർ ${currentTurn}-ന്റെ ഊഴം`;
-      }
-    }
-
-    function playStep(idx, player) {
-      board[idx] = player;
-      const el = document.getElementsByClassName('cell')[idx];
-      el.textContent = player;
-      el.classList.add(player.toLowerCase());
-    }
-
-    function checkWin(b, player) {
-      return winCombos.some(combo => combo.every(i => b[i] === player));
-    }
-
-    function getWinPath(player) {
-      return winCombos.find(combo => combo.every(i => board[i] === player));
-    }
-
-    function finishGame(winner) {
-      isGamePlayable = false;
-      if (winner === "draw") {
-        document.getElementById('game-status').textContent = "കളി സമനിലയിൽ! 🤝";
-        scores.draw++;
-      } else {
-        const path = getWinPath(winner);
-        if (path) {
-          path.forEach(i => document.getElementsByClassName('cell')[i].classList.add('win-cell'));
-        }
-        if (mode === 'ai') {
-          document.getElementById('game-status').textContent = (winner === humanSymbol) ? "🎉 നിങ്ങൾ ജയിച്ചു!" : "🤖 AI ജയിച്ചു!";
-          if (winner === humanSymbol) scores.p1++; else scores.p2++;
-        } else {
-          document.getElementById('game-status').textContent = `🎉 പ്ലെയർ ${winner} ജയിച്ചു!`;
-          if (winner === "X") scores.p1++; else scores.p2++;
-        }
-      }
-      refreshScores();
-    }
-
-    function refreshScores() {
-      document.getElementById('val-score-p1').textContent = scores.p1;
-      document.getElementById('val-score-draw').textContent = scores.draw;
-      document.getElementById('val-score-p2').textContent = scores.p2;
-    }
-
-    function resetCurrentGame() {
-      board = ["", "", "", "", "", "", "", "", ""];
-      currentTurn = "X";
-      isGamePlayable = true;
-      const cells = document.getElementsByClassName('cell');
-      for (let c of cells) {
-        c.textContent = "";
-        c.className = "cell";
-      }
-
-      if (mode === 'ai') {
-        if (humanSymbol === 'O') {
-          isGamePlayable = false;
-          document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
-          setTimeout(() => {
-            const initialCorners = [0, 2, 4, 6, 8];
-            const move = initialCorners[Math.floor(Math.random() * initialCorners.length)];
-            playStep(move, 'X');
-            currentTurn = 'O';
-            isGamePlayable = true;
-            document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (O)";
-          }, 350);
-        } else {
-          document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (X)";
-        }
-      } else {
-        document.getElementById('game-status').textContent = "പ്ലെയർ X-ന്റെ ഊഴം";
-      }
-    }
-
-    // Minimax Unbeatable Logic
-    function getBestMove() {
-      let bestScore = -Infinity;
-      let move = -1;
-      for (let i = 0; i < 9; i++) {
-        if (board
-  
+    .touch-start
