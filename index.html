@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shameel's Tic-Tac-Toe</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    h1 { font-size: 2rem; color: #38bdf8; margin-bottom: 8px; text-align: center; }
+    .subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; }
+    .scoreboard { display: flex; gap: 15px; margin-bottom: 20px; }
+    .score-card { background: #1e293b; padding: 10px 16px; border-radius: 12px; text-align: center; min-width: 80px; border: 1px solid #334155; }
+    .score-title { font-size: 0.8rem; color: #94a3b8; }
+    .score-val { font-size: 1.4rem; font-weight: bold; }
+    .status { font-size: 1.1rem; margin-bottom: 20px; font-weight: 500; min-height: 28px; color: #facc15; }
+    .grid { display: grid; grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px); gap: 10px; margin-bottom: 25px; }
+    .cell { background: #1e293b; border: 2px solid #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; cursor: pointer; transition: all 0.2s; user-select: none; }
+    .cell:active { transform: scale(0.95); }
+    .cell.x { color: #38bdf8; }
+    .cell.o { color: #f43f5e; }
+    .btn { background: #2563eb; color: #fff; border: none; padding: 12px 24px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .btn:active { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <h1>Tic-Tac-Toe</h1>
+  <div class="subtitle">Created by Shameel</div>
+  
+  <div class="scoreboard">
+    <div class="score-card"><div class="score-title">X (You)</div><div class="score-val" id="scoreX">0</div></div>
+    <div class="score-card"><div class="score-title">Draw</div><div class="score-val" id="scoreDraw">0</div></div>
+    <div class="score-card"><div class="score-title">O (Comp)</div><div class="score-val" id="scoreO">0</div></div>
+  </div>
+
+  <div class="status" id="status">നിങ്ങളുടെ ഊഴം (X)</div>
+
+  <div class="grid" id="board">
+    <div class="cell" onclick="makeMove(0)"></div>
+    <div class="cell" onclick="makeMove(1)"></div>
+    <div class="cell" onclick="makeMove(2)"></div>
+    <div class="cell" onclick="makeMove(3)"></div>
+    <div class="cell" onclick="makeMove(4)"></div>
+    <div class="cell" onclick="makeMove(5)"></div>
+    <div class="cell" onclick="makeMove(6)"></div>
+    <div class="cell" onclick="makeMove(7)"></div>
+    <div class="cell" onclick="makeMove(8)"></div>
+  </div>
+
+  <button class="btn" onclick="resetGame()">Restart Game</button>
+
+  <script>
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let isGameOver = false;
+    let scores = { X: 0, O: 0, Draw: 0 };
+    const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+    function makeMove(i) {
+      if (board[i] || isGameOver) return;
+      board[i] = "X";
+      render();
+      if (checkWin("X")) {
+        document.getElementById("status").innerText = "🎉 നിങ്ങൾ ജയിച്ചു!";
+        scores.X++; updateScores(); isGameOver = true; return;
+      }
+      if (board.every(c => c)) {
+        document.getElementById("status").innerText = "തുല്യത (Draw)!";
+        scores.Draw++; updateScores(); isGameOver = true; return;
+      }
+      document.getElementById("status").innerText = "Computer ചിന്തിക്കുന്നു...";
+      setTimeout(botMove, 400);
+    }
+
+    function botMove() {
+      if (isGameOver) return;
+      const empties = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+      if (!empties.length) return;
+      const move = empties[Math.floor(Math.random() * empties.length)];
+      board[move] = "O";
+      render();
+      if (checkWin("O")) {
+        document.getElementById("status").innerText = "Computer ജയിച്ചു!";
+        scores.O++; updateScores(); isGameOver = true; return;
+      }
+      document.getElementById("status").innerText = "നിങ്ങളുടെ ഊഴം (X)";
+    }
+
+    function checkWin(p) {
+      return wins.some(c => c.every(i => board[i] === p));
+    }
+
+    function render() {
+      const cells = document.querySelectorAll(".cell");
+      cells.forEach((cell, i) => {
+        cell.innerText = board[i];
+        cell.className = "cell " + (board[i] ? board[i].toLowerCase() : "");
+      });
+    }
+
+    function updateScores() {
+      document.getElementById("scoreX").innerText = scores.X;
+      document.getElementById("scoreO").innerText = scores.O;
+      document.getElementById("scoreDraw").innerText = scores.Draw;
+    }
+
+    function resetGame() {
+      board = ["", "", "", "", "", "", "", "", ""];
+      isGameOver = false;
+      document.getElementById("status").innerText = "നിങ്ങളുടെ ഊഴം (X)";
+      render();
+    }
+  </script>
+</body>
+</html>
+  
