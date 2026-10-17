@@ -26,27 +26,26 @@
     }
 
     body {
-      background: #020617;
+      background: #060913;
       color: #f8fafc;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 6px;
+      padding: 10px;
       overflow-x: hidden;
     }
 
     .hidden { display: none !important; }
 
-    /* FULL POSTER WRAPPER */
+    /* START SCREEN POSTER */
     #start-screen {
       position: relative;
       width: 100%;
-      max-width: 420px;
+      max-width: 410px;
       border-radius: 26px;
       overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.25);
-      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
       user-select: none;
     }
 
@@ -58,84 +57,77 @@
       user-select: none;
     }
 
-    /* DIRECT ON-IMAGE CLICKABLE HOTSPOTS */
+    /* INVISIBLE HOTSPOTS */
     .hotspot {
       position: absolute;
       cursor: pointer;
-      border-radius: 16px;
-      z-index: 99;
+      border-radius: 14px;
+      z-index: 10;
       background: rgba(255, 255, 255, 0.001);
       border: 2px solid transparent;
-      transition: all 0.15s ease;
+      outline: none;
     }
 
-    /* Mode: Unbeatable AI */
     #hotspot-ai {
-      top: 49%;
+      top: 49.5%;
       left: 13%;
       width: 40%;
-      height: 9%;
+      height: 8.5%;
     }
 
-    /* Mode: 2 Players */
     #hotspot-2p {
-      top: 49%;
+      top: 49.5%;
       left: 55%;
       width: 33%;
-      height: 9%;
+      height: 8.5%;
     }
 
-    /* Symbol: X */
     #hotspot-x {
-      top: 63.5%;
+      top: 63.8%;
       left: 13%;
       width: 39%;
-      height: 9%;
+      height: 8.5%;
     }
 
-    /* Symbol: O */
     #hotspot-o {
-      top: 63.5%;
+      top: 63.8%;
       left: 54%;
       width: 33%;
-      height: 9%;
+      height: 8.5%;
     }
 
-    /* Active Glowing State over selected option */
+    /* Subtle indicator border without massive shield/glow */
     .hotspot.selected {
-      border: 2.5px solid #38bdf8 !important;
-      background: rgba(56, 189, 248, 0.28) !important;
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
+      border: 2px solid #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.12) !important;
     }
 
-    /* Start Button Hotspot */
     #hotspot-start {
-      top: 73%;
+      top: 73.2%;
       left: 12%;
       width: 76%;
-      height: 11%;
+      height: 10%;
       border-radius: 9999px;
     }
 
     #hotspot-start:active {
-      background: rgba(250, 204, 21, 0.45) !important;
-      box-shadow: 0 0 25px rgba(250, 204, 21, 0.9);
-      transform: scale(0.97);
+      background: rgba(250, 204, 21, 0.3) !important;
+      transform: scale(0.98);
     }
 
-    /* GAME PLAY SCREEN */
+    /* GAME SCREEN */
     #game-screen {
       width: 100%;
-      max-width: 390px;
+      max-width: 380px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
-      animation: popIn 0.3s ease;
+      gap: 16px;
+      animation: fadeIn 0.25s ease-out;
     }
 
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.95); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
       to { opacity: 1; transform: scale(1); }
     }
 
@@ -147,8 +139,8 @@
     }
 
     .nav-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
+      background: #111827;
+      border: 1px solid #1f2937;
       color: #94a3b8;
       padding: 8px 16px;
       border-radius: 12px;
@@ -160,68 +152,88 @@
     .scoreboard-box {
       width: 100%;
       display: flex;
-      gap: 8px;
+      gap: 10px;
     }
 
     .score-card {
       flex: 1;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid #334155;
-      padding: 10px 4px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 12px 6px;
       border-radius: 16px;
       text-align: center;
     }
 
-    .score-title { font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
-    .score-val { font-size: 1.45rem; font-weight: 900; color: #38bdf8; }
+    .score-title { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+    .score-val { font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin-top: 2px; }
 
     .game-status-bubble {
-      background: #1e293b;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 8px 20px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 8px 22px;
       border-radius: 9999px;
       font-weight: 700;
       color: #e2e8f0;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
     }
 
+    /* PERFECT EQUAL GRID BOARD */
     .game-board {
       width: 100%;
-      aspect-ratio: 1/1;
-      background: rgba(15, 23, 42, 0.9);
-      border: 2px solid rgba(56, 189, 248, 0.3);
+      height: 350px;
+      max-height: 85vw;
+      background: #0b1120;
+      border: 1.5px solid #1e293b;
       border-radius: 24px;
       padding: 12px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
       gap: 10px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .cell {
-      background: #090d16;
-      border-radius: 18px;
+      background: #060a14;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 3rem;
       font-weight: 900;
       cursor: pointer;
-      border: 1px solid #1e293b;
+      border: 1px solid #172033;
       user-select: none;
-      transition: all 0.15s ease;
+      line-height: 1;
+      overflow: hidden;
+      transition: background 0.15s, transform 0.1s;
     }
 
-    .cell:active { transform: scale(0.94); }
-    .cell.x { color: #38bdf8; text-shadow: 0 0 16px rgba(56, 189, 248, 0.8); }
-    .cell.o { color: #ec4899; text-shadow: 0 0 16px rgba(236, 72, 153, 0.8); }
-    .cell.win-cell { background: #1e3a5f; border-color: #38bdf8; animation: pulseWin 0.8s infinite alternate; }
-    @keyframes pulseWin { from { transform: scale(0.98); } to { transform: scale(1.04); } }
+    .cell:active { transform: scale(0.95); }
+    .cell.x {
+      color: #38bdf8;
+      text-shadow: 0 0 14px rgba(56, 189, 248, 0.7);
+    }
+    .cell.o {
+      color: #f43f5e;
+      text-shadow: 0 0 14px rgba(244, 63, 94, 0.7);
+    }
+
+    .cell.win-cell {
+      background: #0c2340;
+      border-color: #38bdf8;
+      animation: winGlow 0.8s infinite alternate;
+    }
+
+    @keyframes winGlow {
+      0% { transform: scale(0.97); }
+      100% { transform: scale(1.03); }
+    }
   </style>
 </head>
 <body>
 
-  <!-- FULL 3D POSTER SCREEN WITH DIRECT TOUCH -->
+  <!-- FULL 3D POSTER START SCREEN -->
   <div id="start-screen">
     <img src="file_0000000074188208aabdc190d10e5f39.png" alt="3D Tic Tac Toe Poster" class="poster-img">
 
@@ -233,11 +245,11 @@
     <button type="button" id="hotspot-x" class="hotspot selected" onclick="pickSym('X')"></button>
     <button type="button" id="hotspot-o" class="hotspot" onclick="pickSym('O')"></button>
 
-    <!-- Start Game Button Hotspot -->
+    <!-- Start Button Hotspot -->
     <button type="button" id="hotspot-start" class="hotspot" onclick="launchGame()"></button>
   </div>
 
-  <!-- GAME PLAY SCREEN -->
+  <!-- EQUAL GRID GAME SCREEN -->
   <div id="game-screen" class="hidden">
     <div class="game-top-bar">
       <button class="nav-btn" onclick="goToHome()">⬅️ Back</button>
@@ -358,7 +370,7 @@
             isGamePlayable = true;
             document.getElementById('game-status').textContent = `Ningalude oozham (${humanSymbol})`;
           }
-        }, 400);
+        }, 350);
       } else {
         currentTurn = (currentTurn === "X") ? "O" : "X";
         document.getElementById('game-status').textContent = `Player ${currentTurn}-nte oozham`;
