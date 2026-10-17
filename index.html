@@ -284,7 +284,7 @@
     <div class="game-top-bar">
       <button class="nav-btn" onclick="goToHome()">⬅️ Back</button>
       <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Smart AI</span>
-      <button class="nav-btn" onclick="resetCurrentGame()">🔄 Restart</button>
+      <button class="nav-btn" onclick="manualRestart()">🔄 Restart</button>
     </div>
 
     <!-- AI Difficulty Toggle -->
@@ -333,6 +333,7 @@
     let currentTurn = "X";
     let isGamePlayable = true;
     let scores = { p1: 0, draw: 0, p2: 0 };
+    let restartTimer = null;
 
     const winCombos = [
       [0,1,2], [3,4,5], [6,7,8],
@@ -358,7 +359,7 @@
       document.getElementById('diff-easy').classList.toggle('active', lvl === 'easy');
       document.getElementById('diff-med').classList.toggle('active', lvl === 'medium');
       document.getElementById('diff-hard').classList.toggle('active', lvl === 'hard');
-      resetCurrentGame();
+      manualRestart();
     }
 
     function launchGame() {
@@ -377,10 +378,11 @@
         document.getElementById('diff-bar').classList.add('hidden');
       }
 
-      resetCurrentGame();
+      manualRestart();
     }
 
     function goToHome() {
+      clearTimeout(restartTimer);
       document.getElementById('game-screen').classList.add('hidden');
       document.getElementById('start-screen').classList.remove('hidden');
     }
@@ -476,12 +478,23 @@
         }
       }
       refreshScores();
+
+      // AUTO-RESTART AFTER 1.5 SECONDS
+      clearTimeout(restartTimer);
+      restartTimer = setTimeout(() => {
+        resetCurrentGame();
+      }, 1500);
     }
 
     function refreshScores() {
       document.getElementById('val-score-p1').textContent = scores.p1;
       document.getElementById('val-score-draw').textContent = scores.draw;
       document.getElementById('val-score-p2').textContent = scores.p2;
+    }
+
+    function manualRestart() {
+      clearTimeout(restartTimer);
+      resetCurrentGame();
     }
 
     function resetCurrentGame() {
@@ -519,12 +532,10 @@
       const emptyIndices = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
 
       if (difficulty === 'easy') {
-        // Random Moves
         return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
       }
 
       if (difficulty === 'medium') {
-        // 50% Smart, 50% Random
         if (Math.random() > 0.5) {
           return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
         }
@@ -574,5 +585,4 @@
     }
   </script>
 </body>
-      </html>
-      
+</html>
