@@ -25,128 +25,102 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 20%, #17153b 0%, #080811 70%, #030408 100%);
+      background: #020617;
       color: #f8fafc;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px;
+      padding: 8px;
       overflow-x: hidden;
     }
 
     .hidden { display: none !important; }
 
-    /* START CARD CONTAINER */
+    /* FULL POSTER WRAPPER */
     #start-screen {
+      position: relative;
       width: 100%;
-      max-width: 390px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 420px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.2);
+      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      animation: popIn 0.3s ease-out;
     }
 
     @keyframes popIn {
-      from { opacity: 0; transform: scale(0.94); }
+      from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* TOP 3D ROBOT ARTWORK (Crops out fake image buttons) */
-    .hero-banner {
+    .poster-img {
       width: 100%;
-      height: 275px;
-      border-radius: 24px;
-      overflow: hidden;
-      border: 1.5px solid rgba(56, 189, 248, 0.35);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
-      position: relative;
-    }
-
-    .hero-banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top center; /* മുകൾഭാഗത്തെ 3D റോബോട്ടും ടൈറ്റിലും മാത്രം ഫോക്കസ് ചെയ്യും */
+      height: auto;
       display: block;
     }
 
-    /* REAL INTERACTIVE CONTROLS CARD */
-    .controls-card {
-      width: 100%;
-      background: rgba(15, 23, 42, 0.88);
-      border: 1.5px solid rgba(56, 189, 248, 0.28);
-      backdrop-filter: blur(14px);
-      border-radius: 24px;
-      padding: 16px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    }
-
-    .card-label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #94a3b8;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .pill-group {
-      background: #090d16;
+    /* DIRECT ON-IMAGE CLICKABLE HOTSPOTS */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
       border-radius: 14px;
-      padding: 4px;
-      display: flex;
-      gap: 6px;
-      border: 1px solid #1e293b;
-    }
-
-    .pill-btn {
-      flex: 1;
-      padding: 10px 6px;
-      border: none;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
       background: transparent;
-      color: #94a3b8;
-      font-size: 0.84rem;
-      font-weight: 700;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      border: 2px solid transparent;
     }
 
-    .pill-btn.active {
-      background: linear-gradient(145deg, #0284c7, #0ea5e9);
-      color: #ffffff;
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.45);
+    /* Mode: Unbeatable AI */
+    #hotspot-ai {
+      top: 50.2%;
+      left: 14.5%;
+      width: 38%;
+      height: 7.2%;
     }
 
-    /* 3D YELLOW START BUTTON */
-    .btn-launch {
-      width: 100%;
-      padding: 14px 20px;
-      background: linear-gradient(180deg, #fde047 0%, #eab308 50%, #ca8a04 100%);
-      border: none;
+    /* Mode: 2 Players */
+    #hotspot-2p {
+      top: 50.2%;
+      left: 54%;
+      width: 32%;
+      height: 7.2%;
+    }
+
+    /* Symbol: X */
+    #hotspot-x {
+      top: 64.6%;
+      left: 14.5%;
+      width: 36%;
+      height: 7.2%;
+    }
+
+    /* Symbol: O */
+    #hotspot-o {
+      top: 64.6%;
+      left: 52%;
+      width: 34%;
+      height: 7.2%;
+    }
+
+    /* Active Glowing State over selected option */
+    .hotspot.selected {
+      border: 2px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.22);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Start Button Hotspot */
+    #hotspot-start {
+      top: 74.2%;
+      left: 13.5%;
+      width: 73%;
+      height: 8.5%;
       border-radius: 9999px;
-      font-size: 1.18rem;
-      font-weight: 900;
-      color: #0f172a;
-      letter-spacing: 0.6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(234, 179, 8, 0.45), inset 0 2px 4px rgba(255,255,255,0.7);
-      transition: all 0.15s ease;
-      margin-top: 2px;
     }
 
-    .btn-launch:active {
-      transform: scale(0.97);
+    #hotspot-start:active {
+      background: rgba(250, 204, 21, 0.35);
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.6);
     }
 
     /* GAME PLAY SCREEN */
@@ -242,35 +216,20 @@
 </head>
 <body>
 
-  <!-- START / WELCOME SCREEN -->
+  <!-- FULL 3D POSTER SCREEN WITH DIRECT TOUCH -->
   <div id="start-screen">
-    <!-- 3D Header Artwork Only -->
-    <div class="hero-banner">
-      <img src="file_0000000074188208aabdc190d10e5f39.png" alt="3D Robot Tic Tac Toe">
-    </div>
+    <img src="file_0000000074188208aabdc190d10e5f39.png" alt="3D Tic Tac Toe Poster" class="poster-img">
 
-    <!-- Interactive Working Controls -->
-    <div class="controls-card">
-      <div>
-        <div class="card-label">🎮 മോഡ് തിരഞ്ഞെടുക്കുക</div>
-        <div class="pill-group">
-          <button class="pill-btn active" id="btn-mode-ai" onclick="selectMode('ai')">🤖 Unbeatable AI</button>
-          <button class="pill-btn" id="btn-mode-2p" onclick="selectMode('2p')">👥 2 Players</button>
-        </div>
-      </div>
+    <!-- Mode Hotspots -->
+    <div id="hotspot-ai" class="hotspot selected" onclick="pickMode('ai')"></div>
+    <div id="hotspot-2p" class="hotspot" onclick="pickMode('2p')"></div>
 
-      <div id="sym-picker-area">
-        <div class="card-label">👤 നിങ്ങളുടെ ചിഹ്നം</div>
-        <div class="pill-group">
-          <button class="pill-btn active" id="btn-sym-x" onclick="selectSymbol('X')">X (ആദ്യം)</button>
-          <button class="pill-btn" id="btn-sym-o" onclick="selectSymbol('O')">O (രണ്ടാമത്)</button>
-        </div>
-      </div>
+    <!-- Symbol Hotspots -->
+    <div id="hotspot-x" class="hotspot selected" onclick="pickSym('X')"></div>
+    <div id="hotspot-o" class="hotspot" onclick="pickSym('O')"></div>
 
-      <button class="btn-launch" onclick="launchGame()">
-        <span>🚀</span> START GAME <span>➔</span>
-      </button>
-    </div>
+    <!-- Start Game Button Hotspot -->
+    <div id="hotspot-start" class="hotspot" onclick="launchGame()"></div>
   </div>
 
   <!-- GAME PLAY SCREEN -->
@@ -296,7 +255,7 @@
       </div>
     </div>
 
-    <div class="game-status-bubble" id="game-status">നിങ്ങളുടെ ഊഴം (X)</div>
+    <div class="game-status-bubble" id="game-status">Njangalude oozham (X)</div>
 
     <div class="game-board" id="board">
       <div class="cell" onclick="handleMove(0)"></div>
@@ -326,18 +285,17 @@
       [0,4,8], [2,4,6]
     ];
 
-    function selectMode(m) {
+    function pickMode(m) {
       mode = m;
-      document.getElementById('btn-mode-ai').classList.toggle('active', m === 'ai');
-      document.getElementById('btn-mode-2p').classList.toggle('active', m === '2p');
-      document.getElementById('sym-picker-area').style.display = (m === 'ai') ? 'block' : 'none';
+      document.getElementById('hotspot-ai').classList.toggle('selected', m === 'ai');
+      document.getElementById('hotspot-2p').classList.toggle('selected', m === '2p');
     }
 
-    function selectSymbol(sym) {
-      humanSymbol = sym;
-      aiSymbol = (sym === 'X') ? 'O' : 'X';
-      document.getElementById('btn-sym-x').classList.toggle('active', sym === 'X');
-      document.getElementById('btn-sym-o').classList.toggle('active', sym === 'O');
+    function pickSym(s) {
+      humanSymbol = s;
+      aiSymbol = (s === 'X') ? 'O' : 'X';
+      document.getElementById('hotspot-x').classList.toggle('selected', s === 'X');
+      document.getElementById('hotspot-o').classList.toggle('selected', s === 'O');
     }
 
     function launchGame() {
@@ -380,117 +338,10 @@
       if (mode === 'ai') {
         currentTurn = aiSymbol;
         isGamePlayable = false;
-        document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
+        document.getElementById('game-status').textContent = "AI chinthikkunnu... 🤖";
         
         setTimeout(() => {
           const aiBest = getBestMove();
           playStep(aiBest, aiSymbol);
 
-          if (checkWin(board, aiSymbol)) {
-            finishGame(aiSymbol);
-          } else if (board.every(c => c !== "")) {
-            finishGame("draw");
-          } else {
-            currentTurn = humanSymbol;
-            isGamePlayable = true;
-            document.getElementById('game-status').textContent = `നിങ്ങളുടെ ഊഴം (${humanSymbol})`;
-          }
-        }, 400);
-      } else {
-        currentTurn = (currentTurn === "X") ? "O" : "X";
-        document.getElementById('game-status').textContent = `പ്ലെയർ ${currentTurn}-ന്റെ ഊഴം`;
-      }
-    }
-
-    function playStep(idx, player) {
-      board[idx] = player;
-      const el = document.getElementsByClassName('cell')[idx];
-      el.textContent = player;
-      el.classList.add(player.toLowerCase());
-    }
-
-    function checkWin(b, player) {
-      return winCombos.some(combo => combo.every(i => b[i] === player));
-    }
-
-    function getWinPath(player) {
-      return winCombos.find(combo => combo.every(i => board[i] === player));
-    }
-
-    function finishGame(winner) {
-      isGamePlayable = false;
-      if (winner === "draw") {
-        document.getElementById('game-status').textContent = "കളി സമനിലയിൽ! 🤝";
-        scores.draw++;
-      } else {
-        const path = getWinPath(winner);
-        if (path) {
-          path.forEach(i => document.getElementsByClassName('cell')[i].classList.add('win-cell'));
-        }
-        if (mode === 'ai') {
-          document.getElementById('game-status').textContent = (winner === humanSymbol) ? "🎉 നിങ്ങൾ ജയിച്ചു!" : "🤖 AI ജയിച്ചു!";
-          if (winner === humanSymbol) scores.p1++; else scores.p2++;
-        } else {
-          document.getElementById('game-status').textContent = `🎉 പ്ലെയർ ${winner} ജയിച്ചു!`;
-          if (winner === "X") scores.p1++; else scores.p2++;
-        }
-      }
-      refreshScores();
-    }
-
-    function refreshScores() {
-      document.getElementById('val-score-p1').textContent = scores.p1;
-      document.getElementById('val-score-draw').textContent = scores.draw;
-      document.getElementById('val-score-p2').textContent = scores.p2;
-    }
-
-    function resetCurrentGame() {
-      board = ["", "", "", "", "", "", "", "", ""];
-      currentTurn = "X";
-      isGamePlayable = true;
-      const cells = document.getElementsByClassName('cell');
-      for (let c of cells) {
-        c.textContent = "";
-        c.className = "cell";
-      }
-
-      if (mode === 'ai') {
-        if (humanSymbol === 'O') {
-          isGamePlayable = false;
-          document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
-          setTimeout(() => {
-            const initialCorners = [0, 2, 4, 6, 8];
-            const move = initialCorners[Math.floor(Math.random() * initialCorners.length)];
-            playStep(move, 'X');
-            currentTurn = 'O';
-            isGamePlayable = true;
-            document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (O)";
-          }, 350);
-        } else {
-          document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (X)";
-        }
-      } else {
-        document.getElementById('game-status').textContent = "പ്ലെയർ X-ന്റെ ഊഴം";
-      }
-    }
-
-    function getBestMove() {
-      let bestScore = -Infinity;
-      let move = -1;
-      for (let i = 0; i < 9; i++) {
-        if (board[i] === "") {
-          board[i] = aiSymbol;
-          let score = runMinimax(board, 0, false);
-          board[i] = "";
-          if (score > bestScore) {
-            bestScore = score;
-            move = i;
-          }
-        }
-      }
-      return move;
-    }
-
-    function runMinimax(b, depth, isMaximizing) {
-      if (checkWin(b, aiSymbol)) return 10 - depth;
-      
+          
