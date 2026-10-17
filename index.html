@@ -122,7 +122,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       animation: fadeIn 0.25s ease-out;
     }
 
@@ -207,11 +207,17 @@
       font-size: 0.92rem;
     }
 
-    /* PERFECT EQUAL GRID BOARD */
-    .game-board {
+    /* BOARD CONTAINER WITH RELATIVE POSITION FOR SVG STRIKE LINE */
+    .board-wrapper {
+      position: relative;
       width: 100%;
       height: 350px;
       max-height: 85vw;
+    }
+
+    .game-board {
+      width: 100%;
+      height: 100%;
       background: #0b1120;
       border: 1.5px solid #1e293b;
       border-radius: 24px;
@@ -252,12 +258,54 @@
     .cell.win-cell {
       background: #0c2340;
       border-color: #38bdf8;
-      animation: winGlow 0.8s infinite alternate;
     }
 
-    @keyframes winGlow {
-      0% { transform: scale(0.97); }
-      100% { transform: scale(1.03); }
+    /* WINNING STRIKE-THROUGH SVG LINE OVERLAY */
+    .strike-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .strike-line {
+      stroke: #38bdf8;
+      stroke-width: 8;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 10px #38bdf8);
+      stroke-dasharray: 400;
+      stroke-dashoffset: 400;
+      animation: drawStrike 0.4s ease-out forwards;
+    }
+
+    @keyframes drawStrike {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* WHATSAPP SHARE BUTTON */
+    .btn-share {
+      width: 100%;
+      padding: 12px;
+      background: #25D366;
+      border: none;
+      border-radius: 14px;
+      color: #052e16;
+      font-weight: 800;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+      transition: transform 0.15s ease;
+    }
+
+    .btn-share:active {
+      transform: scale(0.97);
     }
   </style>
 </head>
@@ -311,17 +359,30 @@
 
     <div class="game-status-bubble" id="game-status">Ningalude oozham (X)</div>
 
-    <div class="game-board" id="board">
-      <div class="cell" onclick="handleMove(0)"></div>
-      <div class="cell" onclick="handleMove(1)"></div>
-      <div class="cell" onclick="handleMove(2)"></div>
-      <div class="cell" onclick="handleMove(3)"></div>
-      <div class="cell" onclick="handleMove(4)"></div>
-      <div class="cell" onclick="handleMove(5)"></div>
-      <div class="cell" onclick="handleMove(6)"></div>
-      <div class="cell" onclick="handleMove(7)"></div>
-      <div class="cell" onclick="handleMove(8)"></div>
+    <!-- Board Wrapper with Strike Line SVG -->
+    <div class="board-wrapper">
+      <div class="game-board" id="board">
+        <div class="cell" onclick="handleMove(0)"></div>
+        <div class="cell" onclick="handleMove(1)"></div>
+        <div class="cell" onclick="handleMove(2)"></div>
+        <div class="cell" onclick="handleMove(3)"></div>
+        <div class="cell" onclick="handleMove(4)"></div>
+        <div class="cell" onclick="handleMove(5)"></div>
+        <div class="cell" onclick="handleMove(6)"></div>
+        <div class="cell" onclick="handleMove(7)"></div>
+        <div class="cell" onclick="handleMove(8)"></div>
+      </div>
+
+      <svg class="strike-svg" id="strike-svg"></svg>
     </div>
+
+    <!-- WhatsApp Share Button -->
+    <button class="btn-share" onclick="shareToWhatsApp()">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12.031 2c-5.514 0-9.999 4.486-9.999 10 0 1.761.459 3.479 1.332 5.006l-1.364 4.994 5.12-1.343c1.472.805 3.125 1.343 4.911 1.343 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.25c-1.579 0-3.109-.434-4.444-1.258l-.319-.196-3.3 0.865.88-3.218-.21-.334c-.908-1.442-1.387-3.119-1.387-4.859 0-4.549 3.701-8.25 8.25-8.25s8.25 3.701 8.25 8.25-3.701 8.25-8.25 8.25zm4.524-6.195c-.248-.124-1.467-.724-1.695-.807-.228-.083-.394-.124-.56.124-.166.248-.644.807-.789.973-.145.166-.29.186-.538.062-.248-.124-1.047-.386-1.995-1.231-.738-.658-1.237-1.471-1.382-1.719-.145-.248-.016-.382.108-.505.111-.11.248-.29.373-.435.124-.145.166-.248.248-.415.083-.166.041-.311-.021-.435-.062-.124-.56-1.349-.767-1.848-.202-.486-.407-.42-.56-.428l-.477-.008c-.166 0-.435.062-.663.311-.228.248-.871.851-.871 2.075s.892 2.406 1.016 2.572c.124.166 1.755 2.68 4.252 3.757.594.256 1.058.409 1.42.524.597.19 1.14.163 1.57.099.479-.071 1.467-.6 1.674-1.18.207-.58.207-1.077.145-1.18-.062-.104-.228-.166-.476-.29z"/>
+      </svg>
+      WhatsApp-ൽ ചലഞ്ച് ഷെയർ ചെയ്യുക
+    </button>
   </div>
 
   <script>
@@ -336,9 +397,14 @@
     let restartTimer = null;
 
     const winCombos = [
-      [0,1,2], [3,4,5], [6,7,8],
-      [0,3,6], [1,4,7], [2,5,8],
-      [0,4,8], [2,4,6]
+      { combo: [0,1,2], type: 'row', idx: 0 },
+      { combo: [3,4,5], type: 'row', idx: 1 },
+      { combo: [6,7,8], type: 'row', idx: 2 },
+      { combo: [0,3,6], type: 'col', idx: 0 },
+      { combo: [1,4,7], type: 'col', idx: 1 },
+      { combo: [2,5,8], type: 'col', idx: 2 },
+      { combo: [0,4,8], type: 'diag', idx: 0 },
+      { combo: [2,4,6], type: 'diag', idx: 1 }
     ];
 
     function pickMode(m) {
@@ -392,38 +458,40 @@
 
       playStep(idx, currentTurn);
 
-      if (checkWin(board, currentTurn)) {
-        finishGame(currentTurn);
+      const winResult = checkWin(board, currentTurn);
+      if (winResult) {
+        finishGame(currentTurn, winResult);
         return;
       }
 
       if (board.every(cell => cell !== "")) {
-        finishGame("draw");
+        finishGame("draw", null);
         return;
       }
 
       if (mode === 'ai') {
         currentTurn = aiSymbol;
         isGamePlayable = false;
-        document.getElementById('game-status').textContent = "AI chinthikkunnu... 🤖";
+        document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
         
         setTimeout(() => {
           const aiMove = getAIMove();
           playStep(aiMove, aiSymbol);
 
-          if (checkWin(board, aiSymbol)) {
-            finishGame(aiSymbol);
+          const aiWin = checkWin(board, aiSymbol);
+          if (aiWin) {
+            finishGame(aiSymbol, aiWin);
           } else if (board.every(c => c !== "")) {
-            finishGame("draw");
+            finishGame("draw", null);
           } else {
             currentTurn = humanSymbol;
             isGamePlayable = true;
-            document.getElementById('game-status').textContent = `Ningalude oozham (${humanSymbol})`;
+            document.getElementById('game-status').textContent = `നിങ്ങളുടെ ഊഴം (${humanSymbol})`;
           }
         }, 350);
       } else {
         currentTurn = (currentTurn === "X") ? "O" : "X";
-        document.getElementById('game-status').textContent = `Player ${currentTurn}-nte oozham`;
+        document.getElementById('game-status').textContent = `പ്ലെയർ ${currentTurn}-ന്റെ ഊഴം`;
       }
     }
 
@@ -435,55 +503,89 @@
     }
 
     function checkWin(b, player) {
-      return winCombos.some(combo => combo.every(i => b[i] === player));
+      return winCombos.find(item => item.combo.every(i => b[i] === player));
     }
 
-    function getWinPath(player) {
-      return winCombos.find(combo => combo.every(i => board[i] === player));
+    function drawStrikeLine(winInfo, winner) {
+      const svg = document.getElementById('strike-svg');
+      svg.innerHTML = '';
+      const strokeColor = (winner === 'X') ? '#38bdf8' : '#f43f5e';
+
+      let x1, y1, x2, y2;
+      const w = svg.clientWidth || 350;
+      const h = svg.clientHeight || 350;
+
+      if (winInfo.type === 'row') {
+        const yPos = (winInfo.idx === 0) ? h * 0.19 : (winInfo.idx === 1) ? h * 0.5 : h * 0.81;
+        x1 = w * 0.08; y1 = yPos;
+        x2 = w * 0.92; y2 = yPos;
+      } else if (winInfo.type === 'col') {
+        const xPos = (winInfo.idx === 0) ? w * 0.19 : (winInfo.idx === 1) ? w * 0.5 : w * 0.81;
+        x1 = xPos; y1 = h * 0.08;
+        x2 = xPos; y2 = h * 0.92;
+      } else if (winInfo.type === 'diag') {
+        if (winInfo.idx === 0) {
+          x1 = w * 0.1; y1 = h * 0.1;
+          x2 = w * 0.9; y2 = h * 0.9;
+        } else {
+          x1 = w * 0.9; y1 = h * 0.1;
+          x2 = w * 0.1; y2 = h * 0.9;
+        }
+      }
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('class', 'strike-line');
+      line.style.stroke = strokeColor;
+      line.style.filter = `drop-shadow(0 0 12px ${strokeColor})`;
+      svg.appendChild(line);
     }
 
     function triggerConfetti() {
       if (typeof confetti === 'function') {
         confetti({
-          particleCount: 80,
-          spread: 70,
+          particleCount: 90,
+          spread: 75,
           origin: { y: 0.6 }
         });
       }
     }
 
-    function finishGame(winner) {
+    function finishGame(winner, winResult) {
       isGamePlayable = false;
       if (winner === "draw") {
-        document.getElementById('game-status').textContent = "Kali samanilayil! 🤝";
+        document.getElementById('game-status').textContent = "കളി സമനിലയിൽ! 🤝";
         scores.draw++;
       } else {
-        const path = getWinPath(winner);
-        if (path) {
-          path.forEach(i => document.getElementsByClassName('cell')[i].classList.add('win-cell'));
+        if (winResult) {
+          winResult.combo.forEach(i => document.getElementsByClassName('cell')[i].classList.add('win-cell'));
+          drawStrikeLine(winResult, winner);
         }
         if (mode === 'ai') {
           if (winner === humanSymbol) {
-            document.getElementById('game-status').textContent = "🎉 Ningal jayichu!";
+            document.getElementById('game-status').textContent = "🎉 നിങ്ങൾ ജയിച്ചു!";
             scores.p1++;
             triggerConfetti();
           } else {
-            document.getElementById('game-status').textContent = "🤖 AI jayichu!";
+            document.getElementById('game-status').textContent = "🤖 AI ജയിച്ചു!";
             scores.p2++;
           }
         } else {
-          document.getElementById('game-status').textContent = `🎉 Player ${winner} jayichu!`;
+          document.getElementById('game-status').textContent = `🎉 പ്ലെയർ ${winner} ജയിച്ചു!`;
           if (winner === "X") scores.p1++; else scores.p2++;
           triggerConfetti();
         }
       }
       refreshScores();
 
-      // AUTO-RESTART AFTER 1.5 SECONDS
+      // AUTO-RESTART AFTER 1.8 SECONDS
       clearTimeout(restartTimer);
       restartTimer = setTimeout(() => {
         resetCurrentGame();
-      }, 1500);
+      }, 1800);
     }
 
     function refreshScores() {
@@ -501,6 +603,7 @@
       board = ["", "", "", "", "", "", "", "", ""];
       currentTurn = "X";
       isGamePlayable = true;
+      document.getElementById('strike-svg').innerHTML = '';
       const cells = document.getElementsByClassName('cell');
       for (let c of cells) {
         c.textContent = "";
@@ -510,24 +613,24 @@
       if (mode === 'ai') {
         if (humanSymbol === 'O') {
           isGamePlayable = false;
-          document.getElementById('game-status').textContent = "AI chinthikkunnu... 🤖";
+          document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
           setTimeout(() => {
             const initialCorners = [0, 2, 4, 6, 8];
             const move = initialCorners[Math.floor(Math.random() * initialCorners.length)];
             playStep(move, 'X');
             currentTurn = 'O';
             isGamePlayable = true;
-            document.getElementById('game-status').textContent = "Ningalude oozham (O)";
+            document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (O)";
           }, 350);
         } else {
-          document.getElementById('game-status').textContent = "Ningalude oozham (X)";
+          document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (X)";
         }
       } else {
-        document.getElementById('game-status').textContent = "Player X-nte oozham";
+        document.getElementById('game-status').textContent = "പ്ലെയർ X-ന്റെ ഊഴം";
       }
     }
 
-    // AI MOVE LOGIC WITH DIFFICULTY LEVELS
+    // AI MOVE LOGIC
     function getAIMove() {
       const emptyIndices = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
 
@@ -541,48 +644,7 @@
         }
       }
 
-      // Impossible (Minimax)
       let bestScore = -Infinity;
       let move = -1;
       for (let i of emptyIndices) {
-        board[i] = aiSymbol;
-        let score = runMinimax(board, 0, false);
-        board[i] = "";
-        if (score > bestScore) {
-          bestScore = score;
-          move = i;
-        }
-      }
-      return move;
-    }
-
-    function runMinimax(b, depth, isMaximizing) {
-      if (checkWin(b, aiSymbol)) return 10 - depth;
-      if (checkWin(b, humanSymbol)) return depth - 10;
-      if (b.every(c => c !== "")) return 0;
-
-      if (isMaximizing) {
-        let maxVal = -Infinity;
-        for (let i = 0; i < 9; i++) {
-          if (b[i] === "") {
-            b[i] = aiSymbol;
-            maxVal = Math.max(maxVal, runMinimax(b, depth + 1, false));
-            b[i] = "";
-          }
-        }
-        return maxVal;
-      } else {
-        let minVal = Infinity;
-        for (let i = 0; i < 9; i++) {
-          if (b[i] === "") {
-            b[i] = humanSymbol;
-            minVal = Math.min(minVal, runMinimax(b, depth + 1, true));
-            b[i] = "";
-          }
-        }
-        return minVal;
-      }
-    }
-  </script>
-</body>
-</html>
+        board
