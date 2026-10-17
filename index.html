@@ -25,14 +25,14 @@
     }
 
     body {
-      background: #020617;
+      background: radial-gradient(circle at 50% 20%, #17153b 0%, #080811 70%, #030408 100%);
       color: #f8fafc;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow-x: hidden;
       padding: 12px;
+      overflow-x: hidden;
     }
 
     .hidden { display: none !important; }
@@ -40,52 +40,54 @@
     /* START CARD CONTAINER */
     #start-screen {
       width: 100%;
-      max-width: 400px;
+      max-width: 390px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
-      animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      gap: 12px;
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes popIn {
-      from { opacity: 0; transform: scale(0.92); }
+      from { opacity: 0; transform: scale(0.94); }
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* 3D POSTER IMAGE BOX */
-    .poster-box {
+    /* TOP 3D ROBOT ARTWORK (Crops out fake image buttons) */
+    .hero-banner {
       width: 100%;
+      height: 275px;
       border-radius: 24px;
       overflow: hidden;
-      border: 2px solid #38bdf840;
-      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.25);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
       position: relative;
-      background: #0b1120;
     }
 
-    .poster-img {
+    .hero-banner img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center; /* മുകൾഭാഗത്തെ 3D റോബോട്ടും ടൈറ്റിലും മാത്രം ഫോക്കസ് ചെയ്യും */
       display: block;
     }
 
-    /* CONTROLS CARD */
+    /* REAL INTERACTIVE CONTROLS CARD */
     .controls-card {
       width: 100%;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1.5px solid rgba(56, 189, 248, 0.3);
-      backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.88);
+      border: 1.5px solid rgba(56, 189, 248, 0.28);
+      backdrop-filter: blur(14px);
       border-radius: 24px;
-      padding: 18px 16px;
+      padding: 16px 14px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      gap: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     }
 
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: #94a3b8;
       margin-bottom: 6px;
@@ -105,13 +107,13 @@
 
     .pill-btn {
       flex: 1;
-      padding: 11px 8px;
+      padding: 10px 6px;
       border: none;
       background: transparent;
       color: #94a3b8;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 700;
-      border-radius: 11px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -119,28 +121,28 @@
     .pill-btn.active {
       background: linear-gradient(145deg, #0284c7, #0ea5e9);
       color: #ffffff;
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.45);
     }
 
     /* 3D YELLOW START BUTTON */
     .btn-launch {
       width: 100%;
-      padding: 15px 20px;
+      padding: 14px 20px;
       background: linear-gradient(180deg, #fde047 0%, #eab308 50%, #ca8a04 100%);
       border: none;
       border-radius: 9999px;
-      font-size: 1.2rem;
+      font-size: 1.18rem;
       font-weight: 900;
       color: #0f172a;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4), inset 0 2px 4px rgba(255,255,255,0.7);
+      box-shadow: 0 8px 24px rgba(234, 179, 8, 0.45), inset 0 2px 4px rgba(255,255,255,0.7);
       transition: all 0.15s ease;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .btn-launch:active {
@@ -150,11 +152,11 @@
     /* GAME PLAY SCREEN */
     #game-screen {
       width: 100%;
-      max-width: 400px;
+      max-width: 390px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       animation: popIn 0.3s ease;
     }
 
@@ -192,7 +194,7 @@
     }
 
     .score-title { font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
-    .score-val { font-size: 1.5rem; font-weight: 900; color: #38bdf8; }
+    .score-val { font-size: 1.45rem; font-weight: 900; color: #38bdf8; }
 
     .game-status-bubble {
       background: #1e293b;
@@ -201,7 +203,7 @@
       border-radius: 9999px;
       font-weight: 700;
       color: #e2e8f0;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     .game-board {
@@ -209,7 +211,7 @@
       aspect-ratio: 1/1;
       background: rgba(15, 23, 42, 0.9);
       border: 2px solid rgba(56, 189, 248, 0.3);
-      border-radius: 26px;
+      border-radius: 24px;
       padding: 12px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -242,12 +244,12 @@
 
   <!-- START / WELCOME SCREEN -->
   <div id="start-screen">
-    <!-- 3D Robotic Poster Card -->
-    <div class="poster-box">
-      <img src="file_0000000074188208aabdc190d10e5f39.png" class="poster-img" alt="Tic Tac Toe Poster" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';">
+    <!-- 3D Header Artwork Only -->
+    <div class="hero-banner">
+      <img src="file_0000000074188208aabdc190d10e5f39.png" alt="3D Robot Tic Tac Toe">
     </div>
 
-    <!-- Controls Card -->
+    <!-- Interactive Working Controls -->
     <div class="controls-card">
       <div>
         <div class="card-label">🎮 മോഡ് തിരഞ്ഞെടുക്കുക</div>
@@ -491,7 +493,4 @@
 
     function runMinimax(b, depth, isMaximizing) {
       if (checkWin(b, aiSymbol)) return 10 - depth;
-      if (checkWin(b, humanSymbol)) return depth - 10;
-      if (b.every(c => c !== "")) return 
-
-  
+      
