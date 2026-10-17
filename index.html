@@ -31,7 +31,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px;
+      padding: 6px;
       overflow-x: hidden;
     }
 
@@ -42,22 +42,18 @@
       position: relative;
       width: 100%;
       max-width: 420px;
-      border-radius: 28px;
+      border-radius: 26px;
       overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.2);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.25);
       border: 1.5px solid rgba(56, 189, 248, 0.3);
-      animation: popIn 0.3s ease-out;
-    }
-
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      user-select: none;
     }
 
     .poster-img {
       width: 100%;
       height: auto;
       display: block;
+      pointer-events: none;
     }
 
     /* DIRECT ON-IMAGE CLICKABLE HOTSPOTS */
@@ -65,62 +61,64 @@
       position: absolute;
       cursor: pointer;
       border-radius: 14px;
-      transition: background 0.15s ease, box-shadow 0.15s ease;
-      background: transparent;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.001);
       border: 2px solid transparent;
+      transition: all 0.2s ease;
     }
 
     /* Mode: Unbeatable AI */
     #hotspot-ai {
-      top: 50.2%;
-      left: 14.5%;
-      width: 38%;
-      height: 7.2%;
+      top: 50%;
+      left: 13%;
+      width: 40%;
+      height: 8%;
     }
 
     /* Mode: 2 Players */
     #hotspot-2p {
-      top: 50.2%;
-      left: 54%;
+      top: 50%;
+      left: 55%;
       width: 32%;
-      height: 7.2%;
+      height: 8%;
     }
 
     /* Symbol: X */
     #hotspot-x {
-      top: 64.6%;
-      left: 14.5%;
-      width: 36%;
-      height: 7.2%;
+      top: 64.5%;
+      left: 13%;
+      width: 39%;
+      height: 8%;
     }
 
     /* Symbol: O */
     #hotspot-o {
-      top: 64.6%;
-      left: 52%;
-      width: 34%;
-      height: 7.2%;
+      top: 64.5%;
+      left: 54%;
+      width: 33%;
+      height: 8%;
     }
 
     /* Active Glowing State over selected option */
     .hotspot.selected {
-      border: 2px solid #38bdf8;
-      background: rgba(56, 189, 248, 0.22);
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+      border: 2px solid #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.28) !important;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
     }
 
     /* Start Button Hotspot */
     #hotspot-start {
-      top: 74.2%;
-      left: 13.5%;
-      width: 73%;
-      height: 8.5%;
+      top: 73.5%;
+      left: 12%;
+      width: 76%;
+      height: 10%;
       border-radius: 9999px;
     }
 
     #hotspot-start:active {
-      background: rgba(250, 204, 21, 0.35);
-      box-shadow: 0 0 20px rgba(250, 204, 21, 0.6);
+      background: rgba(250, 204, 21, 0.4) !important;
+      box-shadow: 0 0 25px rgba(250, 204, 21, 0.8);
+      transform: scale(0.98);
     }
 
     /* GAME PLAY SCREEN */
@@ -132,6 +130,11 @@
       align-items: center;
       gap: 14px;
       animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .game-top-bar {
@@ -236,112 +239,5 @@
   <div id="game-screen" class="hidden">
     <div class="game-top-bar">
       <button class="nav-btn" onclick="goToHome()">⬅️ Back</button>
-      <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Unbeatable AI</span>
-      <button class="nav-btn" onclick="resetCurrentGame()">🔄 Restart</button>
-    </div>
-
-    <div class="scoreboard-box">
-      <div class="score-card">
-        <div class="score-title" id="p1-name">You (X)</div>
-        <div class="score-val" id="val-score-p1">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title">Draw</div>
-        <div class="score-val" id="val-score-draw">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title" id="p2-name">AI (O)</div>
-        <div class="score-val" id="val-score-p2">0</div>
-      </div>
-    </div>
-
-    <div class="game-status-bubble" id="game-status">Njangalude oozham (X)</div>
-
-    <div class="game-board" id="board">
-      <div class="cell" onclick="handleMove(0)"></div>
-      <div class="cell" onclick="handleMove(1)"></div>
-      <div class="cell" onclick="handleMove(2)"></div>
-      <div class="cell" onclick="handleMove(3)"></div>
-      <div class="cell" onclick="handleMove(4)"></div>
-      <div class="cell" onclick="handleMove(5)"></div>
-      <div class="cell" onclick="handleMove(6)"></div>
-      <div class="cell" onclick="handleMove(7)"></div>
-      <div class="cell" onclick="handleMove(8)"></div>
-    </div>
-  </div>
-
-  <script>
-    let mode = 'ai';
-    let humanSymbol = 'X';
-    let aiSymbol = 'O';
-    let board = ["", "", "", "", "", "", "", "", ""];
-    let currentTurn = "X";
-    let isGamePlayable = true;
-    let scores = { p1: 0, draw: 0, p2: 0 };
-
-    const winCombos = [
-      [0,1,2], [3,4,5], [6,7,8],
-      [0,3,6], [1,4,7], [2,5,8],
-      [0,4,8], [2,4,6]
-    ];
-
-    function pickMode(m) {
-      mode = m;
-      document.getElementById('hotspot-ai').classList.toggle('selected', m === 'ai');
-      document.getElementById('hotspot-2p').classList.toggle('selected', m === '2p');
-    }
-
-    function pickSym(s) {
-      humanSymbol = s;
-      aiSymbol = (s === 'X') ? 'O' : 'X';
-      document.getElementById('hotspot-x').classList.toggle('selected', s === 'X');
-      document.getElementById('hotspot-o').classList.toggle('selected', s === 'O');
-    }
-
-    function launchGame() {
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('game-screen').classList.remove('hidden');
-
-      if (mode === 'ai') {
-        document.getElementById('label-game-mode').textContent = "Unbeatable AI";
-        document.getElementById('p1-name').textContent = `You (${humanSymbol})`;
-        document.getElementById('p2-name').textContent = `AI (${aiSymbol})`;
-      } else {
-        document.getElementById('label-game-mode').textContent = "2 Players";
-        document.getElementById('p1-name').textContent = "Player (X)";
-        document.getElementById('p2-name').textContent = "Player (O)";
-      }
-
-      resetCurrentGame();
-    }
-
-    function goToHome() {
-      document.getElementById('game-screen').classList.add('hidden');
-      document.getElementById('start-screen').classList.remove('hidden');
-    }
-
-    function handleMove(idx) {
-      if (board[idx] !== "" || !isGamePlayable) return;
-
-      playStep(idx, currentTurn);
-
-      if (checkWin(board, currentTurn)) {
-        finishGame(currentTurn);
-        return;
-      }
-
-      if (board.every(cell => cell !== "")) {
-        finishGame("draw");
-        return;
-      }
-
-      if (mode === 'ai') {
-        currentTurn = aiSymbol;
-        isGamePlayable = false;
-        document.getElementById('game-status').textContent = "AI chinthikkunnu... 🤖";
+      <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Unbeatable AI
         
-        setTimeout(() => {
-          const aiBest = getBestMove();
-          playStep(aiBest, aiSymbol);
-
-          
