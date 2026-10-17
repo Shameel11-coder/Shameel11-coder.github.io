@@ -7,15 +7,15 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-N7Z24SXFBG');
   </script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Shameel's Tic-Tac-Toe</title>
+  <title>Shameel's Game Zone</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -27,7 +27,7 @@
     }
 
     body {
-      background: #060913;
+      background: radial-gradient(circle at 50% 20%, #17153b 0%, #080811 70%, #030408 100%);
       color: #f8fafc;
       min-height: 100vh;
       display: flex;
@@ -39,7 +39,125 @@
 
     .hidden { display: none !important; }
 
-    /* START SCREEN POSTER */
+    /* =========================================
+       1. ARCADE HOME HUB
+    ========================================= */
+    #hub-screen {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .hub-header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .hub-title {
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+    }
+
+    .hub-subtitle {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .game-card-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .game-pick-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(56, 189, 248, 0.25);
+      border-radius: 22px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      transition: all 0.2s ease;
+    }
+
+    .game-pick-card:active {
+      transform: scale(0.97);
+      border-color: #38bdf8;
+    }
+
+    .game-pick-icon {
+      font-size: 2.4rem;
+      width: 62px;
+      height: 62px;
+      background: #090d16;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #1e293b;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .game-pick-info {
+      flex: 1;
+    }
+
+    .game-pick-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .game-pick-desc {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .game-pick-arrow {
+      font-size: 1.3rem;
+      color: #38bdf8;
+      font-weight: 900;
+    }
+
+    /* COMMON TOP NAVIGATION BAR */
+    .top-hub-nav {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .btn-nav-home {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* =========================================
+       2. TIC-TAC-TOE GAME STYLES
+    ========================================= */
     #start-screen {
       position: relative;
       width: 100%;
@@ -58,7 +176,6 @@
       user-select: none;
     }
 
-    /* INVISIBLE HOTSPOTS */
     .hotspot {
       position: absolute;
       cursor: pointer;
@@ -69,54 +186,25 @@
       outline: none;
     }
 
-    #hotspot-ai {
-      top: 49.5%;
-      left: 13%;
-      width: 40%;
-      height: 8.5%;
-    }
-
-    #hotspot-2p {
-      top: 49.5%;
-      left: 55%;
-      width: 33%;
-      height: 8.5%;
-    }
-
-    #hotspot-x {
-      top: 63.8%;
-      left: 13%;
-      width: 39%;
-      height: 8.5%;
-    }
-
-    #hotspot-o {
-      top: 63.8%;
-      left: 54%;
-      width: 33%;
-      height: 8.5%;
-    }
-
+    #hotspot-ai { top: 49.5%; left: 13%; width: 40%; height: 8.5%; }
+    #hotspot-2p { top: 49.5%; left: 55%; width: 33%; height: 8.5%; }
+    #hotspot-x { top: 63.8%; left: 13%; width: 39%; height: 8.5%; }
+    #hotspot-o { top: 63.8%; left: 54%; width: 33%; height: 8.5%; }
     .hotspot.selected {
       border: 2px solid #38bdf8 !important;
       background: rgba(56, 189, 248, 0.12) !important;
     }
 
     #hotspot-start {
-      top: 73.2%;
-      left: 12%;
-      width: 76%;
-      height: 10%;
+      top: 73.2%; left: 12%; width: 76%; height: 10%;
       border-radius: 9999px;
     }
-
     #hotspot-start:active {
       background: rgba(250, 204, 21, 0.3) !important;
       transform: scale(0.98);
     }
 
-    /* GAME SCREEN */
-    #game-screen {
+    #ttt-game-screen {
       width: 100%;
       max-width: 380px;
       display: flex;
@@ -126,30 +214,6 @@
       animation: fadeIn 0.25s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .game-top-bar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-btn {
-      background: #111827;
-      border: 1px solid #1f2937;
-      color: #94a3b8;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* DIFFICULTY SELECTOR PILL */
     .diff-selector {
       width: 100%;
       display: flex;
@@ -207,7 +271,6 @@
       font-size: 0.92rem;
     }
 
-    /* BOARD CONTAINER WITH RELATIVE POSITION FOR SVG STRIKE LINE */
     .board-wrapper {
       position: relative;
       width: 100%;
@@ -246,29 +309,14 @@
     }
 
     .cell:active { transform: scale(0.95); }
-    .cell.x {
-      color: #38bdf8;
-      text-shadow: 0 0 14px rgba(56, 189, 248, 0.7);
-    }
-    .cell.o {
-      color: #f43f5e;
-      text-shadow: 0 0 14px rgba(244, 63, 94, 0.7);
-    }
+    .cell.x { color: #38bdf8; text-shadow: 0 0 14px rgba(56, 189, 248, 0.7); }
+    .cell.o { color: #f43f5e; text-shadow: 0 0 14px rgba(244, 63, 94, 0.7); }
+    .cell.win-cell { background: #0c2340; border-color: #38bdf8; }
 
-    .cell.win-cell {
-      background: #0c2340;
-      border-color: #38bdf8;
-    }
-
-    /* WINNING STRIKE-THROUGH SVG LINE OVERLAY */
     .strike-svg {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 20;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 20;
     }
 
     .strike-line {
@@ -276,16 +324,12 @@
       stroke-width: 8;
       stroke-linecap: round;
       filter: drop-shadow(0 0 10px #38bdf8);
-      stroke-dasharray: 400;
-      stroke-dashoffset: 400;
+      stroke-dasharray: 400; stroke-dashoffset: 400;
       animation: drawStrike 0.4s ease-out forwards;
     }
 
-    @keyframes drawStrike {
-      to { stroke-dashoffset: 0; }
-    }
+    @keyframes drawStrike { to { stroke-dashoffset: 0; } }
 
-    /* WHATSAPP SHARE BUTTON */
     .btn-share {
       width: 100%;
       padding: 12px;
@@ -304,15 +348,204 @@
       transition: transform 0.15s ease;
     }
 
-    .btn-share:active {
-      transform: scale(0.97);
+    /* =========================================
+       3. MEMORY CARD FLIP GAME STYLES
+    ========================================= */
+    #memory-screen {
+      width: 100%;
+      max-width: 390px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .memory-grid {
+      width: 100%;
+      aspect-ratio: 1/1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 9px;
+      background: #0b1120;
+      padding: 12px;
+      border-radius: 24px;
+      border: 1.5px solid #1e293b;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .mem-card {
+      background: #090d16;
+      border: 1.5px solid #1e293b;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      cursor: pointer;
+      perspective: 1000px;
+      transition: transform 0.2s ease, background 0.2s;
+      user-select: none;
+    }
+
+    .mem-card.flipped {
+      background: #1e293b;
+      border-color: #38bdf8;
+      transform: rotateY(180deg);
+    }
+
+    .mem-card.matched {
+      background: #064e3b;
+      border-color: #34d399;
+      animation: pulseMatch 0.5s ease;
+    }
+
+    @keyframes pulseMatch {
+      0% { transform: scale(0.9); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* =========================================
+       4. ROCK PAPER SCISSORS GAME STYLES
+    ========================================= */
+    #rps-screen {
+      width: 100%;
+      max-width: 390px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .rps-battlefield {
+      width: 100%;
+      background: #0b1120;
+      border: 1.5px solid #1e293b;
+      border-radius: 24px;
+      padding: 20px 14px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .rps-fighter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rps-hand-display {
+      width: 80px;
+      height: 80px;
+      background: #060a14;
+      border: 2px solid #1e293b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .rps-fighter-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .rps-actions {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+    }
+
+    .rps-btn {
+      flex: 1;
+      background: #0f172a;
+      border: 1.5px solid #1e293b;
+      border-radius: 18px;
+      padding: 16px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .rps-btn:active {
+      transform: scale(0.94);
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .rps-btn-emoji { font-size: 2.2rem; }
+    .rps-btn-label { font-size: 0.78rem; font-weight: 700; color: #e2e8f0; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <!-- FULL 3D POSTER START SCREEN -->
-  <div id="start-screen">
+  <!-- =========================================
+       1. ARCADE MAIN HUB SCREEN
+  ========================================= -->
+  <div id="hub-screen">
+    <div class="hub-header">
+      <div class="hub-title">SHAMEEL GAME ZONE 🎮</div>
+      <div class="hub-subtitle">Ningalkk ishtamulla game theranjedukkuka!</div>
+    </div>
+
+    <div class="game-card-list">
+      <!-- 1. Tic Tac Toe Card -->
+      <div class="game-pick-card" onclick="openGame('ttt-poster')">
+        <div class="game-pick-icon">❌⭕</div>
+        <div class="game-pick-info">
+          <div class="game-pick-title">Tic-Tac-Toe 3D</div>
+          <div class="game-pick-desc">Unbeatable Smart AI & 2 Player Mode</div>
+        </div>
+        <div class="game-pick-arrow">➔</div>
+      </div>
+
+      <!-- 2. Memory Card Flip Card -->
+      <div class="game-pick-card" onclick="openGame('memory')">
+        <div class="game-pick-icon">🧠🃏</div>
+        <div class="game-pick-info">
+          <div class="game-pick-title">Memory Card Flip</div>
+          <div class="game-pick-desc">Card-ukal marichu matching jodi kandupidikkuka</div>
+        </div>
+        <div class="game-pick-arrow">➔</div>
+      </div>
+
+      <!-- 3. Rock Paper Scissors Card -->
+      <div class="game-pick-card" onclick="openGame('rps')">
+        <div class="game-pick-icon">✊✋</div>
+        <div class="game-pick-info">
+          <div class="game-pick-title">Rock Paper Scissors</div>
+          <div class="game-pick-desc">AI-yumaayi fast round battle kalikkuka</div>
+        </div>
+        <div class="game-pick-arrow">➔</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       2. TIC-TAC-TOE 3D POSTER & GAME SCREENS
+  ========================================= -->
+  <div id="start-screen" class="hidden">
+    <!-- Top Back to Home Button -->
+    <div style="position: absolute; top: 12px; left: 12px; z-index: 25;">
+      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Arcade Home</button>
+    </div>
+
     <img src="file_0000000074188208aabdc190d10e5f39.png" alt="3D Tic Tac Toe Poster" class="poster-img">
 
     <!-- Mode Hotspots -->
@@ -327,15 +560,13 @@
     <button type="button" id="hotspot-start" class="hotspot" onclick="launchGame()"></button>
   </div>
 
-  <!-- GAME SCREEN -->
-  <div id="game-screen" class="hidden">
-    <div class="game-top-bar">
-      <button class="nav-btn" onclick="goToHome()">⬅️ Back</button>
+  <div id="ttt-game-screen" class="hidden">
+    <div class="top-hub-nav">
+      <button class="btn-nav-home" onclick="openGame('ttt-poster')">⬅️ Settings</button>
       <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Smart AI</span>
-      <button class="nav-btn" onclick="manualRestart()">🔄 Restart</button>
+      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Home</button>
     </div>
 
-    <!-- AI Difficulty Toggle -->
     <div class="diff-selector" id="diff-bar">
       <button class="diff-btn" id="diff-easy" onclick="setDifficulty('easy')">Easy 🟢</button>
       <button class="diff-btn" id="diff-med" onclick="setDifficulty('medium')">Medium 🟡</button>
@@ -359,7 +590,6 @@
 
     <div class="game-status-bubble" id="game-status">Ningalude oozham (X)</div>
 
-    <!-- Board Wrapper with Strike Line SVG -->
     <div class="board-wrapper">
       <div class="game-board" id="board">
         <div class="cell" onclick="handleMove(0)"></div>
@@ -372,20 +602,119 @@
         <div class="cell" onclick="handleMove(7)"></div>
         <div class="cell" onclick="handleMove(8)"></div>
       </div>
-
       <svg class="strike-svg" id="strike-svg"></svg>
     </div>
 
-    <!-- WhatsApp Share Button -->
     <button class="btn-share" onclick="shareToWhatsApp()">
-      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12.031 2c-5.514 0-9.999 4.486-9.999 10 0 1.761.459 3.479 1.332 5.006l-1.364 4.994 5.12-1.343c1.472.805 3.125 1.343 4.911 1.343 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.25c-1.579 0-3.109-.434-4.444-1.258l-.319-.196-3.3 0.865.88-3.218-.21-.334c-.908-1.442-1.387-3.119-1.387-4.859 0-4.549 3.701-8.25 8.25-8.25s8.25 3.701 8.25 8.25-3.701 8.25-8.25 8.25zm4.524-6.195c-.248-.124-1.467-.724-1.695-.807-.228-.083-.394-.124-.56.124-.166.248-.644.807-.789.973-.145.166-.29.186-.538.062-.248-.124-1.047-.386-1.995-1.231-.738-.658-1.237-1.471-1.382-1.719-.145-.248-.016-.382.108-.505.111-.11.248-.29.373-.435.124-.145.166-.248.248-.415.083-.166.041-.311-.021-.435-.062-.124-.56-1.349-.767-1.848-.202-.486-.407-.42-.56-.428l-.477-.008c-.166 0-.435.062-.663.311-.228.248-.871.851-.871 2.075s.892 2.406 1.016 2.572c.124.166 1.755 2.68 4.252 3.757.594.256 1.058.409 1.42.524.597.19 1.14.163 1.57.099.479-.071 1.467-.6 1.674-1.18.207-.58.207-1.077.145-1.18-.062-.104-.228-.166-.476-.29z"/>
-      </svg>
       WhatsApp-ൽ ചലഞ്ച് ഷെയർ ചെയ്യുക
     </button>
   </div>
 
+  <!-- =========================================
+       3. MEMORY CARD FLIP SCREEN
+  ========================================= -->
+  <div id="memory-screen" class="hidden">
+    <div class="top-hub-nav">
+      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Arcade Home</button>
+      <button class="btn-nav-home" onclick="initMemoryGame()">🔄 Restart</button>
+    </div>
+
+    <div class="scoreboard-box">
+      <div class="score-card">
+        <div class="score-title">Moves</div>
+        <div class="score-val" id="mem-moves">0</div>
+      </div>
+      <div class="score-card">
+        <div class="score-title">Matched</div>
+        <div class="score-val" id="mem-matches" style="color:#34d399;">0 / 8</div>
+      </div>
+    </div>
+
+    <div class="game-status-bubble" id="mem-status">Cards marichu nokkoo! 🧠</div>
+
+    <div class="memory-grid" id="mem-grid"></div>
+  </div>
+
+  <!-- =========================================
+       4. ROCK PAPER SCISSORS SCREEN
+  ========================================= -->
+  <div id="rps-screen" class="hidden">
+    <div class="top-hub-nav">
+      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Arcade Home</button>
+      <button class="btn-nav-home" onclick="resetRpsScores()">🔄 Reset Score</button>
+    </div>
+
+    <div class="scoreboard-box">
+      <div class="score-card">
+        <div class="score-title">You</div>
+        <div class="score-val" id="rps-p1-score">0</div>
+      </div>
+      <div class="score-card">
+        <div class="score-title">Draw</div>
+        <div class="score-val" id="rps-draw-score">0</div>
+      </div>
+      <div class="score-card">
+        <div class="score-title">AI</div>
+        <div class="score-val" id="rps-ai-score" style="color:#f43f5e;">0</div>
+      </div>
+    </div>
+
+    <div class="game-status-bubble" id="rps-status">Njangalude aayudham select cheyyuka!</div>
+
+    <div class="rps-battlefield">
+      <div class="rps-fighter">
+        <div class="rps-hand-display" id="rps-player-hand">❓</div>
+        <div class="rps-fighter-name">You</div>
+      </div>
+      <div style="font-weight:900; font-size:1.5rem; color:#38bdf8;">VS</div>
+      <div class="rps-fighter">
+        <div class="rps-hand-display" id="rps-ai-hand">❓</div>
+        <div class="rps-fighter-name">AI</div>
+      </div>
+    </div>
+
+    <div class="rps-actions">
+      <button class="rps-btn" onclick="playRPS('rock')">
+        <span class="rps-btn-emoji">✊</span>
+        <span class="rps-btn-label">Rock</span>
+      </button>
+      <button class="rps-btn" onclick="playRPS('paper')">
+        <span class="rps-btn-emoji">✋</span>
+        <span class="rps-btn-label">Paper</span>
+      </button>
+      <button class="rps-btn" onclick="playRPS('scissors')">
+        <span class="rps-btn-emoji">✌️</span>
+        <span class="rps-btn-label">Scissors</span>
+      </button>
+    </div>
+  </div>
+
   <script>
+    /* =========================================
+       NAVIGATION LOGIC
+    ========================================= */
+    function openGame(screenId) {
+      document.getElementById('hub-screen').classList.add('hidden');
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('ttt-game-screen').classList.add('hidden');
+      document.getElementById('memory-screen').classList.add('hidden');
+      document.getElementById('rps-screen').classList.add('hidden');
+
+      if (screenId === 'hub') {
+        document.getElementById('hub-screen').classList.remove('hidden');
+      } else if (screenId === 'ttt-poster') {
+        document.getElementById('start-screen').classList.remove('hidden');
+      } else if (screenId === 'memory') {
+        document.getElementById('memory-screen').classList.remove('hidden');
+        initMemoryGame();
+      } else if (screenId === 'rps') {
+        document.getElementById('rps-screen').classList.remove('hidden');
+      }
+    }
+
+    /* =========================================
+       TIC TAC TOE LOGIC
+    ========================================= */
     let mode = 'ai';
     let difficulty = 'hard';
     let humanSymbol = 'X';
@@ -425,12 +754,12 @@
       document.getElementById('diff-easy').classList.toggle('active', lvl === 'easy');
       document.getElementById('diff-med').classList.toggle('active', lvl === 'medium');
       document.getElementById('diff-hard').classList.toggle('active', lvl === 'hard');
-      manualRestart();
+      resetCurrentGame();
     }
 
     function launchGame() {
       document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('game-screen').classList.remove('hidden');
+      document.getElementById('ttt-game-screen').classList.remove('hidden');
 
       if (mode === 'ai') {
         document.getElementById('label-game-mode').textContent = "Smart AI";
@@ -444,13 +773,7 @@
         document.getElementById('diff-bar').classList.add('hidden');
       }
 
-      manualRestart();
-    }
-
-    function goToHome() {
-      clearTimeout(restartTimer);
-      document.getElementById('game-screen').classList.add('hidden');
-      document.getElementById('start-screen').classList.remove('hidden');
+      resetCurrentGame();
     }
 
     function handleMove(idx) {
@@ -517,27 +840,21 @@
 
       if (winInfo.type === 'row') {
         const yPos = (winInfo.idx === 0) ? h * 0.19 : (winInfo.idx === 1) ? h * 0.5 : h * 0.81;
-        x1 = w * 0.08; y1 = yPos;
-        x2 = w * 0.92; y2 = yPos;
+        x1 = w * 0.08; y1 = yPos; x2 = w * 0.92; y2 = yPos;
       } else if (winInfo.type === 'col') {
         const xPos = (winInfo.idx === 0) ? w * 0.19 : (winInfo.idx === 1) ? w * 0.5 : w * 0.81;
-        x1 = xPos; y1 = h * 0.08;
-        x2 = xPos; y2 = h * 0.92;
+        x1 = xPos; y1 = h * 0.08; x2 = xPos; y2 = h * 0.92;
       } else if (winInfo.type === 'diag') {
         if (winInfo.idx === 0) {
-          x1 = w * 0.1; y1 = h * 0.1;
-          x2 = w * 0.9; y2 = h * 0.9;
+          x1 = w * 0.1; y1 = h * 0.1; x2 = w * 0.9; y2 = h * 0.9;
         } else {
-          x1 = w * 0.9; y1 = h * 0.1;
-          x2 = w * 0.1; y2 = h * 0.9;
+          x1 = w * 0.9; y1 = h * 0.1; x2 = w * 0.1; y2 = h * 0.9;
         }
       }
 
       const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x1);
-      line.setAttribute('y1', y1);
-      line.setAttribute('x2', x2);
-      line.setAttribute('y2', y2);
+      line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
       line.setAttribute('class', 'strike-line');
       line.style.stroke = strokeColor;
       line.style.filter = `drop-shadow(0 0 12px ${strokeColor})`;
@@ -546,11 +863,7 @@
 
     function triggerConfetti() {
       if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 90,
-          spread: 75,
-          origin: { y: 0.6 }
-        });
+        confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
       }
     }
 
@@ -581,7 +894,6 @@
       }
       refreshScores();
 
-      // AUTO-RESTART AFTER 5 SECONDS
       clearTimeout(restartTimer);
       restartTimer = setTimeout(() => {
         resetCurrentGame();
@@ -592,11 +904,6 @@
       document.getElementById('val-score-p1').textContent = scores.p1;
       document.getElementById('val-score-draw').textContent = scores.draw;
       document.getElementById('val-score-p2').textContent = scores.p2;
-    }
-
-    function manualRestart() {
-      clearTimeout(restartTimer);
-      resetCurrentGame();
     }
 
     function resetCurrentGame() {
@@ -630,21 +937,183 @@
       }
     }
 
-    // AI MOVE LOGIC
     function getAIMove() {
       const emptyIndices = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
-
       if (difficulty === 'easy') {
         return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
       }
-
       if (difficulty === 'medium') {
         if (Math.random() > 0.5) {
           return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
         }
       }
-
       let bestScore = -Infinity;
       let move = -1;
       for (let i of emptyIndices) {
-        board[i
+        board[i] = aiSymbol;
+        let score = runMinimax(board, 0, false);
+        board[i] = "";
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
+        }
+      }
+      return move;
+    }
+
+    function runMinimax(b, depth, isMaximizing) {
+      if (checkWin(b, aiSymbol)) return 10 - depth;
+      if (checkWin(b, humanSymbol)) return depth - 10;
+      if (b.every(c => c !== "")) return 0;
+
+      if (isMaximizing) {
+        let maxVal = -Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (b[i] === "") {
+            b[i] = aiSymbol;
+            maxVal = Math.max(maxVal, runMinimax(b, depth + 1, false));
+            b[i] = "";
+          }
+        }
+        return maxVal;
+      } else {
+        let minVal = Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (b[i] === "") {
+            b[i] = humanSymbol;
+            minVal = Math.min(minVal, runMinimax(b, depth + 1, true));
+            b[i] = "";
+          }
+        }
+        return minVal;
+      }
+    }
+
+    function shareToWhatsApp() {
+      const siteUrl = "https://shameel11-coder.github.io";
+      const message = `🔥 ഞാൻ Shameel-ന്റെ Tic-Tac-Toe ഗെയിമിൽ സ്കോർ അടിച്ചു തൂക്കി!\n\n🎮 നിലവിലെ സ്കോർ:\n👉 You: ${scores.p1} | AI: ${scores.p2} | Draw: ${scores.draw}\n\nധൈര്യമുണ്ടെങ്കിൽ ഈ Unbeatable AI-യെ തോൽപ്പിച്ചു കാണിക്ക്! കളിക്കാൻ ലിങ്ക് ഇതാ:\n🔗 ${siteUrl}`;
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    /* =========================================
+       3. MEMORY CARD GAME LOGIC
+    ========================================= */
+    const memIcons = ['🚀', '⚽', '💎', '🎮', '🔥', '👑', '🍕', '🤖'];
+    let memCards = [];
+    let flippedCards = [];
+    let memMoves = 0;
+    let memMatches = 0;
+    let lockMemBoard = false;
+
+    function initMemoryGame() {
+      const grid = document.getElementById('mem-grid');
+      grid.innerHTML = '';
+      memCards = [...memIcons, ...memIcons].sort(() => 0.5 - Math.random());
+      flippedCards = [];
+      memMoves = 0;
+      memMatches = 0;
+      lockMemBoard = false;
+
+      document.getElementById('mem-moves').textContent = '0';
+      document.getElementById('mem-matches').textContent = '0 / 8';
+      document.getElementById('mem-status').textContent = 'Cards marichu nokkoo! 🧠';
+
+      memCards.forEach((icon, index) => {
+        const card = document.createElement('div');
+        card.classList.add('mem-card');
+        card.dataset.index = index;
+        card.dataset.icon = icon;
+        card.textContent = '❓';
+        card.onclick = () => flipMemCard(card);
+        grid.appendChild(card);
+      });
+    }
+
+    function flipMemCard(card) {
+      if (lockMemBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+      card.classList.add('flipped');
+      card.textContent = card.dataset.icon;
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+        memMoves++;
+        document.getElementById('mem-moves').textContent = memMoves;
+        checkMemMatch();
+      }
+    }
+
+    function checkMemMatch() {
+      const [c1, c2] = flippedCards;
+      if (c1.dataset.icon === c2.dataset.icon) {
+        c1.classList.add('matched');
+        c2.classList.add('matched');
+        memMatches++;
+        document.getElementById('mem-matches').textContent = `${memMatches} / 8`;
+        flippedCards = [];
+
+        if (memMatches === 8) {
+          document.getElementById('mem-status').textContent = `🎉 ജയിച്ചു! ${memMoves} moves-ൽ കളി തീർത്തു!`;
+          triggerConfetti();
+        }
+      } else {
+        lockMemBoard = true;
+        setTimeout(() => {
+          c1.classList.remove('flipped');
+          c2.classList.remove('flipped');
+          c1.textContent = '❓';
+          c2.textContent = '❓';
+          flippedCards = [];
+          lockMemBoard = false;
+        }, 900);
+      }
+    }
+
+    /* =========================================
+       4. ROCK PAPER SCISSORS LOGIC
+    ========================================= */
+    const rpsEmojis = { rock: '✊', paper: '✋', scissors: '✌️' };
+    let rpsScores = { p1: 0, draw: 0, ai: 0 };
+
+    function playRPS(pChoice) {
+      const choices = ['rock', 'paper', 'scissors'];
+      const aiChoice = choices[Math.floor(Math.random() * choices.length)];
+
+      document.getElementById('rps-player-hand').textContent = rpsEmojis[pChoice];
+      document.getElementById('rps-ai-hand').textContent = rpsEmojis[aiChoice];
+
+      if (pChoice === aiChoice) {
+        document.getElementById('rps-status').textContent = "സമനിലയായി! 🤝";
+        rpsScores.draw++;
+      } else if (
+        (pChoice === 'rock' && aiChoice === 'scissors') ||
+        (pChoice === 'paper' && aiChoice === 'rock') ||
+        (pChoice === 'scissors' && aiChoice === 'paper')
+      ) {
+        document.getElementById('rps-status').textContent = "🎉 നിങ്ങൾ ജയിച്ചു!";
+        rpsScores.p1++;
+        triggerConfetti();
+      } else {
+        document.getElementById('rps-status').textContent = "🤖 AI ജയിച്ചു!";
+        rpsScores.ai++;
+      }
+
+      document.getElementById('rps-p1-score').textContent = rpsScores.p1;
+      document.getElementById('rps-draw-score').textContent = rpsScores.draw;
+      document.getElementById('rps-ai-score').textContent = rpsScores.ai;
+    }
+
+    function resetRpsScores() {
+      rpsScores = { p1: 0, draw: 0, ai: 0 };
+      document.getElementById('rps-p1-score').textContent = '0';
+      document.getElementById('rps-draw-score').textContent = '0';
+      document.getElementById('rps-ai-score').textContent = '0';
+      document.getElementById('rps-player-hand').textContent = '❓';
+      document.getElementById('rps-ai-hand').textContent = '❓';
+      document.getElementById('rps-status').textContent = 'സ്കോർ റീസെറ്റ് ചെയ്തു!';
+    }
+  </script>
+</body>
+</html>
+
