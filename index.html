@@ -15,6 +15,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Shameel's Tic-Tac-Toe</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -96,7 +97,6 @@
       height: 8.5%;
     }
 
-    /* Subtle indicator border without massive shield/glow */
     .hotspot.selected {
       border: 2px solid #38bdf8 !important;
       background: rgba(56, 189, 248, 0.12) !important;
@@ -122,7 +122,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       animation: fadeIn 0.25s ease-out;
     }
 
@@ -142,11 +142,41 @@
       background: #111827;
       border: 1px solid #1f2937;
       color: #94a3b8;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
+    }
+
+    /* DIFFICULTY SELECTOR PILL */
+    .diff-selector {
+      width: 100%;
+      display: flex;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .diff-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 7px 0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .diff-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
     }
 
     .scoreboard-box {
@@ -159,13 +189,13 @@
       flex: 1;
       background: #0f172a;
       border: 1px solid #1e293b;
-      padding: 12px 6px;
+      padding: 10px 4px;
       border-radius: 16px;
       text-align: center;
     }
 
-    .score-title { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
-    .score-val { font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin-top: 2px; }
+    .score-title { font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
+    .score-val { font-size: 1.45rem; font-weight: 900; color: #38bdf8; margin-top: 2px; }
 
     .game-status-bubble {
       background: #0f172a;
@@ -174,7 +204,7 @@
       border-radius: 9999px;
       font-weight: 700;
       color: #e2e8f0;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     /* PERFECT EQUAL GRID BOARD */
@@ -249,12 +279,19 @@
     <button type="button" id="hotspot-start" class="hotspot" onclick="launchGame()"></button>
   </div>
 
-  <!-- EQUAL GRID GAME SCREEN -->
+  <!-- GAME SCREEN -->
   <div id="game-screen" class="hidden">
     <div class="game-top-bar">
       <button class="nav-btn" onclick="goToHome()">⬅️ Back</button>
-      <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Unbeatable AI</span>
+      <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Smart AI</span>
       <button class="nav-btn" onclick="resetCurrentGame()">🔄 Restart</button>
+    </div>
+
+    <!-- AI Difficulty Toggle -->
+    <div class="diff-selector" id="diff-bar">
+      <button class="diff-btn" id="diff-easy" onclick="setDifficulty('easy')">Easy 🟢</button>
+      <button class="diff-btn" id="diff-med" onclick="setDifficulty('medium')">Medium 🟡</button>
+      <button class="diff-btn active" id="diff-hard" onclick="setDifficulty('hard')">Impossible 🔴</button>
     </div>
 
     <div class="scoreboard-box">
@@ -289,6 +326,7 @@
 
   <script>
     let mode = 'ai';
+    let difficulty = 'hard';
     let humanSymbol = 'X';
     let aiSymbol = 'O';
     let board = ["", "", "", "", "", "", "", "", ""];
@@ -315,18 +353,28 @@
       document.getElementById('hotspot-o').classList.toggle('selected', s === 'O');
     }
 
+    function setDifficulty(lvl) {
+      difficulty = lvl;
+      document.getElementById('diff-easy').classList.toggle('active', lvl === 'easy');
+      document.getElementById('diff-med').classList.toggle('active', lvl === 'medium');
+      document.getElementById('diff-hard').classList.toggle('active', lvl === 'hard');
+      resetCurrentGame();
+    }
+
     function launchGame() {
       document.getElementById('start-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
 
       if (mode === 'ai') {
-        document.getElementById('label-game-mode').textContent = "Unbeatable AI";
+        document.getElementById('label-game-mode').textContent = "Smart AI";
         document.getElementById('p1-name').textContent = `You (${humanSymbol})`;
         document.getElementById('p2-name').textContent = `AI (${aiSymbol})`;
+        document.getElementById('diff-bar').classList.remove('hidden');
       } else {
         document.getElementById('label-game-mode').textContent = "2 Players";
         document.getElementById('p1-name').textContent = "Player (X)";
         document.getElementById('p2-name').textContent = "Player (O)";
+        document.getElementById('diff-bar').classList.add('hidden');
       }
 
       resetCurrentGame();
@@ -358,8 +406,8 @@
         document.getElementById('game-status').textContent = "AI chinthikkunnu... 🤖";
         
         setTimeout(() => {
-          const aiBest = getBestMove();
-          playStep(aiBest, aiSymbol);
+          const aiMove = getAIMove();
+          playStep(aiMove, aiSymbol);
 
           if (checkWin(board, aiSymbol)) {
             finishGame(aiSymbol);
@@ -392,6 +440,16 @@
       return winCombos.find(combo => combo.every(i => board[i] === player));
     }
 
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
     function finishGame(winner) {
       isGamePlayable = false;
       if (winner === "draw") {
@@ -403,11 +461,18 @@
           path.forEach(i => document.getElementsByClassName('cell')[i].classList.add('win-cell'));
         }
         if (mode === 'ai') {
-          document.getElementById('game-status').textContent = (winner === humanSymbol) ? "🎉 Ningal jayichu!" : "🤖 AI jayichu!";
-          if (winner === humanSymbol) scores.p1++; else scores.p2++;
+          if (winner === humanSymbol) {
+            document.getElementById('game-status').textContent = "🎉 Ningal jayichu!";
+            scores.p1++;
+            triggerConfetti();
+          } else {
+            document.getElementById('game-status').textContent = "🤖 AI jayichu!";
+            scores.p2++;
+          }
         } else {
           document.getElementById('game-status').textContent = `🎉 Player ${winner} jayichu!`;
           if (winner === "X") scores.p1++; else scores.p2++;
+          triggerConfetti();
         }
       }
       refreshScores();
@@ -449,18 +514,32 @@
       }
     }
 
-    function getBestMove() {
+    // AI MOVE LOGIC WITH DIFFICULTY LEVELS
+    function getAIMove() {
+      const emptyIndices = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+
+      if (difficulty === 'easy') {
+        // Random Moves
+        return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+      }
+
+      if (difficulty === 'medium') {
+        // 50% Smart, 50% Random
+        if (Math.random() > 0.5) {
+          return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+        }
+      }
+
+      // Impossible (Minimax)
       let bestScore = -Infinity;
       let move = -1;
-      for (let i = 0; i < 9; i++) {
-        if (board[i] === "") {
-          board[i] = aiSymbol;
-          let score = runMinimax(board, 0, false);
-          board[i] = "";
-          if (score > bestScore) {
-            bestScore = score;
-            move = i;
-          }
+      for (let i of emptyIndices) {
+        board[i] = aiSymbol;
+        let score = runMinimax(board, 0, false);
+        board[i] = "";
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
         }
       }
       return move;
@@ -495,4 +574,5 @@
     }
   </script>
 </body>
-</html>
+      </html>
+      
