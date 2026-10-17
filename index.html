@@ -581,11 +581,11 @@
       }
       refreshScores();
 
-      // AUTO-RESTART AFTER 1.8 SECONDS
+      // AUTO-RESTART AFTER 5 SECONDS
       clearTimeout(restartTimer);
       restartTimer = setTimeout(() => {
         resetCurrentGame();
-      }, 1800);
+      }, 5000);
     }
 
     function refreshScores() {
@@ -647,4 +647,4 @@
       let bestScore = -Infinity;
       let move = -1;
       for (let i of emptyIndices) {
-        board
+        board[i
