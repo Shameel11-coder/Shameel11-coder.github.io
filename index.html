@@ -12,11 +12,36 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Shameel's Game Zone</title>
+  <title>Shameel's Arcade Zone 🎮</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
+    /* THEME SYSTEM */
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 15%, #18153b 0%, #080811 70%, #030408 100%);
+      --accent-color: #38bdf8;
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --card-border: rgba(56, 189, 248, 0.25);
+      --text-main: #f8fafc;
+    }
+
+    body.theme-cyber {
+      --bg-gradient: radial-gradient(circle at 50% 15%, #2a0845 0%, #0f051d 70%, #05010a 100%);
+      --accent-color: #f43f5e;
+      --card-bg: rgba(29, 9, 44, 0.92);
+      --card-border: rgba(244, 63, 94, 0.35);
+      --text-main: #fff1f2;
+    }
+
+    body.theme-sunset {
+      --bg-gradient: radial-gradient(circle at 50% 15%, #3b1812 0%, #150907 70%, #070302 100%);
+      --accent-color: #fb923c;
+      --card-bg: rgba(36, 18, 14, 0.92);
+      --card-border: rgba(251, 146, 60, 0.35);
+      --text-main: #fff7ed;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -27,20 +52,21 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 20%, #17153b 0%, #080811 70%, #030408 100%);
-      color: #f8fafc;
+      background: var(--bg-gradient);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 10px;
       overflow-x: hidden;
+      transition: background 0.3s ease;
     }
 
     .hidden { display: none !important; }
 
     /* =========================================
-       FULLSCREEN 5-SECOND WINNER OVERLAY
+       5-SECOND WINNER FULLSCREEN MODAL
     ========================================= */
     #winner-modal {
       position: fixed;
@@ -48,8 +74,8 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(3, 7, 18, 0.94);
-      backdrop-filter: blur(16px);
+      background: rgba(3, 7, 18, 0.95);
+      backdrop-filter: blur(14px);
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -57,73 +83,69 @@
       justify-content: center;
       text-align: center;
       padding: 24px;
-      animation: modalZoom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes modalZoom {
-      from { opacity: 0; transform: scale(0.75); }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.8); }
       to { opacity: 1; transform: scale(1); }
     }
 
     .modal-trophy {
-      font-size: 5.5rem;
-      animation: bounceTrophy 1s infinite alternate ease-in-out;
-      filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.6));
+      font-size: 5rem;
+      filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.7));
+      animation: floatTrophy 1s alternate infinite ease-in-out;
     }
 
-    @keyframes bounceTrophy {
-      from { transform: translateY(0) scale(1); }
-      to { transform: translateY(-16px) scale(1.08); }
+    @keyframes floatTrophy {
+      from { transform: translateY(0); }
+      to { transform: translateY(-14px); }
     }
 
-    .modal-title {
-      font-size: 2.5rem;
+    .modal-headline {
+      font-size: 2.2rem;
       font-weight: 900;
+      color: #fde047;
       margin-top: 10px;
-      background: linear-gradient(135deg, #fde047, #f59e0b, #ef4444);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 1px;
+      text-shadow: 0 0 20px rgba(253, 224, 71, 0.4);
     }
 
-    .modal-winner-name {
-      font-size: 1.5rem;
+    .modal-name {
+      font-size: 1.3rem;
       font-weight: 800;
-      color: #38bdf8;
-      margin-top: 6px;
-      text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+      color: var(--accent-color);
+      margin-top: 4px;
     }
 
-    .modal-subtitle {
-      font-size: 0.95rem;
+    .modal-desc {
+      font-size: 0.9rem;
       color: #94a3b8;
-      font-weight: 600;
       margin-top: 6px;
     }
 
     .modal-timer-bar {
-      width: 160px;
+      width: 150px;
       height: 6px;
       background: #1e293b;
       border-radius: 9999px;
-      margin-top: 24px;
+      margin-top: 20px;
       overflow: hidden;
     }
 
     .modal-timer-fill {
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, #38bdf8, #818cf8);
-      animation: timerCountdown 5s linear forwards;
+      background: var(--accent-color);
+      animation: timerBar 5s linear forwards;
     }
 
-    @keyframes timerCountdown {
+    @keyframes timerBar {
       from { width: 100%; }
       to { width: 0%; }
     }
 
     /* =========================================
-       1. ARCADE HOME HUB
+       ARCADE HUB / HEADER
     ========================================= */
     #hub-screen {
       width: 100%;
@@ -131,210 +153,134 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
-      animation: fadeIn 0.3s ease;
+      gap: 14px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .hub-top-controls {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+    }
+
+    .control-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .hub-header {
       text-align: center;
-      margin-bottom: 8px;
     }
 
     .hub-title {
-      font-size: 2rem;
+      font-size: 1.9rem;
       font-weight: 900;
-      background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+      background: linear-gradient(135deg, #38bdf8, #a855f7, #ec4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: 0.5px;
     }
 
     .hub-subtitle {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #94a3b8;
       font-weight: 600;
+      margin-top: 2px;
     }
 
-    .game-card-list {
+    /* DAILY CHALLENGES */
+    .challenge-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .challenge-badge {
+      font-size: 1.8rem;
+    }
+
+    .challenge-info {
+      flex: 1;
+    }
+
+    .challenge-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--accent-color);
+    }
+
+    .challenge-status {
+      font-size: 0.74rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* GAME LIST */
+    .game-list {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .game-pick-card {
+    .game-card {
       width: 100%;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1.5px solid rgba(56, 189, 248, 0.25);
-      border-radius: 22px;
-      padding: 16px 18px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 14px 16px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      transition: all 0.15s ease;
       color: inherit;
       text-align: left;
+      transition: all 0.15s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
-    .game-pick-card:active {
+    .game-card:active {
       transform: scale(0.97);
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.1);
+      border-color: var(--accent-color);
     }
 
-    .game-pick-icon {
+    .game-icon-box {
       font-size: 1.8rem;
-      min-width: 58px;
-      height: 58px;
-      background: #090d16;
-      border-radius: 18px;
+      min-width: 54px;
+      height: 54px;
+      background: #060a12;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #1e293b;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
       flex-shrink: 0;
-      line-height: 1;
     }
 
-    .game-pick-info { flex: 1; }
-    .game-pick-title { font-size: 1.1rem; font-weight: 800; color: #f8fafc; }
-    .game-pick-desc { font-size: 0.78rem; color: #94a3b8; margin-top: 2px; }
-    .game-pick-arrow { font-size: 1.3rem; color: #38bdf8; font-weight: 900; }
+    .game-meta { flex: 1; }
+    .game-title { font-size: 1.05rem; font-weight: 800; color: #ffffff; }
+    .game-desc { font-size: 0.74rem; color: #94a3b8; margin-top: 2px; }
+    .game-best { font-size: 0.72rem; color: #facc15; font-weight: 700; margin-top: 3px; }
+    .game-arrow { font-size: 1.2rem; color: var(--accent-color); font-weight: 900; }
 
-    /* COMMON TOP NAVIGATION & PILLS */
-    .top-hub-nav {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .btn-nav-home {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #f8fafc;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .mode-pill-bar {
-      width: 100%;
-      display: flex;
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-    }
-
-    .mode-pill-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: #94a3b8;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 8px 0;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .mode-pill-btn.active {
-      background: #0284c7;
-      color: #ffffff;
-      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
-    }
-
-    .scoreboard-box {
-      width: 100%;
-      display: flex;
-      gap: 10px;
-    }
-
-    .score-card {
-      flex: 1;
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      padding: 10px 4px;
-      border-radius: 16px;
-      text-align: center;
-    }
-
-    .score-title { font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
-    .score-val { font-size: 1.45rem; font-weight: 900; color: #38bdf8; margin-top: 2px; }
-
-    .game-status-bubble {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      padding: 8px 22px;
-      border-radius: 9999px;
-      font-weight: 700;
-      color: #e2e8f0;
-      font-size: 0.92rem;
-      text-align: center;
-    }
-
-    /* =========================================
-       2. TIC-TAC-TOE 3D POSTER & BOARD
-    ========================================= */
-    #start-screen {
-      position: relative;
-      width: 100%;
-      max-width: 410px;
-      border-radius: 26px;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
-      user-select: none;
-    }
-
-    .poster-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .hotspot {
-      position: absolute;
-      cursor: pointer;
-      border-radius: 14px;
-      z-index: 10;
-      background: rgba(255, 255, 255, 0.001);
-      border: 2px solid transparent;
-      outline: none;
-    }
-
-    #hotspot-ai { top: 49.5%; left: 13%; width: 40%; height: 8.5%; }
-    #hotspot-2p { top: 49.5%; left: 55%; width: 33%; height: 8.5%; }
-    #hotspot-x { top: 63.8%; left: 13%; width: 39%; height: 8.5%; }
-    #hotspot-o { top: 63.8%; left: 54%; width: 33%; height: 8.5%; }
-    .hotspot.selected {
-      border: 2px solid #38bdf8 !important;
-      background: rgba(56, 189, 248, 0.12) !important;
-    }
-
-    #hotspot-start {
-      top: 73.2%; left: 12%; width: 76%; height: 10%;
-      border-radius: 9999px;
-    }
-    #hotspot-start:active {
-      background: rgba(250, 204, 21, 0.3) !important;
-      transform: scale(0.98);
-    }
-
-    #ttt-game-screen {
+    /* COMMON PLAY WRAPPER */
+    .play-screen {
       width: 100%;
       max-width: 380px;
       display: flex;
@@ -344,222 +290,75 @@
       animation: fadeIn 0.25s ease-out;
     }
 
-    .board-wrapper {
-      position: relative;
+    .play-navbar {
       width: 100%;
-      height: 350px;
-      max-height: 85vw;
-    }
-
-    .game-board {
-      width: 100%;
-      height: 100%;
-      background: #0b1120;
-      border: 1.5px solid #1e293b;
-      border-radius: 24px;
-      padding: 12px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .cell {
-      background: #060a14;
-      border-radius: 16px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      font-weight: 900;
+    }
+
+    .nav-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 7px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
-      border: 1px solid #172033;
-      user-select: none;
-      line-height: 1;
-      overflow: hidden;
-      transition: background 0.15s, transform 0.1s;
     }
 
-    .cell:active { transform: scale(0.95); }
-    .cell.x { color: #38bdf8; text-shadow: 0 0 14px rgba(56, 189, 248, 0.7); }
-    .cell.o { color: #f43f5e; text-shadow: 0 0 14px rgba(244, 63, 94, 0.7); }
-    .cell.win-cell { background: #0c2340; border-color: #38bdf8; }
-
-    .strike-svg {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 20;
-    }
-
-    .strike-line {
-      stroke: #38bdf8;
-      stroke-width: 8;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 10px #38bdf8);
-      stroke-dasharray: 400; stroke-dashoffset: 400;
-      animation: drawStrike 0.4s ease-out forwards;
-    }
-
-    @keyframes drawStrike { to { stroke-dashoffset: 0; } }
-
-    .btn-share {
-      width: 100%;
-      padding: 12px;
-      background: #25D366;
-      border: none;
-      border-radius: 14px;
-      color: #052e16;
+    .score-bubble {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
       font-weight: 800;
-      font-size: 0.92rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-      transition: transform 0.15s ease;
+      color: var(--accent-color);
     }
 
-    /* =========================================
-       3. MEMORY CARD FLIP STYLES
-    ========================================= */
-    #memory-screen {
+    canvas {
+      background: #070b14;
+      border: 1.5px solid var(--card-border);
+      border-radius: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      display: block;
       width: 100%;
-      max-width: 390px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      animation: fadeIn 0.25s ease;
+      max-height: 480px;
     }
 
-    .memory-grid {
-      width: 100%;
-      aspect-ratio: 1/1;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      gap: 9px;
-      background: #0b1120;
-      padding: 12px;
-      border-radius: 24px;
-      border: 1.5px solid #1e293b;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .mem-card {
-      background: #090d16;
-      border: 1.5px solid #1e293b;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.2s ease, background 0.2s;
-    }
-
-    .mem-card.flipped {
-      background: #1e293b;
-      border-color: #38bdf8;
-      transform: rotateY(180deg);
-    }
-
-    .mem-card.matched {
-      background: #064e3b;
-      border-color: #34d399;
-      animation: pulseMatch 0.5s ease;
-    }
-
-    @keyframes pulseMatch {
-      0% { transform: scale(0.9); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-
-    /* =========================================
-       4. ROCK PAPER SCISSORS STYLES
-    ========================================= */
-    #rps-screen {
-      width: 100%;
-      max-width: 390px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      animation: fadeIn 0.25s ease;
-    }
-
-    .rps-battlefield {
-      width: 100%;
-      background: #0b1120;
-      border: 1.5px solid #1e293b;
-      border-radius: 24px;
-      padding: 18px 14px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .rps-fighter {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .rps-hand-display {
-      width: 76px;
-      height: 76px;
-      background: #060a14;
-      border: 2px solid #1e293b;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }
-
-    .rps-fighter-name { font-size: 0.85rem; font-weight: 700; color: #94a3b8; }
-
-    .rps-actions {
+    /* CONTROLS BAR FOR CAR & FLAPPY */
+    .car-touch-bar {
       width: 100%;
       display: flex;
       gap: 10px;
     }
 
-    .rps-btn {
+    .touch-btn {
       flex: 1;
-      background: #0f172a;
-      border: 1.5px solid #1e293b;
-      border-radius: 18px;
-      padding: 14px 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 900;
+      padding: 14px 0;
+      border-radius: 16px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      user-select: none;
+      transition: all 0.1s ease;
     }
 
-    .rps-btn:active {
-      transform: scale(0.94);
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.1);
+    .touch-btn:active {
+      background: var(--accent-color);
+      transform: scale(0.95);
     }
 
-    .rps-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none !important;
+    .nitro-btn {
+      background: #dc2626 !important;
+      border-color: #ef4444 !important;
+      font-size: 0.95rem !important;
     }
-
-    .rps-btn-emoji { font-size: 2.2rem; }
-    .rps-btn-label { font-size: 0.78rem; font-weight: 700; color: #e2e8f0; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.96); }
@@ -570,809 +369,640 @@
 <body>
 
   <!-- =========================================
-       GLOBAL 5-SECOND FULLSCREEN WINNER POPUP
+       5-SECOND WINNER FULLSCREEN MODAL
   ========================================= -->
   <div id="winner-modal" class="hidden">
-    <div class="modal-trophy" id="modal-icon">🏆</div>
-    <div class="modal-title" id="modal-headline">WINNER!</div>
-    <div class="modal-winner-name" id="modal-player-name">Player Name</div>
-    <div class="modal-subtitle" id="modal-subtext">അടിപൊളി വിജയം! 🎉</div>
+    <div class="modal-trophy">🏆</div>
+    <div class="modal-headline">NEW RECORD!</div>
+    <div class="modal-name" id="modal-name">CHAMPION!</div>
+    <div class="modal-desc" id="modal-desc">പുതിയ ഹൈസ്കോർ നേടി വിജയിച്ചു! 🎉</div>
     <div class="modal-timer-bar">
       <div class="modal-timer-fill"></div>
     </div>
   </div>
 
   <!-- =========================================
-       1. ARCADE MAIN HUB SCREEN
+       ARCADE HUB SCREEN
   ========================================= -->
   <div id="hub-screen">
+    <div class="hub-top-controls">
+      <button class="control-btn" onclick="cycleTheme()">🎨 <span id="label-theme">Neon</span></button>
+      <button class="control-btn" onclick="toggleAudio()">🔊 <span id="label-sound">Sound: ON</span></button>
+    </div>
+
     <div class="hub-header">
-      <div class="hub-title">SHAMEEL GAME ZONE 🎮</div>
-      <div class="hub-subtitle">നിങ്ങൾക്ക് ഇഷ്ടമുള്ള ഗെയിം തിരഞ്ഞെടുക്കുക!</div>
+      <div class="hub-title">SHAMEEL ARCADE 🎮</div>
+      <div class="hub-subtitle">കളിക്കാൻ ഇഷ്ടമുള്ള ഗെയിം തിരഞ്ഞെടുക്കൂ!</div>
     </div>
 
-    <div class="game-card-list">
-      <!-- 1. Tic Tac Toe Card -->
-      <button type="button" class="game-pick-card" onclick="openGame('ttt-poster')">
-        <div class="game-pick-icon">❌</div>
-        <div class="game-pick-info">
-          <div class="game-pick-title">Tic-Tac-Toe 3D</div>
-          <div class="game-pick-desc">Unbeatable AI & 2 Player Mode</div>
+    <!-- DAILY CHALLENGE CARD -->
+    <div class="challenge-card">
+      <div class="challenge-badge" id="badge-icon">🎖️</div>
+      <div class="challenge-info">
+        <div class="challenge-title">ഡെയ്‌ലി ചലഞ്ച്: Speed Demon</div>
+        <div class="challenge-status" id="badge-desc">Turbo Racer-ൽ 30 സ്കോർ അടിക്കൂ!</div>
+      </div>
+    </div>
+
+    <!-- GAME SELECTION LIST -->
+    <div class="game-list">
+      <!-- 1. Turbo Car Racer -->
+      <button type="button" class="game-card" onclick="startAppGame('car')">
+        <div class="game-icon-box">🏎️</div>
+        <div class="game-meta">
+          <div class="game-title">Turbo Car Racer</div>
+          <div class="game-desc">Dodge traffic, grab coins & Nitro boost!</div>
+          <div class="game-best" id="best-car">Best Score: 0</div>
         </div>
-        <div class="game-pick-arrow">➔</div>
+        <div class="game-arrow">➔</div>
       </button>
 
-      <!-- 2. Memory Card Flip Card -->
-      <button type="button" class="game-pick-card" onclick="openGame('memory')">
-        <div class="game-pick-icon">🧠</div>
-        <div class="game-pick-info">
-          <div class="game-pick-title">Memory Card Flip</div>
-          <div class="game-pick-desc">vs Smart AI & 2 Player Match</div>
+      <!-- 2. Flappy Jet -->
+      <button type="button" class="game-card" onclick="startAppGame('flappy')">
+        <div class="game-icon-box">🚀</div>
+        <div class="game-meta">
+          <div class="game-title">Flappy Jet</div>
+          <div class="game-desc">Tap to fly through neon lasers!</div>
+          <div class="game-best" id="best-flappy">Best Score: 0</div>
         </div>
-        <div class="game-pick-arrow">➔</div>
+        <div class="game-arrow">➔</div>
       </button>
 
-      <!-- 3. Rock Paper Scissors Card -->
-      <button type="button" class="game-pick-card" onclick="openGame('rps')">
-        <div class="game-pick-icon">✊</div>
-        <div class="game-pick-info">
-          <div class="game-pick-title">Rock Paper Scissors</div>
-          <div class="game-pick-desc">First to 5 Points Challenge</div>
+      <!-- 3. Knife Hit / Dart Master -->
+      <button type="button" class="game-card" onclick="startAppGame('knife')">
+        <div class="game-icon-box">🎯</div>
+        <div class="game-meta">
+          <div class="game-title">Knife Hit / Dart Master</div>
+          <div class="game-desc">Throw knives without hitting each other!</div>
+          <div class="game-best" id="best-knife">Best Stage: 1</div>
         </div>
-        <div class="game-pick-arrow">➔</div>
+        <div class="game-arrow">➔</div>
       </button>
     </div>
   </div>
 
   <!-- =========================================
-       2. TIC-TAC-TOE 3D POSTER & GAME SCREENS
+       1. TURBO CAR RACER SCREEN
   ========================================= -->
-  <div id="start-screen" class="hidden">
-    <div style="position: absolute; top: 12px; left: 12px; z-index: 25;">
-      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Arcade Home</button>
+  <div id="screen-car" class="play-screen hidden">
+    <div class="play-navbar">
+      <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
+      <div class="score-bubble">Score: <span id="car-score">0</span></div>
+      <button class="nav-btn" onclick="initCarGame()">🔄 Retry</button>
     </div>
-
-    <img src="file_0000000074188208aabdc190d10e5f39.png" alt="3D Tic Tac Toe Poster" class="poster-img">
-
-    <button type="button" id="hotspot-ai" class="hotspot selected" onclick="pickTttMode('ai')"></button>
-    <button type="button" id="hotspot-2p" class="hotspot" onclick="pickTttMode('2p')"></button>
-    <button type="button" id="hotspot-x" class="hotspot selected" onclick="pickTttSym('X')"></button>
-    <button type="button" id="hotspot-o" class="hotspot" onclick="pickTttSym('O')"></button>
-    <button type="button" id="hotspot-start" class="hotspot" onclick="launchTttGame()"></button>
-  </div>
-
-  <div id="ttt-game-screen" class="hidden">
-    <div class="top-hub-nav">
-      <button class="btn-nav-home" onclick="openGame('ttt-poster')">⬅️ Settings</button>
-      <span id="label-game-mode" style="font-size:0.85rem; color:#38bdf8; font-weight:700;">Smart AI</span>
-      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Home</button>
+    <canvas id="car-canvas" width="340" height="420"></canvas>
+    <div class="car-touch-bar">
+      <button class="touch-btn" onclick="moveCarLane(-1)">⬅️</button>
+      <button class="touch-btn nitro-btn" onclick="triggerNitro()">🔥 NITRO</button>
+      <button class="touch-btn" onclick="moveCarLane(1)">➡️</button>
     </div>
-
-    <div class="mode-pill-bar" id="ttt-diff-bar">
-      <button class="mode-pill-btn" id="diff-easy" onclick="setTttDifficulty('easy')">Easy 🟢</button>
-      <button class="mode-pill-btn" id="diff-med" onclick="setTttDifficulty('medium')">Medium 🟡</button>
-      <button class="mode-pill-btn active" id="diff-hard" onclick="setTttDifficulty('hard')">Impossible 🔴</button>
-    </div>
-
-    <div class="scoreboard-box">
-      <div class="score-card">
-        <div class="score-title" id="ttt-p1-name">You (X)</div>
-        <div class="score-val" id="ttt-val-p1">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title">Draw</div>
-        <div class="score-val" id="ttt-val-draw">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title" id="ttt-p2-name">AI (O)</div>
-        <div class="score-val" id="ttt-val-p2">0</div>
-      </div>
-    </div>
-
-    <div class="game-status-bubble" id="ttt-game-status">നിങ്ങളുടെ ഊഴം (X)</div>
-
-    <div class="board-wrapper">
-      <div class="game-board" id="ttt-board">
-        <div class="cell" onclick="handleTttMove(0)"></div>
-        <div class="cell" onclick="handleTttMove(1)"></div>
-        <div class="cell" onclick="handleTttMove(2)"></div>
-        <div class="cell" onclick="handleTttMove(3)"></div>
-        <div class="cell" onclick="handleTttMove(4)"></div>
-        <div class="cell" onclick="handleTttMove(5)"></div>
-        <div class="cell" onclick="handleTttMove(6)"></div>
-        <div class="cell" onclick="handleTttMove(7)"></div>
-        <div class="cell" onclick="handleTttMove(8)"></div>
-      </div>
-      <svg class="strike-svg" id="strike-svg"></svg>
-    </div>
-
-    <button class="btn-share" onclick="shareToWhatsApp()">
-      WhatsApp-ൽ ചലഞ്ച് ഷെയർ ചെയ്യുക
-    </button>
   </div>
 
   <!-- =========================================
-       3. MEMORY CARD FLIP SCREEN
+       2. FLAPPY JET SCREEN
   ========================================= -->
-  <div id="memory-screen" class="hidden">
-    <div class="top-hub-nav">
-      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Home</button>
-      <button class="btn-nav-home" onclick="initMemoryGame()">🔄 Restart</button>
+  <div id="screen-flappy" class="play-screen hidden">
+    <div class="play-navbar">
+      <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
+      <div class="score-bubble">Score: <span id="flappy-score">0</span></div>
+      <button class="nav-btn" onclick="initFlappyGame()">🔄 Retry</button>
     </div>
-
-    <div class="mode-pill-bar">
-      <button class="mode-pill-btn active" id="btn-mem-ai" onclick="setMemMode('ai')">🤖 vs AI</button>
-      <button class="mode-pill-btn" id="btn-mem-2p" onclick="setMemMode('2p')">👥 2 Players</button>
-    </div>
-
-    <div class="scoreboard-box">
-      <div class="score-card">
-        <div class="score-title" id="mem-p1-label">You</div>
-        <div class="score-val" id="mem-p1-score">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title">Moves</div>
-        <div class="score-val" id="mem-moves" style="color:#94a3b8;">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title" id="mem-p2-label">AI</div>
-        <div class="score-val" id="mem-p2-score" style="color:#f43f5e;">0</div>
-      </div>
-    </div>
-
-    <div class="game-status-bubble" id="mem-status">നിങ്ങളുടെ ഊഴം! കാർഡ് തുറക്കൂ 🧠</div>
-
-    <div class="memory-grid" id="mem-grid"></div>
+    <canvas id="flappy-canvas" width="340" height="420" onclick="flapJet()"></canvas>
+    <div style="font-size:0.75rem; color:#94a3b8; font-weight:600;">സ്ക്രീനിൽ ടാപ്പ് ചെയ്ത് പറക്കൂ! 👆</div>
   </div>
 
   <!-- =========================================
-       4. ROCK PAPER SCISSORS SCREEN
+       3. KNIFE HIT / DART MASTER SCREEN
   ========================================= -->
-  <div id="rps-screen" class="hidden">
-    <div class="top-hub-nav">
-      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Home</button>
-      <button class="btn-nav-home" onclick="resetRpsScores()">🔄 Reset</button>
+  <div id="screen-knife" class="play-screen hidden">
+    <div class="play-navbar">
+      <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
+      <div class="score-bubble">Stage <span id="knife-stage">1</span> | Knives: <span id="knife-count">5</span></div>
+      <button class="nav-btn" onclick="initKnifeGame()">🔄 Retry</button>
     </div>
-
-    <div class="mode-pill-bar">
-      <button class="mode-pill-btn active" id="btn-rps-ai" onclick="setRpsMode('ai')">🤖 vs AI</button>
-      <button class="mode-pill-btn" id="btn-rps-2p" onclick="setRpsMode('2p')">👥 2 Players</button>
-    </div>
-
-    <div class="scoreboard-box">
-      <div class="score-card">
-        <div class="score-title" id="rps-p1-label">You</div>
-        <div class="score-val" id="rps-p1-score">0 / 5</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title">Draw</div>
-        <div class="score-val" id="rps-draw-score">0</div>
-      </div>
-      <div class="score-card">
-        <div class="score-title" id="rps-p2-label">AI</div>
-        <div class="score-val" id="rps-p2-score" style="color:#f43f5e;">0 / 5</div>
-      </div>
-    </div>
-
-    <div class="game-status-bubble" id="rps-status">ആദ്യം 5 പോയിന്റ് നേടുന്നയാൾ ജയിക്കും! 🏆</div>
-
-    <div class="rps-battlefield">
-      <div class="rps-fighter">
-        <div class="rps-hand-display" id="rps-player-hand">❓</div>
-        <div class="rps-fighter-name" id="rps-fighter1-name">You</div>
-      </div>
-      <div style="font-weight:900; font-size:1.5rem; color:#38bdf8;">VS</div>
-      <div class="rps-fighter">
-        <div class="rps-hand-display" id="rps-ai-hand">❓</div>
-        <div class="rps-fighter-name" id="rps-fighter2-name">AI</div>
-      </div>
-    </div>
-
-    <div class="rps-actions">
-      <button class="rps-btn" id="rps-btn-rock" onclick="handleRpsChoice('rock')">
-        <span class="rps-btn-emoji">✊</span>
-        <span class="rps-btn-label">Rock</span>
-      </button>
-      <button class="rps-btn" id="rps-btn-paper" onclick="handleRpsChoice('paper')">
-        <span class="rps-btn-emoji">✋</span>
-        <span class="rps-btn-label">Paper</span>
-      </button>
-      <button class="rps-btn" id="rps-btn-scissors" onclick="handleRpsChoice('scissors')">
-        <span class="rps-btn-emoji">✌️</span>
-        <span class="rps-btn-label">Scissors</span>
-      </button>
-    </div>
+    <canvas id="knife-canvas" width="340" height="420" onclick="throwKnife()"></canvas>
+    <div style="font-size:0.75rem; color:#94a3b8; font-weight:600;">കത്തി എറിയാൻ സ്ക്രീനിൽ തൊടുക! 🗡️</div>
   </div>
 
   <script>
     /* =========================================
-       GLOBAL 5-SECOND FULLSCREEN WINNER POPUP LOGIC
+       AUDIO & HAPTICS (SYNTHESIZED NATIVE WEB AUDIO)
     ========================================= */
-    let modalTimer = null;
+    let isSoundOn = true;
+    let audioCtx = null;
 
-    function showFullscreenWinner(winnerName, subtext = "അടിപൊളി വിജയം! 🎉", icon = "🏆") {
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playSound(type) {
+      if (!isSoundOn) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'tap') {
+          osc.frequency.setValueAtTime(450, now);
+          osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now); osc.stop(now + 0.08);
+        } else if (type === 'coin') {
+          osc.frequency.setValueAtTime(987, now);
+          osc.frequency.setValueAtTime(1318, now + 0.08);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+          osc.start(now); osc.stop(now + 0.2);
+        } else if (type === 'crash') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(120, now);
+          osc.frequency.linearRampToValueAtTime(40, now + 0.3);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now); osc.stop(now + 0.3);
+          if (navigator.vibrate) navigator.vibrate(100);
+        }
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      isSoundOn = !isSoundOn;
+      document.getElementById('label-sound').textContent = isSoundOn ? "Sound: ON" : "Sound: OFF";
+      playSound('tap');
+    }
+
+    /* THEME SWITCHER */
+    const themes = ['', 'theme-cyber', 'theme-sunset'];
+    const themeNames = ['Default', 'Cyber', 'Sunset'];
+    let themeIdx = 0;
+
+    function cycleTheme() {
+      themeIdx = (themeIdx + 1) % themes.length;
+      document.body.className = themes[themeIdx];
+      document.getElementById('label-theme').textContent = themeNames[themeIdx];
+      playSound('tap');
+    }
+
+    /* =========================================
+       LOCAL STORAGE & RECORDS
+    ========================================= */
+    let bestScores = {
+      car: parseInt(localStorage.getItem('shameel_car') || '0'),
+      flappy: parseInt(localStorage.getItem('shameel_flappy') || '0'),
+      knife: parseInt(localStorage.getItem('shameel_knife') || '1')
+    };
+
+    function refreshBestLabels() {
+      document.getElementById('best-car').textContent = `Best Score: ${bestScores.car}`;
+      document.getElementById('best-flappy').textContent = `Best Score: ${bestScores.flappy}`;
+      document.getElementById('best-knife').textContent = `Best Stage: ${bestScores.knife}`;
+
+      if (bestScores.car >= 30) {
+        document.getElementById('badge-icon').textContent = '🏆';
+        document.getElementById('badge-desc').textContent = 'Speed Demon അൺലോക്കായി! (30+ Completed)';
+        document.getElementById('badge-desc').style.color = '#34d399';
+      }
+    }
+    refreshBestLabels();
+
+    /* =========================================
+       5-SECOND WINNER OVERLAY
+    ========================================= */
+    let winModalTimer = null;
+    function triggerWinModal(name, desc) {
       const modal = document.getElementById('winner-modal');
-      document.getElementById('modal-icon').textContent = icon;
-      document.getElementById('modal-player-name').textContent = winnerName;
-      document.getElementById('modal-subtext').textContent = subtext;
-
+      document.getElementById('modal-name').textContent = name;
+      document.getElementById('modal-desc').textContent = desc;
       modal.classList.remove('hidden');
 
-      // Trigger Confetti Blast
-      triggerConfetti();
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+      }
 
-      // Reset and re-trigger timer bar animation
       const bar = document.querySelector('.modal-timer-fill');
       bar.style.animation = 'none';
-      void bar.offsetWidth; // Trigger reflow
-      bar.style.animation = 'timerCountdown 5s linear forwards';
+      void bar.offsetWidth;
+      bar.style.animation = 'timerBar 5s linear forwards';
 
-      clearTimeout(modalTimer);
-      modalTimer = setTimeout(() => {
+      clearTimeout(winModalTimer);
+      winModalTimer = setTimeout(() => {
         modal.classList.add('hidden');
       }, 5000);
     }
 
-    function triggerConfetti() {
-      if (typeof confetti === 'function') {
-        confetti({ particleCount: 120, spread: 85, origin: { y: 0.6 } });
-      }
-    }
-
     /* =========================================
-       NAVIGATION LOGIC
+       NAVIGATION SYSTEM
     ========================================= */
-    function openGame(screenId) {
+    let activeGame = null;
+
+    function startAppGame(game) {
+      playSound('tap');
       document.getElementById('hub-screen').classList.add('hidden');
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('ttt-game-screen').classList.add('hidden');
-      document.getElementById('memory-screen').classList.add('hidden');
-      document.getElementById('rps-screen').classList.add('hidden');
+      document.getElementById('screen-car').classList.add('hidden');
+      document.getElementById('screen-flappy').classList.add('hidden');
+      document.getElementById('screen-knife').classList.add('hidden');
 
-      if (screenId === 'hub') {
-        document.getElementById('hub-screen').classList.remove('hidden');
-      } else if (screenId === 'ttt-poster') {
-        document.getElementById('start-screen').classList.remove('hidden');
-      } else if (screenId === 'memory') {
-        document.getElementById('memory-screen').classList.remove('hidden');
-        initMemoryGame();
-      } else if (screenId === 'rps') {
-        document.getElementById('rps-screen').classList.remove('hidden');
-        resetRpsScores();
+      activeGame = game;
+      if (game === 'car') {
+        document.getElementById('screen-car').classList.remove('hidden');
+        initCarGame();
+      } else if (game === 'flappy') {
+        document.getElementById('screen-flappy').classList.remove('hidden');
+        initFlappyGame();
+      } else if (game === 'knife') {
+        document.getElementById('screen-knife').classList.remove('hidden');
+        initKnifeGame();
       }
+    }
+
+    function returnToHub() {
+      playSound('tap');
+      stopAllGameLoops();
+      document.getElementById('screen-car').classList.add('hidden');
+      document.getElementById('screen-flappy').classList.add('hidden');
+      document.getElementById('screen-knife').classList.add('hidden');
+      document.getElementById('hub-screen').classList.remove('hidden');
+      refreshBestLabels();
+    }
+
+    function stopAllGameLoops() {
+      cancelAnimationFrame(carAnimId);
+      cancelAnimationFrame(flappyAnimId);
+      cancelAnimationFrame(knifeAnimId);
     }
 
     /* =========================================
-       1. TIC TAC TOE LOGIC
+       1. TURBO CAR RACER GAME LOGIC
     ========================================= */
-    let tttMode = 'ai';
-    let tttDifficulty = 'hard';
-    let tttHumanSymbol = 'X';
-    let tttAiSymbol = 'O';
-    let tttBoard = ["", "", "", "", "", "", "", "", ""];
-    let tttCurrentTurn = "X";
-    let tttIsPlayable = true;
-    let tttScores = { p1: 0, draw: 0, p2: 0 };
-    let tttRestartTimer = null;
+    const carCanvas = document.getElementById('car-canvas');
+    const carCtx = carCanvas.getContext('2d');
+    let carAnimId = null;
+    let carLane = 1; // 0, 1, 2
+    const lanesX = [55, 170, 285];
+    let carScore = 0;
+    let carSpeed = 4.5;
+    let enemies = [];
+    let coins = [];
+    let roadStripeY = 0;
+    let isCarOver = false;
 
-    const tttWinCombos = [
-      { combo: [0,1,2], type: 'row', idx: 0 },
-      { combo: [3,4,5], type: 'row', idx: 1 },
-      { combo: [6,7,8], type: 'row', idx: 2 },
-      { combo: [0,3,6], type: 'col', idx: 0 },
-      { combo: [1,4,7], type: 'col', idx: 1 },
-      { combo: [2,5,8], type: 'col', idx: 2 },
-      { combo: [0,4,8], type: 'diag', idx: 0 },
-      { combo: [2,4,6], type: 'diag', idx: 1 }
-    ];
-
-    function pickTttMode(m) {
-      tttMode = m;
-      document.getElementById('hotspot-ai').classList.toggle('selected', m === 'ai');
-      document.getElementById('hotspot-2p').classList.toggle('selected', m === '2p');
+    function initCarGame() {
+      cancelAnimationFrame(carAnimId);
+      carLane = 1;
+      carScore = 0;
+      carSpeed = 4.5;
+      enemies = [];
+      coins = [];
+      isCarOver = false;
+      document.getElementById('car-score').textContent = '0';
+      loopCarGame();
     }
 
-    function pickTttSym(s) {
-      tttHumanSymbol = s;
-      tttAiSymbol = (s === 'X') ? 'O' : 'X';
-      document.getElementById('hotspot-x').classList.toggle('selected', s === 'X');
-      document.getElementById('hotspot-o').classList.toggle('selected', s === 'O');
+    function moveCarLane(dir) {
+      if (isCarOver) return;
+      carLane = Math.max(0, Math.min(2, carLane + dir));
+      playSound('tap');
     }
 
-    function setTttDifficulty(lvl) {
-      tttDifficulty = lvl;
-      document.getElementById('diff-easy').classList.toggle('active', lvl === 'easy');
-      document.getElementById('diff-med').classList.toggle('active', lvl === 'medium');
-      document.getElementById('diff-hard').classList.toggle('active', lvl === 'hard');
-      resetTttGame();
+    function triggerNitro() {
+      if (isCarOver) return;
+      carSpeed = 8.5;
+      playSound('coin');
+      setTimeout(() => { carSpeed = 4.5; }, 1400);
     }
 
-    function launchTttGame() {
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('ttt-game-screen').classList.remove('hidden');
+    function loopCarGame() {
+      carCtx.clearRect(0, 0, carCanvas.width, carCanvas.height);
 
-      if (tttMode === 'ai') {
-        document.getElementById('label-game-mode').textContent = "Smart AI";
-        document.getElementById('ttt-p1-name').textContent = `You (${tttHumanSymbol})`;
-        document.getElementById('ttt-p2-name').textContent = `AI (${tttAiSymbol})`;
-        document.getElementById('ttt-diff-bar').classList.remove('hidden');
-      } else {
-        document.getElementById('label-game-mode').textContent = "2 Players";
-        document.getElementById('ttt-p1-name').textContent = "Player (X)";
-        document.getElementById('ttt-p2-name').textContent = "Player (O)";
-        document.getElementById('ttt-diff-bar').classList.add('hidden');
+      // Draw Highway Lanes
+      carCtx.fillStyle = '#111827';
+      carCtx.fillRect(0, 0, carCanvas.width, carCanvas.height);
+      carCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+      carCtx.setLineDash([20, 15]);
+      carCtx.lineDashOffset = -roadStripeY;
+      roadStripeY = (roadStripeY + carSpeed) % 35;
+
+      carCtx.beginPath();
+      carCtx.moveTo(113, 0); carCtx.lineTo(113, carCanvas.height);
+      carCtx.moveTo(226, 0); carCtx.lineTo(226, carCanvas.height);
+      carCtx.stroke();
+
+      // Spawn Enemies & Coins
+      if (Math.random() < 0.022) {
+        const lane = Math.floor(Math.random() * 3);
+        enemies.push({ x: lanesX[lane], y: -50, lane: lane });
       }
-      resetTttGame();
-    }
-
-    function handleTttMove(idx) {
-      if (tttBoard[idx] !== "" || !tttIsPlayable) return;
-
-      playTttStep(idx, tttCurrentTurn);
-
-      const winResult = checkTttWin(tttBoard, tttCurrentTurn);
-      if (winResult) {
-        finishTttGame(tttCurrentTurn, winResult);
-        return;
+      if (Math.random() < 0.018) {
+        const lane = Math.floor(Math.random() * 3);
+        coins.push({ x: lanesX[lane], y: -30 });
       }
 
-      if (tttBoard.every(cell => cell !== "")) {
-        finishTttGame("draw", null);
-        return;
+      // Update & Draw Coins
+      for (let i = coins.length - 1; i >= 0; i--) {
+        const c = coins[i];
+        c.y += carSpeed;
+        carCtx.fillStyle = '#facc15';
+        carCtx.beginPath();
+        carCtx.arc(c.x, c.y, 10, 0, Math.PI * 2);
+        carCtx.fill();
+
+        // Collect
+        if (Math.abs(c.x - lanesX[carLane]) < 25 && Math.abs(c.y - 350) < 30) {
+          carScore += 5;
+          playSound('coin');
+          document.getElementById('car-score').textContent = carScore;
+          coins.splice(i, 1);
+        } else if (c.y > carCanvas.height + 20) {
+          coins.splice(i, 1);
+        }
       }
 
-      if (tttMode === 'ai') {
-        tttCurrentTurn = tttAiSymbol;
-        tttIsPlayable = false;
-        document.getElementById('ttt-game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
-        
-        setTimeout(() => {
-          const aiMove = getTttAIMove();
-          playTttStep(aiMove, tttAiSymbol);
+      // Update & Draw Enemies
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        const e = enemies[i];
+        e.y += carSpeed * 0.85;
 
-          const aiWin = checkTttWin(tttBoard, tttAiSymbol);
-          if (aiWin) {
-            finishTttGame(tttAiSymbol, aiWin);
-          } else if (tttBoard.every(c => c !== "")) {
-            finishTttGame("draw", null);
-          } else {
-            tttCurrentTurn = tttHumanSymbol;
-            tttIsPlayable = true;
-            document.getElementById('ttt-game-status').textContent = `നിങ്ങളുടെ ഊഴം (${tttHumanSymbol})`;
+        // Draw Enemy Car
+        carCtx.fillStyle = '#ef4444';
+        carCtx.fillRect(e.x - 18, e.y, 36, 52);
+        carCtx.fillStyle = '#fee2e2';
+        carCtx.fillRect(e.x - 14, e.y + 10, 28, 12);
+
+        // Crash Detection
+        if (Math.abs(e.x - lanesX[carLane]) < 28 && Math.abs(e.y - 350) < 45) {
+          isCarOver = true;
+          playSound('crash');
+          if (carScore > bestScores.car) {
+            bestScores.car = carScore;
+            localStorage.setItem('shameel_car', carScore);
+            triggerWinModal("NEW RECORD!", `Turbo Racer-ൽ ${carScore} സ്കോർ നേടി!`);
           }
-        }, 350);
-      } else {
-        tttCurrentTurn = (tttCurrentTurn === "X") ? "O" : "X";
-        document.getElementById('ttt-game-status').textContent = `പ്ലെയർ ${tttCurrentTurn}-ന്റെ ഊഴം`;
-      }
-    }
-
-    function playTttStep(idx, player) {
-      tttBoard[idx] = player;
-      const el = document.getElementsByClassName('cell')[idx];
-      el.textContent = player;
-      el.classList.add(player.toLowerCase());
-    }
-
-    function checkTttWin(b, player) {
-      return tttWinCombos.find(item => item.combo.every(i => b[i] === player));
-    }
-
-    function drawTttStrike(winInfo, winner) {
-      const svg = document.getElementById('strike-svg');
-      svg.innerHTML = '';
-      const strokeColor = (winner === 'X') ? '#38bdf8' : '#f43f5e';
-      let x1, y1, x2, y2;
-      const w = svg.clientWidth || 350;
-      const h = svg.clientHeight || 350;
-
-      if (winInfo.type === 'row') {
-        const yPos = (winInfo.idx === 0) ? h * 0.19 : (winInfo.idx === 1) ? h * 0.5 : h * 0.81;
-        x1 = w * 0.08; y1 = yPos;
-        x2 = w * 0.92; y2 = yPos;
-      } else if (winInfo.type === 'col') {
-        const xPos = (winInfo.idx === 0) ? w * 0.19 : (winInfo.idx === 1) ? w * 0.5 : w * 0.81;
-        x1 = xPos; y1 = h * 0.08;
-        x2 = xPos; y2 = h * 0.92;
-      } else if (winInfo.type === 'diag') {
-        if (winInfo.idx === 0) { x1 = w * 0.1; y1 = h * 0.1; x2 = w * 0.9; y2 = h * 0.9; }
-        else { x1 = w * 0.9; y1 = h * 0.1; x2 = w * 0.1; y2 = h * 0.9; }
-      }
-
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-      line.setAttribute('class', 'strike-line');
-      line.style.stroke = strokeColor;
-      line.style.filter = `drop-shadow(0 0 12px ${strokeColor})`;
-      svg.appendChild(line);
-    }
-
-    function finishTttGame(winner, winResult) {
-      tttIsPlayable = false;
-      if (winner === "draw") {
-        document.getElementById('ttt-game-status').textContent = "കളി സമനിലയിൽ! 🤝";
-        tttScores.draw++;
-      } else {
-        if (winResult) {
-          winResult.combo.forEach(i => document.getElementsByClassName('cell')[i].classList.add('win-cell'));
-          drawTttStrike(winResult, winner);
-        }
-        if (tttMode === 'ai') {
-          if (winner === tttHumanSymbol) {
-            document.getElementById('ttt-game-status').textContent = "🎉 നിങ്ങൾ ജയിച്ചു!";
-            tttScores.p1++;
-            showFullscreenWinner("YOU WON!", "നിങ്ങൾ AI-യെ പരാജയപ്പെടുത്തി!");
-          } else {
-            document.getElementById('ttt-game-status').textContent = "🤖 AI ജയിച്ചു!";
-            tttScores.p2++;
-            showFullscreenWinner("SMART AI WON!", "AI ഈ റൗണ്ട് വിജയിച്ചു!", "🤖");
-          }
-        } else {
-          document.getElementById('ttt-game-status').textContent = `🎉 പ്ലെയർ ${winner} ജയിച്ചു!`;
-          if (winner === "X") tttScores.p1++; else tttScores.p2++;
-          showFullscreenWinner(`PLAYER ${winner} WON!`, `പ്ലെയർ ${winner} ഈ റൗണ്ട് നേടി!`);
-        }
-      }
-      document.getElementById('ttt-val-p1').textContent = tttScores.p1;
-      document.getElementById('ttt-val-draw').textContent = tttScores.draw;
-      document.getElementById('ttt-val-p2').textContent = tttScores.p2;
-
-      clearTimeout(tttRestartTimer);
-      tttRestartTimer = setTimeout(() => { resetTttGame(); }, 5000);
-    }
-
-    function resetTttGame() {
-      tttBoard = ["", "", "", "", "", "", "", "", ""];
-      tttCurrentTurn = "X";
-      tttIsPlayable = true;
-      document.getElementById('strike-svg').innerHTML = '';
-      const cells = document.getElementsByClassName('cell');
-      for (let c of cells) { c.textContent = ""; c.className = "cell"; }
-
-      if (tttMode === 'ai') {
-        if (tttHumanSymbol === 'O') {
-          tttIsPlayable = false;
-          document.getElementById('ttt-game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
-          setTimeout(() => {
-            playTttStep(4, 'X');
-            tttCurrentTurn = 'O';
-            tttIsPlayable = true;
-            document.getElementById('ttt-game-status').textContent = "നിങ്ങളുടെ ഊഴം (O)";
-          }, 350);
-        } else {
-          document.getElementById('ttt-game-status').textContent = "നിങ്ങളുടെ ഊഴം (X)";
-        }
-      } else {
-        document.getElementById('ttt-game-status').textContent = "പ്ലെയർ X-ന്റെ ഊഴം";
-      }
-    }
-
-    function getTttAIMove() {
-      const emptyIndices = tttBoard.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
-      if (tttDifficulty === 'easy') return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-      if (tttDifficulty === 'medium' && Math.random() > 0.5) return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-
-      let bestScore = -Infinity;
-      let move = -1;
-      for (let i of emptyIndices) {
-        tttBoard[i] = tttAiSymbol;
-        let score = runTttMinimax(tttBoard, 0, false);
-        tttBoard[i] = "";
-        if (score > bestScore) { bestScore = score; move = i; }
-      }
-      return move;
-    }
-
-    function runTttMinimax(b, depth, isMaximizing) {
-      if (checkTttWin(b, tttAiSymbol)) return 10 - depth;
-      if (checkTttWin(b, tttHumanSymbol)) return depth - 10;
-      if (b.every(c => c !== "")) return 0;
-
-      if (isMaximizing) {
-        let maxVal = -Infinity;
-        for (let i = 0; i < 9; i++) {
-          if (b[i] === "") {
-            b[i] = tttAiSymbol;
-            maxVal = Math.max(maxVal, runTttMinimax(b, depth + 1, false));
-            b[i] = "";
-          }
-        }
-        return maxVal;
-      } else {
-        let minVal = Infinity;
-        for (let i = 0; i < 9; i++) {
-          if (b[i] === "") {
-            b[i] = tttHumanSymbol;
-            minVal = Math.min(minVal, runTttMinimax(b, depth + 1, true));
-            b[i] = "";
-          }
-        }
-        return minVal;
-      }
-    }
-
-    function shareToWhatsApp() {
-      const siteUrl = "https://shameel11-coder.github.io";
-      const message = `🔥 ഞാൻ Shameel-ന്റെ Tic-Tac-Toe ഗെയിമിൽ സ്കോർ അടിച്ചു തൂക്കി!\n\n🎮 നിലവിലെ സ്കോർ:\n👉 You: ${tttScores.p1} | AI: ${tttScores.p2} | Draw: ${tttScores.draw}\n\nധൈര്യമുണ്ടെങ്കിൽ ഈ Unbeatable AI-യെ തോൽപ്പിച്ചു കാണിക്ക്!\n🔗 ${siteUrl}`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
-    }
-
-    /* =========================================
-       2. MEMORY CARD GAME (AI + 2 PLAYERS)
-    ========================================= */
-    const memIcons = ['🚀', '⚽', '💎', '🎮', '🔥', '👑', '🍕', '🤖'];
-    let memMode = 'ai';
-    let memCards = [];
-    let memFlippedCards = [];
-    let memMoves = 0;
-    let memScores = { p1: 0, p2: 0 };
-    let memTurn = 1;
-    let lockMemBoard = false;
-    let aiMemory = {};
-
-    function setMemMode(mode) {
-      memMode = mode;
-      document.getElementById('btn-mem-ai').classList.toggle('active', mode === 'ai');
-      document.getElementById('btn-mem-2p').classList.toggle('active', mode === '2p');
-      document.getElementById('mem-p1-label').textContent = (mode === 'ai') ? 'You' : 'Player 1';
-      document.getElementById('mem-p2-label').textContent = (mode === 'ai') ? 'AI' : 'Player 2';
-      initMemoryGame();
-    }
-
-    function initMemoryGame() {
-      const grid = document.getElementById('mem-grid');
-      grid.innerHTML = '';
-      memCards = [...memIcons, ...memIcons].sort(() => 0.5 - Math.random());
-      memFlippedCards = [];
-      memMoves = 0;
-      memScores = { p1: 0, p2: 0 };
-      memTurn = 1;
-      lockMemBoard = false;
-      aiMemory = {};
-
-      document.getElementById('mem-moves').textContent = '0';
-      document.getElementById('mem-p1-score').textContent = '0';
-      document.getElementById('mem-p2-score').textContent = '0';
-      updateMemStatus();
-
-      memCards.forEach((icon, index) => {
-        const card = document.createElement('div');
-        card.classList.add('mem-card');
-        card.dataset.index = index;
-        card.dataset.icon = icon;
-        card.textContent = '❓';
-        card.onclick = () => {
-          if (memMode === 'ai' && memTurn === 2) return;
-          flipMemCard(card);
-        };
-        grid.appendChild(card);
-      });
-    }
-
-    function updateMemStatus() {
-      if (memMode === 'ai') {
-        document.getElementById('mem-status').textContent = (memTurn === 1) ? "നിങ്ങളുടെ ഊഴം! കാർഡ് തുറക്കൂ 🧠" : "AI ചിന്തിക്കുന്നു... 🤖";
-      } else {
-        document.getElementById('mem-status').textContent = `പ്ലെയർ ${memTurn}-ന്റെ ഊഴം! 🧠`;
-      }
-    }
-
-    function flipMemCard(card) {
-      if (lockMemBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-
-      card.classList.add('flipped');
-      card.textContent = card.dataset.icon;
-      memFlippedCards.push(card);
-
-      aiMemory[card.dataset.index] = card.dataset.icon;
-
-      if (memFlippedCards.length === 2) {
-        memMoves++;
-        document.getElementById('mem-moves').textContent = memMoves;
-        checkMemMatch();
-      }
-    }
-
-    function checkMemMatch() {
-      const [c1, c2] = memFlippedCards;
-      if (c1.dataset.icon === c2.dataset.icon) {
-        c1.classList.add('matched');
-        c2.classList.add('matched');
-        delete aiMemory[c1.dataset.index];
-        delete aiMemory[c2.dataset.index];
-
-        if (memTurn === 1) memScores.p1++; else memScores.p2++;
-        document.getElementById('mem-p1-score').textContent = memScores.p1;
-        document.getElementById('mem-p2-score').textContent = memScores.p2;
-        memFlippedCards = [];
-
-        // Check if all pairs are matched
-        if (memScores.p1 + memScores.p2 === 8) {
-          if (memScores.p1 > memScores.p2) {
-            const winner = (memMode === 'ai') ? "YOU WON!" : "PLAYER 1 WON!";
-            document.getElementById('mem-status').textContent = `🎉 ${winner}`;
-            showFullscreenWinner(winner, "എല്ലാ കാർഡുകളും വിജയകരമായി കണ്ടെത്തി! 🧠");
-          } else if (memScores.p2 > memScores.p1) {
-            const winner = (memMode === 'ai') ? "AI WON!" : "PLAYER 2 WON!";
-            document.getElementById('mem-status').textContent = `🤖 ${winner}`;
-            showFullscreenWinner(winner, "കൂടുതൽ ജോടികൾ ഉണ്ടാക്കി വിജയിച്ചു!", (memMode === 'ai') ? "🤖" : "🏆");
-          } else {
-            document.getElementById('mem-status').textContent = "സമനിലയായി! 🤝";
-          }
-          setTimeout(initMemoryGame, 5000);
-          return;
-        }
-
-        if (memMode === 'ai' && memTurn === 2) {
-          setTimeout(runMemAITurn, 800);
-        }
-      } else {
-        lockMemBoard = true;
-        setTimeout(() => {
-          c1.classList.remove('flipped');
-          c2.classList.remove('flipped');
-          c1.textContent = '❓';
-          c2.textContent = '❓';
-          memFlippedCards = [];
-          lockMemBoard = false;
-
-          memTurn = (memTurn === 1) ? 2 : 1;
-          updateMemStatus();
-
-          if (memMode === 'ai' && memTurn === 2) {
-            setTimeout(runMemAITurn, 700);
-          }
-        }, 900);
-      }
-    }
-
-    function runMemAITurn() {
-      if (memScores.p1 + memScores.p2 === 8) return;
-
-      const unmatchedCards = Array.from(document.querySelectorAll('.mem-card:not(.matched)'));
-      let firstCard = null;
-      let secondCard = null;
-
-      const iconToIndices = {};
-      for (const [idx, icon] of Object.entries(aiMemory)) {
-        if (!iconToIndices[icon]) iconToIndices[icon] = [];
-        iconToIndices[icon].push(idx);
-      }
-
-      for (const icon in iconToIndices) {
-        if (iconToIndices[icon].length >= 2) {
-          const [i1, i2] = iconToIndices[icon];
-          firstCard = document.querySelector(`.mem-card[data-index='${i1}']`);
-          secondCard = document.querySelector(`.mem-card[data-index='${i2}']`);
           break;
         }
-      }
 
-      if (!firstCard || !secondCard) {
-        const available = unmatchedCards.filter(c => !c.classList.contains('flipped'));
-        firstCard = available[Math.floor(Math.random() * available.length)];
-        
-        for (const [idx, icon] of Object.entries(aiMemory)) {
-          if (idx !== firstCard.dataset.index && icon === firstCard.dataset.icon) {
-            secondCard = document.querySelector(`.mem-card[data-index='${idx}']`);
-            break;
-          }
-        }
-        if (!secondCard) {
-          const remaining = available.filter(c => c !== firstCard);
-          secondCard = remaining[Math.floor(Math.random() * remaining.length)];
+        if (e.y > carCanvas.height + 60) {
+          enemies.splice(i, 1);
+          carScore++;
+          document.getElementById('car-score').textContent = carScore;
         }
       }
 
-      if (firstCard && secondCard) {
-        flipMemCard(firstCard);
-        setTimeout(() => {
-          flipMemCard(secondCard);
-        }, 600);
+      // Draw Player Car
+      const px = lanesX[carLane];
+      carCtx.fillStyle = '#38bdf8';
+      carCtx.fillRect(px - 18, 350, 36, 52);
+      carCtx.fillStyle = '#0f172a';
+      carCtx.fillRect(px - 14, 360, 28, 12);
+
+      if (!isCarOver) {
+        carAnimId = requestAnimationFrame(loopCarGame);
+      } else {
+        carCtx.fillStyle = 'rgba(0,0,0,0.7)';
+        carCtx.fillRect(0, 0, carCanvas.width, carCanvas.height);
+        carCtx.fillStyle = '#ef4444';
+        carCtx.font = '900 28px Poppins';
+        carCtx.textAlign = 'center';
+        carCtx.fillText('CRASHED!', carCanvas.width / 2, 200);
+        carCtx.fillStyle = '#fff';
+        carCtx.font = '600 16px Poppins';
+        carCtx.fillText('Tap Retry to Play Again', carCanvas.width / 2, 235);
       }
     }
 
     /* =========================================
-       3. ROCK PAPER SCISSORS (FIRST TO 5 WINS STRICT)
+       2. FLAPPY JET GAME LOGIC
     ========================================= */
-    const rpsEmojis = { rock: '✊', paper: '✋', scissors: '✌️' };
-    let rpsMode = 'ai';
-    let rpsScores = { p1: 0, draw: 0, p2: 0 };
-    let rpsP1Choice = null;
-    let rpsMatchOver = false;
+    const flappyCanvas = document.getElementById('flappy-canvas');
+    const flappyCtx = flappyCanvas.getContext('2d');
+    let flappyAnimId = null;
+    let jetY = 180;
+    let jetVel = 0;
+    let pipes = [];
+    let flappyScore = 0;
+    let isFlappyOver = false;
 
-    function setRpsMode(mode) {
-      rpsMode = mode;
-      document.getElementById('btn-rps-ai').classList.toggle('active', mode === 'ai');
-      document.getElementById('btn-rps-2p').classList.toggle('active', mode === '2p');
-      document.getElementById('rps-p1-label').textContent = (mode === 'ai') ? 'You' : 'Player 1';
-      document.getElementById('rps-p2-label').textContent = (mode === 'ai') ? 'AI' : 'Player 2';
-      document.getElementById('rps-fighter1-name').textContent = (mode === 'ai') ? 'You' : 'Player 1';
-      document.getElementById('rps-fighter2-name').textContent = (mode === 'ai') ? 'AI' : 'Player 2';
-      resetRpsScores();
+    function initFlappyGame() {
+      cancelAnimationFrame(flappyAnimId);
+      jetY = 180;
+      jetVel = 0;
+      pipes = [];
+      flappyScore = 0;
+      isFlappyOver = false;
+      document.getElementById('flappy-score').textContent = '0';
+      loopFlappyGame();
     }
 
-    function toggleRpsButtons(enable) {
-      document.getElementById('rps-btn-rock').disabled = !enable;
-      document.getElementById('rps-btn-paper').disabled = !enable;
-      document.getElementById('rps-btn-scissors').disabled = !enable;
+    function flapJet() {
+      if (isFlappyOver) {
+        initFlappyGame();
+        return;
+      }
+      jetVel = -5.2;
+      playSound('tap');
     }
 
-    function handleRpsChoice(choice) {
-      if (rpsMatchOver) return;
+    function loopFlappyGame() {
+      flappyCtx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
 
-      if (rpsMode === 'ai') {
-        const choices = ['rock', 'paper', 'scissors'];
-        const aiChoice = choices[Math.floor(Math.random() * choices.length)];
-        evaluateRpsRound(choice, aiChoice);
-      } else {
-        if (!rpsP1Choice) {
-          rpsP1Choice = choice;
-          document.getElementById('rps-player-hand').textContent = '🔒';
-          document.getElementById('rps-status').textContent = "Player 1 തിരഞ്ഞെടുത്തു! ഇനി Player 2 ആയുധം തിരഞ്ഞെടുക്കൂ 👇";
-        } else {
-          const p2Choice = choice;
-          evaluateRpsRound(rpsP1Choice, p2Choice);
-          rpsP1Choice = null;
+      jetVel += 0.28;
+      jetY += jetVel;
+
+      // Pipe Spawning
+      if (pipes.length === 0 || pipes[pipes.length - 1].x < flappyCanvas.width - 150) {
+        const topH = Math.floor(Math.random() * 160) + 40;
+        pipes.push({ x: flappyCanvas.width, top: topH, passed: false });
+      }
+
+      // Draw & Check Pipes
+      flappyCtx.fillStyle = '#22c55e';
+      for (let i = pipes.length - 1; i >= 0; i--) {
+        const p = pipes[i];
+        p.x -= 2.2;
+
+        // Top Pipe
+        flappyCtx.fillRect(p.x, 0, 48, p.top);
+        // Bottom Pipe
+        const bottomY = p.top + 115;
+        flappyCtx.fillRect(p.x, bottomY, 48, flappyCanvas.height - bottomY);
+
+        // Score
+        if (!p.passed && p.x + 48 < 60) {
+          p.passed = true;
+          flappyScore++;
+          playSound('coin');
+          document.getElementById('flappy-score').textContent = flappyScore;
         }
+
+        // Collision
+        if (60 + 16 > p.x && 60 - 16 < p.x + 48) {
+          if (jetY - 14 < p.top || jetY + 14 > bottomY) {
+            isFlappyOver = true;
+          }
+        }
+
+        if (p.x < -60) pipes.splice(i, 1);
       }
-    }
 
-    function evaluateRpsRound(c1, c2) {
-      document.getElementById('rps-player-hand').textContent = rpsEmojis[c1];
-      document.getElementById('rps-ai-hand').textContent = rpsEmojis[c2];
+      // Floor/Ceiling Hit
+      if (jetY < 0 || jetY > flappyCanvas.height) isFlappyOver = true;
 
-      if (c1 === c2) {
-        document.getElementById('rps-status').textContent = "റൗണ്ട് സമനില! 🤝";
-        rpsScores.draw++;
-      } else if (
-        (c1 === 'rock' && c2 === 'scissors') ||
-        (c1 === 'paper' && c2 === 'rock') ||
-        (c1 === 'scissors' && c2 === 'paper')
-      ) {
-        rpsScores.p1++;
-        document.getElementById('rps-status').textContent = (rpsMode === 'ai') ? "റൗണ്ട് നിങ്ങൾ നേടി! 🎯" : "റൗണ്ട് Player 1 നേടി! 🎯";
+      // Draw Rocket Jet
+      flappyCtx.fillStyle = '#38bdf8';
+      flappyCtx.beginPath();
+      flappyCtx.arc(60, jetY, 15, 0, Math.PI * 2);
+      flappyCtx.fill();
+
+      if (!isFlappyOver) {
+        flappyAnimId = requestAnimationFrame(loopFlappyGame);
       } else {
-        rpsScores.p2++;
-        document.getElementById('rps-status').textContent = (rpsMode === 'ai') ? "റൗണ്ട് AI നേടി! 🤖" : "റൗണ്ട് Player 2 നേടി! 🎯";
-      }
-
-      document.getElementById('rps-p1-score').textContent = `${rpsScores.p1} / 5`;
-      document.getElementById('rps-draw-score').textContent = rpsScores.draw;
-      document.getElementById('rps-p2-score').textContent = `${rpsScores.p2} / 5`;
-
-      // 5 POINTS REACHED CHECK
-      if (rpsScores.p1 >= 5 || rpsScores.p2 >= 5) {
-        rpsMatchOver = true;
-        toggleRpsButtons(false);
-
-        const isP1 = rpsScores.p1 >= 5;
-        const winnerHeadline = isP1 
-          ? ((rpsMode === 'ai') ? "YOU WON!" : "PLAYER 1 WON!")
-          : ((rpsMode === 'ai') ? "AI WON!" : "PLAYER 2 WON!");
-
-        const icon = (!isP1 && rpsMode === 'ai') ? "🤖" : "🏆";
-        showFullscreenWinner(winnerHeadline, "ആദ്യം 5 പോയിന്റ് നേടി മാച്ച് വിജയിച്ചു!", icon);
-
-        setTimeout(() => {
-          resetRpsScores();
-          toggleRpsButtons(true);
-        }, 5000);
+        playSound('crash');
+        if (flappyScore > bestScores.flappy) {
+          bestScores.flappy = flappyScore;
+          localStorage.setItem('shameel_flappy', flappyScore);
+          triggerWinModal("FLAPPY CHAMP!", `Flappy Jet-ൽ ${flappyScore} സ്കോർ അടിച്ചു!`);
+        }
+        flappyCtx.fillStyle = 'rgba(0,0,0,0.7)';
+        flappyCtx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+        flappyCtx.fillStyle = '#ef4444';
+        flappyCtx.font = '900 28px Poppins';
+        flappyCtx.textAlign = 'center';
+        flappyCtx.fillText('GAME OVER', flappyCanvas.width / 2, 200);
+        flappyCtx.fillStyle = '#fff';
+        flappyCtx.font = '600 16px Poppins';
+        flappyCtx.fillText('Tap to Fly Again', flappyCanvas.width / 2, 235);
       }
     }
 
-    function resetRpsScores() {
-      rpsScores = { p1: 0, draw: 0, p2: 0 };
-      rpsP1Choice = null;
-      rpsMatchOver = false;
-      toggleRpsButtons(true);
-      document.getElementById('rps-p1-score').textContent = '0 / 5';
-      document.getElementById('rps-draw-score').textContent = '0';
-      document.getElementById('rps-p2-score').textContent = '0 / 5';
-      document.getElementById('rps-player-hand').textContent = '❓';
-      document.getElementById('rps-ai-hand').textContent = '❓';
-      document.getElementById('rps-status').textContent = 'ആദ്യം 5 പോയിന്റ് നേടുന്നയാൾ ജയിക്കും! 🏆';
+    /* =========================================
+       3. KNIFE HIT / DART MASTER LOGIC
+    ========================================= */
+    const knifeCanvas = document.getElementById('knife-canvas');
+    const knifeCtx = knifeCanvas.getContext('2d');
+    let knifeAnimId = null;
+    let targetAngle = 0;
+    let targetSpeed = 0.035;
+    let knivesOnTarget = [];
+    let knivesLeft = 6;
+    let knifeStage = 1;
+    let throwingKnife = null;
+    let isKnifeOver = false;
+
+    function initKnifeGame() {
+      cancelAnimationFrame(knifeAnimId);
+      targetAngle = 0;
+      targetSpeed = 0.035 + (knifeStage * 0.005);
+      knivesOnTarget = [];
+      knivesLeft = 5 + knifeStage;
+      throwingKnife = null;
+      isKnifeOver = false;
+      document.getElementById('knife-stage').textContent = knifeStage;
+      document.getElementById('knife-count').textContent = knivesLeft;
+      loopKnifeGame();
+    }
+
+    function throwKnife() {
+      if (isKnifeOver || throwingKnife || knivesLeft <= 0) {
+        if (isKnifeOver) { knifeStage = 1; initKnifeGame(); }
+        return;
+      }
+      playSound('tap');
+      throwingKnife = { y: 360 };
+      knivesLeft--;
+      document.getElementById('knife-count').textContent = knivesLeft;
+    }
+
+    function loopKnifeGame() {
+      knifeCtx.clearRect(0, 0, knifeCanvas.width, knifeCanvas.height);
+      const cx = knifeCanvas.width / 2;
+      const cy = 130;
+      const radius = 55;
+
+      targetAngle += targetSpeed;
+
+      // Draw Spinning Wood Target
+      knifeCtx.save();
+      knifeCtx.translate(cx, cy);
+      knifeCtx.rotate(targetAngle);
+      knifeCtx.fillStyle = '#92400e';
+      knifeCtx.beginPath();
+      knifeCtx.arc(0, 0, radius, 0, Math.PI * 2);
+      knifeCtx.fill();
+      knifeCtx.strokeStyle = '#b45309';
+      knifeCtx.lineWidth = 4;
+      knifeCtx.stroke();
+
+      // Draw Embedded Knives
+      for (let angle of knivesOnTarget) {
+        knifeCtx.save();
+        knifeCtx.rotate(angle);
+        knifeCtx.fillStyle = '#94a3b8';
+        knifeCtx.fillRect(-3, radius, 6, 38);
+        knifeCtx.restore();
+      }
+      knifeCtx.restore();
+
+      // Handle Throwing Knife
+      if (throwingKnife) {
+        throwingKnife.y -= 18;
+        knifeCtx.fillStyle = '#f8fafc';
+        knifeCtx.fillRect(cx - 3, throwingKnife.y, 6, 42);
+
+        // Impact with Target
+        if (throwingKnife.y <= cy + radius) {
+          const hitAngle = Math.atan2(throwingKnife.y - cy, 0) - targetAngle;
+
+          // Check if hits another knife
+          let clashed = false;
+          for (let a of knivesOnTarget) {
+            let diff = Math.abs((a - hitAngle) % (Math.PI * 2));
+            if (diff > Math.PI) diff = Math.PI * 2 - diff;
+            if (diff < 0.22) { clashed = true; break; }
+          }
+
+          if (clashed) {
+            isKnifeOver = true;
+            playSound('crash');
+          } else {
+            playSound('coin');
+            knivesOnTarget.push(hitAngle);
+            throwingKnife = null;
+
+            // Stage Cleared!
+            if (knivesLeft === 0) {
+              knifeStage++;
+              if (knifeStage > bestScores.knife) {
+                bestScores.knife = knifeStage;
+                localStorage.setItem('shameel_knife', knifeStage);
+              }
+              triggerWinModal("STAGE CLEARED!", `Stage ${knifeStage - 1} പൂർത്തിയാക്കി! 🎯`);
+              setTimeout(initKnifeGame, 1200);
+              return;
+            }
+          }
+        }
+      } else if (knivesLeft > 0 && !isKnifeOver) {
+        // Draw Ready Knife at Bottom
+        knifeCtx.fillStyle = '#f8fafc';
+        knifeCtx.fillRect(cx - 3, 350, 6, 42);
+      }
+
+      if (!isKnifeOver) {
+        knifeAnimId = requestAnimationFrame(loopKnifeGame);
+      } else {
+        knifeCtx.fillStyle = 'rgba(0,0,0,0.7)';
+        knifeCtx.fillRect(0, 0, knifeCanvas.width, knifeCanvas.height);
+        knifeCtx.fillStyle = '#ef4444';
+        knifeCtx.font = '900 28px Poppins';
+        knifeCtx.textAlign = 'center';
+        knifeCtx.fillText('KNIFE DEFLECTED!', knifeCanvas.width / 2, 230);
+        knifeCtx.fillStyle = '#fff';
+        knifeCtx.font = '600 16px Poppins';
+        knifeCtx.fillText('Tap to Restart Stage', knifeCanvas.width / 2, 265);
+      }
     }
   </script>
 </body>
