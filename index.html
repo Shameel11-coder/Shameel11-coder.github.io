@@ -110,29 +110,12 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
-    .game-pick-info {
-      flex: 1;
-    }
+    .game-pick-info { flex: 1; }
+    .game-pick-title { font-size: 1.15rem; font-weight: 800; color: #f8fafc; }
+    .game-pick-desc { font-size: 0.78rem; color: #94a3b8; margin-top: 2px; }
+    .game-pick-arrow { font-size: 1.3rem; color: #38bdf8; font-weight: 900; }
 
-    .game-pick-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #f8fafc;
-    }
-
-    .game-pick-desc {
-      font-size: 0.78rem;
-      color: #94a3b8;
-      margin-top: 2px;
-    }
-
-    .game-pick-arrow {
-      font-size: 1.3rem;
-      color: #38bdf8;
-      font-weight: 900;
-    }
-
-    /* COMMON TOP NAVIGATION BAR */
+    /* COMMON TOP NAVIGATION & PILLS */
     .top-hub-nav {
       width: 100%;
       display: flex;
@@ -155,8 +138,66 @@
       gap: 5px;
     }
 
+    .mode-pill-bar {
+      width: 100%;
+      display: flex;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .mode-pill-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-pill-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
+    }
+
+    .scoreboard-box {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+    }
+
+    .score-card {
+      flex: 1;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 10px 4px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .score-title { font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
+    .score-val { font-size: 1.45rem; font-weight: 900; color: #38bdf8; margin-top: 2px; }
+
+    .game-status-bubble {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 8px 22px;
+      border-radius: 9999px;
+      font-weight: 700;
+      color: #e2e8f0;
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
     /* =========================================
-       2. TIC-TAC-TOE GAME STYLES
+       2. TIC-TAC-TOE 3D POSTER & BOARD
     ========================================= */
     #start-screen {
       position: relative;
@@ -212,63 +253,6 @@
       align-items: center;
       gap: 12px;
       animation: fadeIn 0.25s ease-out;
-    }
-
-    .diff-selector {
-      width: 100%;
-      display: flex;
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-    }
-
-    .diff-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: #94a3b8;
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 7px 0;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .diff-btn.active {
-      background: #0284c7;
-      color: #ffffff;
-      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
-    }
-
-    .scoreboard-box {
-      width: 100%;
-      display: flex;
-      gap: 10px;
-    }
-
-    .score-card {
-      flex: 1;
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      padding: 10px 4px;
-      border-radius: 16px;
-      text-align: center;
-    }
-
-    .score-title { font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
-    .score-val { font-size: 1.45rem; font-weight: 900; color: #38bdf8; margin-top: 2px; }
-
-    .game-status-bubble {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      padding: 8px 22px;
-      border-radius: 9999px;
-      font-weight: 700;
-      color: #e2e8f0;
-      font-size: 0.92rem;
     }
 
     .board-wrapper {
@@ -349,7 +333,7 @@
     }
 
     /* =========================================
-       3. MEMORY CARD FLIP GAME STYLES
+       3. MEMORY CARD FLIP STYLES
     ========================================= */
     #memory-screen {
       width: 100%;
@@ -357,7 +341,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       animation: fadeIn 0.25s ease;
     }
 
@@ -384,9 +368,8 @@
       justify-content: center;
       font-size: 1.8rem;
       cursor: pointer;
-      perspective: 1000px;
-      transition: transform 0.2s ease, background 0.2s;
       user-select: none;
+      transition: transform 0.2s ease, background 0.2s;
     }
 
     .mem-card.flipped {
@@ -408,7 +391,7 @@
     }
 
     /* =========================================
-       4. ROCK PAPER SCISSORS GAME STYLES
+       4. ROCK PAPER SCISSORS STYLES
     ========================================= */
     #rps-screen {
       width: 100%;
@@ -416,7 +399,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       animation: fadeIn 0.25s ease;
     }
 
@@ -425,7 +408,7 @@
       background: #0b1120;
       border: 1.5px solid #1e293b;
       border-radius: 24px;
-      padding: 20px 14px;
+      padding: 18px 14px;
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -440,23 +423,19 @@
     }
 
     .rps-hand-display {
-      width: 80px;
-      height: 80px;
+      width: 76px;
+      height: 76px;
       background: #060a14;
       border: 2px solid #1e293b;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.6rem;
+      font-size: 2.5rem;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
-    .rps-fighter-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #94a3b8;
-    }
+    .rps-fighter-name { font-size: 0.85rem; font-weight: 700; color: #94a3b8; }
 
     .rps-actions {
       width: 100%;
@@ -469,7 +448,7 @@
       background: #0f172a;
       border: 1.5px solid #1e293b;
       border-radius: 18px;
-      padding: 16px 6px;
+      padding: 14px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -501,7 +480,7 @@
   <div id="hub-screen">
     <div class="hub-header">
       <div class="hub-title">SHAMEEL GAME ZONE 🎮</div>
-      <div class="hub-subtitle">Ningalkk ishtamulla game theranjedukkuka!</div>
+      <div class="hub-subtitle">നിങ്ങൾക്ക് ഇഷ്ടമുള്ള ഗെയിം തിരഞ്ഞെടുക്കുക!</div>
     </div>
 
     <div class="game-card-list">
@@ -510,7 +489,7 @@
         <div class="game-pick-icon">❌⭕</div>
         <div class="game-pick-info">
           <div class="game-pick-title">Tic-Tac-Toe 3D</div>
-          <div class="game-pick-desc">Unbeatable Smart AI & 2 Player Mode</div>
+          <div class="game-pick-desc">Unbeatable AI & 2 Player Mode</div>
         </div>
         <div class="game-pick-arrow">➔</div>
       </div>
@@ -520,7 +499,7 @@
         <div class="game-pick-icon">🧠🃏</div>
         <div class="game-pick-info">
           <div class="game-pick-title">Memory Card Flip</div>
-          <div class="game-pick-desc">Card-ukal marichu matching jodi kandupidikkuka</div>
+          <div class="game-pick-desc">vs Smart AI & 2 Player Match</div>
         </div>
         <div class="game-pick-arrow">➔</div>
       </div>
@@ -530,7 +509,7 @@
         <div class="game-pick-icon">✊✋</div>
         <div class="game-pick-info">
           <div class="game-pick-title">Rock Paper Scissors</div>
-          <div class="game-pick-desc">AI-yumaayi fast round battle kalikkuka</div>
+          <div class="game-pick-desc">AI Challenge & 2 Player Face-off</div>
         </div>
         <div class="game-pick-arrow">➔</div>
       </div>
@@ -541,23 +520,17 @@
        2. TIC-TAC-TOE 3D POSTER & GAME SCREENS
   ========================================= -->
   <div id="start-screen" class="hidden">
-    <!-- Top Back to Home Button -->
     <div style="position: absolute; top: 12px; left: 12px; z-index: 25;">
       <button class="btn-nav-home" onclick="openGame('hub')">🏠 Arcade Home</button>
     </div>
 
     <img src="file_0000000074188208aabdc190d10e5f39.png" alt="3D Tic Tac Toe Poster" class="poster-img">
 
-    <!-- Mode Hotspots -->
-    <button type="button" id="hotspot-ai" class="hotspot selected" onclick="pickMode('ai')"></button>
-    <button type="button" id="hotspot-2p" class="hotspot" onclick="pickMode('2p')"></button>
-
-    <!-- Symbol Hotspots -->
-    <button type="button" id="hotspot-x" class="hotspot selected" onclick="pickSym('X')"></button>
-    <button type="button" id="hotspot-o" class="hotspot" onclick="pickSym('O')"></button>
-
-    <!-- Start Button Hotspot -->
-    <button type="button" id="hotspot-start" class="hotspot" onclick="launchGame()"></button>
+    <button type="button" id="hotspot-ai" class="hotspot selected" onclick="pickTttMode('ai')"></button>
+    <button type="button" id="hotspot-2p" class="hotspot" onclick="pickTttMode('2p')"></button>
+    <button type="button" id="hotspot-x" class="hotspot selected" onclick="pickTttSym('X')"></button>
+    <button type="button" id="hotspot-o" class="hotspot" onclick="pickTttSym('O')"></button>
+    <button type="button" id="hotspot-start" class="hotspot" onclick="launchTttGame()"></button>
   </div>
 
   <div id="ttt-game-screen" class="hidden">
@@ -567,40 +540,40 @@
       <button class="btn-nav-home" onclick="openGame('hub')">🏠 Home</button>
     </div>
 
-    <div class="diff-selector" id="diff-bar">
-      <button class="diff-btn" id="diff-easy" onclick="setDifficulty('easy')">Easy 🟢</button>
-      <button class="diff-btn" id="diff-med" onclick="setDifficulty('medium')">Medium 🟡</button>
-      <button class="diff-btn active" id="diff-hard" onclick="setDifficulty('hard')">Impossible 🔴</button>
+    <div class="mode-pill-bar" id="ttt-diff-bar">
+      <button class="mode-pill-btn" id="diff-easy" onclick="setTttDifficulty('easy')">Easy 🟢</button>
+      <button class="mode-pill-btn" id="diff-med" onclick="setTttDifficulty('medium')">Medium 🟡</button>
+      <button class="mode-pill-btn active" id="diff-hard" onclick="setTttDifficulty('hard')">Impossible 🔴</button>
     </div>
 
     <div class="scoreboard-box">
       <div class="score-card">
-        <div class="score-title" id="p1-name">You (X)</div>
-        <div class="score-val" id="val-score-p1">0</div>
+        <div class="score-title" id="ttt-p1-name">You (X)</div>
+        <div class="score-val" id="ttt-val-p1">0</div>
       </div>
       <div class="score-card">
         <div class="score-title">Draw</div>
-        <div class="score-val" id="val-score-draw">0</div>
+        <div class="score-val" id="ttt-val-draw">0</div>
       </div>
       <div class="score-card">
-        <div class="score-title" id="p2-name">AI (O)</div>
-        <div class="score-val" id="val-score-p2">0</div>
+        <div class="score-title" id="ttt-p2-name">AI (O)</div>
+        <div class="score-val" id="ttt-val-p2">0</div>
       </div>
     </div>
 
-    <div class="game-status-bubble" id="game-status">Ningalude oozham (X)</div>
+    <div class="game-status-bubble" id="ttt-game-status">നിങ്ങളുടെ ഊഴം (X)</div>
 
     <div class="board-wrapper">
-      <div class="game-board" id="board">
-        <div class="cell" onclick="handleMove(0)"></div>
-        <div class="cell" onclick="handleMove(1)"></div>
-        <div class="cell" onclick="handleMove(2)"></div>
-        <div class="cell" onclick="handleMove(3)"></div>
-        <div class="cell" onclick="handleMove(4)"></div>
-        <div class="cell" onclick="handleMove(5)"></div>
-        <div class="cell" onclick="handleMove(6)"></div>
-        <div class="cell" onclick="handleMove(7)"></div>
-        <div class="cell" onclick="handleMove(8)"></div>
+      <div class="game-board" id="ttt-board">
+        <div class="cell" onclick="handleTttMove(0)"></div>
+        <div class="cell" onclick="handleTttMove(1)"></div>
+        <div class="cell" onclick="handleTttMove(2)"></div>
+        <div class="cell" onclick="handleTttMove(3)"></div>
+        <div class="cell" onclick="handleTttMove(4)"></div>
+        <div class="cell" onclick="handleTttMove(5)"></div>
+        <div class="cell" onclick="handleTttMove(6)"></div>
+        <div class="cell" onclick="handleTttMove(7)"></div>
+        <div class="cell" onclick="handleTttMove(8)"></div>
       </div>
       <svg class="strike-svg" id="strike-svg"></svg>
     </div>
@@ -615,22 +588,32 @@
   ========================================= -->
   <div id="memory-screen" class="hidden">
     <div class="top-hub-nav">
-      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Arcade Home</button>
+      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Home</button>
       <button class="btn-nav-home" onclick="initMemoryGame()">🔄 Restart</button>
+    </div>
+
+    <!-- Mode Selector: vs AI or 2 Players -->
+    <div class="mode-pill-bar">
+      <button class="mode-pill-btn active" id="btn-mem-ai" onclick="setMemMode('ai')">🤖 vs AI</button>
+      <button class="mode-pill-btn" id="btn-mem-2p" onclick="setMemMode('2p')">👥 2 Players</button>
     </div>
 
     <div class="scoreboard-box">
       <div class="score-card">
-        <div class="score-title">Moves</div>
-        <div class="score-val" id="mem-moves">0</div>
+        <div class="score-title" id="mem-p1-label">You</div>
+        <div class="score-val" id="mem-p1-score">0</div>
       </div>
       <div class="score-card">
-        <div class="score-title">Matched</div>
-        <div class="score-val" id="mem-matches" style="color:#34d399;">0 / 8</div>
+        <div class="score-title">Moves</div>
+        <div class="score-val" id="mem-moves" style="color:#94a3b8;">0</div>
+      </div>
+      <div class="score-card">
+        <div class="score-title" id="mem-p2-label">AI</div>
+        <div class="score-val" id="mem-p2-score" style="color:#f43f5e;">0</div>
       </div>
     </div>
 
-    <div class="game-status-bubble" id="mem-status">Cards marichu nokkoo! 🧠</div>
+    <div class="game-status-bubble" id="mem-status">നിങ്ങളുടെ ഊഴം! കാർഡ് തുറക്കൂ 🧠</div>
 
     <div class="memory-grid" id="mem-grid"></div>
   </div>
@@ -640,13 +623,19 @@
   ========================================= -->
   <div id="rps-screen" class="hidden">
     <div class="top-hub-nav">
-      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Arcade Home</button>
-      <button class="btn-nav-home" onclick="resetRpsScores()">🔄 Reset Score</button>
+      <button class="btn-nav-home" onclick="openGame('hub')">🏠 Home</button>
+      <button class="btn-nav-home" onclick="resetRpsScores()">🔄 Reset</button>
+    </div>
+
+    <!-- Mode Selector: vs AI or 2 Players -->
+    <div class="mode-pill-bar">
+      <button class="mode-pill-btn active" id="btn-rps-ai" onclick="setRpsMode('ai')">🤖 vs AI</button>
+      <button class="mode-pill-btn" id="btn-rps-2p" onclick="setRpsMode('2p')">👥 2 Players</button>
     </div>
 
     <div class="scoreboard-box">
       <div class="score-card">
-        <div class="score-title">You</div>
+        <div class="score-title" id="rps-p1-label">You</div>
         <div class="score-val" id="rps-p1-score">0</div>
       </div>
       <div class="score-card">
@@ -654,466 +643,30 @@
         <div class="score-val" id="rps-draw-score">0</div>
       </div>
       <div class="score-card">
-        <div class="score-title">AI</div>
-        <div class="score-val" id="rps-ai-score" style="color:#f43f5e;">0</div>
+        <div class="score-title" id="rps-p2-label">AI</div>
+        <div class="score-val" id="rps-p2-score" style="color:#f43f5e;">0</div>
       </div>
     </div>
 
-    <div class="game-status-bubble" id="rps-status">Njangalude aayudham select cheyyuka!</div>
+    <div class="game-status-bubble" id="rps-status">ആയുധം തിരഞ്ഞെടുക്കുക!</div>
 
     <div class="rps-battlefield">
       <div class="rps-fighter">
         <div class="rps-hand-display" id="rps-player-hand">❓</div>
-        <div class="rps-fighter-name">You</div>
+        <div class="rps-fighter-name" id="rps-fighter1-name">You</div>
       </div>
       <div style="font-weight:900; font-size:1.5rem; color:#38bdf8;">VS</div>
       <div class="rps-fighter">
         <div class="rps-hand-display" id="rps-ai-hand">❓</div>
-        <div class="rps-fighter-name">AI</div>
+        <div class="rps-fighter-name" id="rps-fighter2-name">AI</div>
       </div>
     </div>
 
     <div class="rps-actions">
-      <button class="rps-btn" onclick="playRPS('rock')">
+      <button class="rps-btn" onclick="handleRpsChoice('rock')">
         <span class="rps-btn-emoji">✊</span>
         <span class="rps-btn-label">Rock</span>
       </button>
-      <button class="rps-btn" onclick="playRPS('paper')">
+      <button class="rps-btn" onclick="handleRpsChoice('paper')">
         <span class="rps-btn-emoji">✋</span>
-        <span class="rps-btn-label">Paper</span>
-      </button>
-      <button class="rps-btn" onclick="playRPS('scissors')">
-        <span class="rps-btn-emoji">✌️</span>
-        <span class="rps-btn-label">Scissors</span>
-      </button>
-    </div>
-  </div>
-
-  <script>
-    /* =========================================
-       NAVIGATION LOGIC
-    ========================================= */
-    function openGame(screenId) {
-      document.getElementById('hub-screen').classList.add('hidden');
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('ttt-game-screen').classList.add('hidden');
-      document.getElementById('memory-screen').classList.add('hidden');
-      document.getElementById('rps-screen').classList.add('hidden');
-
-      if (screenId === 'hub') {
-        document.getElementById('hub-screen').classList.remove('hidden');
-      } else if (screenId === 'ttt-poster') {
-        document.getElementById('start-screen').classList.remove('hidden');
-      } else if (screenId === 'memory') {
-        document.getElementById('memory-screen').classList.remove('hidden');
-        initMemoryGame();
-      } else if (screenId === 'rps') {
-        document.getElementById('rps-screen').classList.remove('hidden');
-      }
-    }
-
-    /* =========================================
-       TIC TAC TOE LOGIC
-    ========================================= */
-    let mode = 'ai';
-    let difficulty = 'hard';
-    let humanSymbol = 'X';
-    let aiSymbol = 'O';
-    let board = ["", "", "", "", "", "", "", "", ""];
-    let currentTurn = "X";
-    let isGamePlayable = true;
-    let scores = { p1: 0, draw: 0, p2: 0 };
-    let restartTimer = null;
-
-    const winCombos = [
-      { combo: [0,1,2], type: 'row', idx: 0 },
-      { combo: [3,4,5], type: 'row', idx: 1 },
-      { combo: [6,7,8], type: 'row', idx: 2 },
-      { combo: [0,3,6], type: 'col', idx: 0 },
-      { combo: [1,4,7], type: 'col', idx: 1 },
-      { combo: [2,5,8], type: 'col', idx: 2 },
-      { combo: [0,4,8], type: 'diag', idx: 0 },
-      { combo: [2,4,6], type: 'diag', idx: 1 }
-    ];
-
-    function pickMode(m) {
-      mode = m;
-      document.getElementById('hotspot-ai').classList.toggle('selected', m === 'ai');
-      document.getElementById('hotspot-2p').classList.toggle('selected', m === '2p');
-    }
-
-    function pickSym(s) {
-      humanSymbol = s;
-      aiSymbol = (s === 'X') ? 'O' : 'X';
-      document.getElementById('hotspot-x').classList.toggle('selected', s === 'X');
-      document.getElementById('hotspot-o').classList.toggle('selected', s === 'O');
-    }
-
-    function setDifficulty(lvl) {
-      difficulty = lvl;
-      document.getElementById('diff-easy').classList.toggle('active', lvl === 'easy');
-      document.getElementById('diff-med').classList.toggle('active', lvl === 'medium');
-      document.getElementById('diff-hard').classList.toggle('active', lvl === 'hard');
-      resetCurrentGame();
-    }
-
-    function launchGame() {
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('ttt-game-screen').classList.remove('hidden');
-
-      if (mode === 'ai') {
-        document.getElementById('label-game-mode').textContent = "Smart AI";
-        document.getElementById('p1-name').textContent = `You (${humanSymbol})`;
-        document.getElementById('p2-name').textContent = `AI (${aiSymbol})`;
-        document.getElementById('diff-bar').classList.remove('hidden');
-      } else {
-        document.getElementById('label-game-mode').textContent = "2 Players";
-        document.getElementById('p1-name').textContent = "Player (X)";
-        document.getElementById('p2-name').textContent = "Player (O)";
-        document.getElementById('diff-bar').classList.add('hidden');
-      }
-
-      resetCurrentGame();
-    }
-
-    function handleMove(idx) {
-      if (board[idx] !== "" || !isGamePlayable) return;
-
-      playStep(idx, currentTurn);
-
-      const winResult = checkWin(board, currentTurn);
-      if (winResult) {
-        finishGame(currentTurn, winResult);
-        return;
-      }
-
-      if (board.every(cell => cell !== "")) {
-        finishGame("draw", null);
-        return;
-      }
-
-      if (mode === 'ai') {
-        currentTurn = aiSymbol;
-        isGamePlayable = false;
-        document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
-        
-        setTimeout(() => {
-          const aiMove = getAIMove();
-          playStep(aiMove, aiSymbol);
-
-          const aiWin = checkWin(board, aiSymbol);
-          if (aiWin) {
-            finishGame(aiSymbol, aiWin);
-          } else if (board.every(c => c !== "")) {
-            finishGame("draw", null);
-          } else {
-            currentTurn = humanSymbol;
-            isGamePlayable = true;
-            document.getElementById('game-status').textContent = `നിങ്ങളുടെ ഊഴം (${humanSymbol})`;
-          }
-        }, 350);
-      } else {
-        currentTurn = (currentTurn === "X") ? "O" : "X";
-        document.getElementById('game-status').textContent = `പ്ലെയർ ${currentTurn}-ന്റെ ഊഴം`;
-      }
-    }
-
-    function playStep(idx, player) {
-      board[idx] = player;
-      const el = document.getElementsByClassName('cell')[idx];
-      el.textContent = player;
-      el.classList.add(player.toLowerCase());
-    }
-
-    function checkWin(b, player) {
-      return winCombos.find(item => item.combo.every(i => b[i] === player));
-    }
-
-    function drawStrikeLine(winInfo, winner) {
-      const svg = document.getElementById('strike-svg');
-      svg.innerHTML = '';
-      const strokeColor = (winner === 'X') ? '#38bdf8' : '#f43f5e';
-
-      let x1, y1, x2, y2;
-      const w = svg.clientWidth || 350;
-      const h = svg.clientHeight || 350;
-
-      if (winInfo.type === 'row') {
-        const yPos = (winInfo.idx === 0) ? h * 0.19 : (winInfo.idx === 1) ? h * 0.5 : h * 0.81;
-        x1 = w * 0.08; y1 = yPos; x2 = w * 0.92; y2 = yPos;
-      } else if (winInfo.type === 'col') {
-        const xPos = (winInfo.idx === 0) ? w * 0.19 : (winInfo.idx === 1) ? w * 0.5 : w * 0.81;
-        x1 = xPos; y1 = h * 0.08; x2 = xPos; y2 = h * 0.92;
-      } else if (winInfo.type === 'diag') {
-        if (winInfo.idx === 0) {
-          x1 = w * 0.1; y1 = h * 0.1; x2 = w * 0.9; y2 = h * 0.9;
-        } else {
-          x1 = w * 0.9; y1 = h * 0.1; x2 = w * 0.1; y2 = h * 0.9;
-        }
-      }
-
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-      line.setAttribute('class', 'strike-line');
-      line.style.stroke = strokeColor;
-      line.style.filter = `drop-shadow(0 0 12px ${strokeColor})`;
-      svg.appendChild(line);
-    }
-
-    function triggerConfetti() {
-      if (typeof confetti === 'function') {
-        confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
-      }
-    }
-
-    function finishGame(winner, winResult) {
-      isGamePlayable = false;
-      if (winner === "draw") {
-        document.getElementById('game-status').textContent = "കളി സമനിലയിൽ! 🤝";
-        scores.draw++;
-      } else {
-        if (winResult) {
-          winResult.combo.forEach(i => document.getElementsByClassName('cell')[i].classList.add('win-cell'));
-          drawStrikeLine(winResult, winner);
-        }
-        if (mode === 'ai') {
-          if (winner === humanSymbol) {
-            document.getElementById('game-status').textContent = "🎉 നിങ്ങൾ ജയിച്ചു!";
-            scores.p1++;
-            triggerConfetti();
-          } else {
-            document.getElementById('game-status').textContent = "🤖 AI ജയിച്ചു!";
-            scores.p2++;
-          }
-        } else {
-          document.getElementById('game-status').textContent = `🎉 പ്ലെയർ ${winner} ജയിച്ചു!`;
-          if (winner === "X") scores.p1++; else scores.p2++;
-          triggerConfetti();
-        }
-      }
-      refreshScores();
-
-      clearTimeout(restartTimer);
-      restartTimer = setTimeout(() => {
-        resetCurrentGame();
-      }, 5000);
-    }
-
-    function refreshScores() {
-      document.getElementById('val-score-p1').textContent = scores.p1;
-      document.getElementById('val-score-draw').textContent = scores.draw;
-      document.getElementById('val-score-p2').textContent = scores.p2;
-    }
-
-    function resetCurrentGame() {
-      board = ["", "", "", "", "", "", "", "", ""];
-      currentTurn = "X";
-      isGamePlayable = true;
-      document.getElementById('strike-svg').innerHTML = '';
-      const cells = document.getElementsByClassName('cell');
-      for (let c of cells) {
-        c.textContent = "";
-        c.className = "cell";
-      }
-
-      if (mode === 'ai') {
-        if (humanSymbol === 'O') {
-          isGamePlayable = false;
-          document.getElementById('game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
-          setTimeout(() => {
-            const initialCorners = [0, 2, 4, 6, 8];
-            const move = initialCorners[Math.floor(Math.random() * initialCorners.length)];
-            playStep(move, 'X');
-            currentTurn = 'O';
-            isGamePlayable = true;
-            document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (O)";
-          }, 350);
-        } else {
-          document.getElementById('game-status').textContent = "നിങ്ങളുടെ ഊഴം (X)";
-        }
-      } else {
-        document.getElementById('game-status').textContent = "പ്ലെയർ X-ന്റെ ഊഴം";
-      }
-    }
-
-    function getAIMove() {
-      const emptyIndices = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
-      if (difficulty === 'easy') {
-        return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-      }
-      if (difficulty === 'medium') {
-        if (Math.random() > 0.5) {
-          return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-        }
-      }
-      let bestScore = -Infinity;
-      let move = -1;
-      for (let i of emptyIndices) {
-        board[i] = aiSymbol;
-        let score = runMinimax(board, 0, false);
-        board[i] = "";
-        if (score > bestScore) {
-          bestScore = score;
-          move = i;
-        }
-      }
-      return move;
-    }
-
-    function runMinimax(b, depth, isMaximizing) {
-      if (checkWin(b, aiSymbol)) return 10 - depth;
-      if (checkWin(b, humanSymbol)) return depth - 10;
-      if (b.every(c => c !== "")) return 0;
-
-      if (isMaximizing) {
-        let maxVal = -Infinity;
-        for (let i = 0; i < 9; i++) {
-          if (b[i] === "") {
-            b[i] = aiSymbol;
-            maxVal = Math.max(maxVal, runMinimax(b, depth + 1, false));
-            b[i] = "";
-          }
-        }
-        return maxVal;
-      } else {
-        let minVal = Infinity;
-        for (let i = 0; i < 9; i++) {
-          if (b[i] === "") {
-            b[i] = humanSymbol;
-            minVal = Math.min(minVal, runMinimax(b, depth + 1, true));
-            b[i] = "";
-          }
-        }
-        return minVal;
-      }
-    }
-
-    function shareToWhatsApp() {
-      const siteUrl = "https://shameel11-coder.github.io";
-      const message = `🔥 ഞാൻ Shameel-ന്റെ Tic-Tac-Toe ഗെയിമിൽ സ്കോർ അടിച്ചു തൂക്കി!\n\n🎮 നിലവിലെ സ്കോർ:\n👉 You: ${scores.p1} | AI: ${scores.p2} | Draw: ${scores.draw}\n\nധൈര്യമുണ്ടെങ്കിൽ ഈ Unbeatable AI-യെ തോൽപ്പിച്ചു കാണിക്ക്! കളിക്കാൻ ലിങ്ക് ഇതാ:\n🔗 ${siteUrl}`;
-      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
-    }
-
-    /* =========================================
-       3. MEMORY CARD GAME LOGIC
-    ========================================= */
-    const memIcons = ['🚀', '⚽', '💎', '🎮', '🔥', '👑', '🍕', '🤖'];
-    let memCards = [];
-    let flippedCards = [];
-    let memMoves = 0;
-    let memMatches = 0;
-    let lockMemBoard = false;
-
-    function initMemoryGame() {
-      const grid = document.getElementById('mem-grid');
-      grid.innerHTML = '';
-      memCards = [...memIcons, ...memIcons].sort(() => 0.5 - Math.random());
-      flippedCards = [];
-      memMoves = 0;
-      memMatches = 0;
-      lockMemBoard = false;
-
-      document.getElementById('mem-moves').textContent = '0';
-      document.getElementById('mem-matches').textContent = '0 / 8';
-      document.getElementById('mem-status').textContent = 'Cards marichu nokkoo! 🧠';
-
-      memCards.forEach((icon, index) => {
-        const card = document.createElement('div');
-        card.classList.add('mem-card');
-        card.dataset.index = index;
-        card.dataset.icon = icon;
-        card.textContent = '❓';
-        card.onclick = () => flipMemCard(card);
-        grid.appendChild(card);
-      });
-    }
-
-    function flipMemCard(card) {
-      if (lockMemBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-
-      card.classList.add('flipped');
-      card.textContent = card.dataset.icon;
-      flippedCards.push(card);
-
-      if (flippedCards.length === 2) {
-        memMoves++;
-        document.getElementById('mem-moves').textContent = memMoves;
-        checkMemMatch();
-      }
-    }
-
-    function checkMemMatch() {
-      const [c1, c2] = flippedCards;
-      if (c1.dataset.icon === c2.dataset.icon) {
-        c1.classList.add('matched');
-        c2.classList.add('matched');
-        memMatches++;
-        document.getElementById('mem-matches').textContent = `${memMatches} / 8`;
-        flippedCards = [];
-
-        if (memMatches === 8) {
-          document.getElementById('mem-status').textContent = `🎉 ജയിച്ചു! ${memMoves} moves-ൽ കളി തീർത്തു!`;
-          triggerConfetti();
-        }
-      } else {
-        lockMemBoard = true;
-        setTimeout(() => {
-          c1.classList.remove('flipped');
-          c2.classList.remove('flipped');
-          c1.textContent = '❓';
-          c2.textContent = '❓';
-          flippedCards = [];
-          lockMemBoard = false;
-        }, 900);
-      }
-    }
-
-    /* =========================================
-       4. ROCK PAPER SCISSORS LOGIC
-    ========================================= */
-    const rpsEmojis = { rock: '✊', paper: '✋', scissors: '✌️' };
-    let rpsScores = { p1: 0, draw: 0, ai: 0 };
-
-    function playRPS(pChoice) {
-      const choices = ['rock', 'paper', 'scissors'];
-      const aiChoice = choices[Math.floor(Math.random() * choices.length)];
-
-      document.getElementById('rps-player-hand').textContent = rpsEmojis[pChoice];
-      document.getElementById('rps-ai-hand').textContent = rpsEmojis[aiChoice];
-
-      if (pChoice === aiChoice) {
-        document.getElementById('rps-status').textContent = "സമനിലയായി! 🤝";
-        rpsScores.draw++;
-      } else if (
-        (pChoice === 'rock' && aiChoice === 'scissors') ||
-        (pChoice === 'paper' && aiChoice === 'rock') ||
-        (pChoice === 'scissors' && aiChoice === 'paper')
-      ) {
-        document.getElementById('rps-status').textContent = "🎉 നിങ്ങൾ ജയിച്ചു!";
-        rpsScores.p1++;
-        triggerConfetti();
-      } else {
-        document.getElementById('rps-status').textContent = "🤖 AI ജയിച്ചു!";
-        rpsScores.ai++;
-      }
-
-      document.getElementById('rps-p1-score').textContent = rpsScores.p1;
-      document.getElementById('rps-draw-score').textContent = rpsScores.draw;
-      document.getElementById('rps-ai-score').textContent = rpsScores.ai;
-    }
-
-    function resetRpsScores() {
-      rpsScores = { p1: 0, draw: 0, ai: 0 };
-      document.getElementById('rps-p1-score').textContent = '0';
-      document.getElementById('rps-draw-score').textContent = '0';
-      document.getElementById('rps-ai-score').textContent = '0';
-      document.getElementById('rps-player-hand').textContent = '❓';
-      document.getElementById('rps-ai-hand').textContent = '❓';
-      document.getElementById('rps-status').textContent = 'സ്കോർ റീസെറ്റ് ചെയ്തു!';
-    }
-  </script>
-</body>
-</html>
-
+        <span class="rps-btn-labe
