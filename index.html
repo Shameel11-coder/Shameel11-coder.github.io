@@ -40,6 +40,89 @@
     .hidden { display: none !important; }
 
     /* =========================================
+       FULLSCREEN 5-SECOND WINNER OVERLAY
+    ========================================= */
+    #winner-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(3, 7, 18, 0.94);
+      backdrop-filter: blur(16px);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      animation: modalZoom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalZoom {
+      from { opacity: 0; transform: scale(0.75); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-trophy {
+      font-size: 5.5rem;
+      animation: bounceTrophy 1s infinite alternate ease-in-out;
+      filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.6));
+    }
+
+    @keyframes bounceTrophy {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-16px) scale(1.08); }
+    }
+
+    .modal-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #fde047, #f59e0b, #ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+    }
+
+    .modal-winner-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-top: 6px;
+      text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+    }
+
+    .modal-subtitle {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .modal-timer-bar {
+      width: 160px;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 9999px;
+      margin-top: 24px;
+      overflow: hidden;
+    }
+
+    .modal-timer-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      animation: timerCountdown 5s linear forwards;
+    }
+
+    @keyframes timerCountdown {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+
+    /* =========================================
        1. ARCADE HOME HUB
     ========================================= */
     #hub-screen {
@@ -487,12 +570,25 @@
 <body>
 
   <!-- =========================================
+       GLOBAL 5-SECOND FULLSCREEN WINNER POPUP
+  ========================================= -->
+  <div id="winner-modal" class="hidden">
+    <div class="modal-trophy" id="modal-icon">🏆</div>
+    <div class="modal-title" id="modal-headline">WINNER!</div>
+    <div class="modal-winner-name" id="modal-player-name">Player Name</div>
+    <div class="modal-subtitle" id="modal-subtext">അടിപൊളി വിജയം! 🎉</div>
+    <div class="modal-timer-bar">
+      <div class="modal-timer-fill"></div>
+    </div>
+  </div>
+
+  <!-- =========================================
        1. ARCADE MAIN HUB SCREEN
   ========================================= -->
   <div id="hub-screen">
     <div class="hub-header">
       <div class="hub-title">SHAMEEL GAME ZONE 🎮</div>
-      <div class="hub-subtitle">Ningalkk ishtamulla game select cheyyuka!</div>
+      <div class="hub-subtitle">നിങ്ങൾക്ക് ഇഷ്ടമുള്ള ഗെയിം തിരഞ്ഞെടുക്കുക!</div>
     </div>
 
     <div class="game-card-list">
@@ -573,7 +669,7 @@
       </div>
     </div>
 
-    <div class="game-status-bubble" id="ttt-game-status">Ningalude oozham (X)</div>
+    <div class="game-status-bubble" id="ttt-game-status">നിങ്ങളുടെ ഊഴം (X)</div>
 
     <div class="board-wrapper">
       <div class="game-board" id="ttt-board">
@@ -591,7 +687,7 @@
     </div>
 
     <button class="btn-share" onclick="shareToWhatsApp()">
-      WhatsApp-il Challenge Share Cheyyuka
+      WhatsApp-ൽ ചലഞ്ച് ഷെയർ ചെയ്യുക
     </button>
   </div>
 
@@ -624,13 +720,13 @@
       </div>
     </div>
 
-    <div class="game-status-bubble" id="mem-status">Ningalude oozham! Card thurakkoo 🧠</div>
+    <div class="game-status-bubble" id="mem-status">നിങ്ങളുടെ ഊഴം! കാർഡ് തുറക്കൂ 🧠</div>
 
     <div class="memory-grid" id="mem-grid"></div>
   </div>
 
   <!-- =========================================
-       4. ROCK PAPER SCISSORS SCREEN (5 POINTS WIN)
+       4. ROCK PAPER SCISSORS SCREEN
   ========================================= -->
   <div id="rps-screen" class="hidden">
     <div class="top-hub-nav">
@@ -658,7 +754,7 @@
       </div>
     </div>
 
-    <div class="game-status-bubble" id="rps-status">Aadyam 5 points nedunnavar jayikkum! 🏆</div>
+    <div class="game-status-bubble" id="rps-status">ആദ്യം 5 പോയിന്റ് നേടുന്നയാൾ ജയിക്കും! 🏆</div>
 
     <div class="rps-battlefield">
       <div class="rps-fighter">
@@ -690,6 +786,40 @@
 
   <script>
     /* =========================================
+       GLOBAL 5-SECOND FULLSCREEN WINNER POPUP LOGIC
+    ========================================= */
+    let modalTimer = null;
+
+    function showFullscreenWinner(winnerName, subtext = "അടിപൊളി വിജയം! 🎉", icon = "🏆") {
+      const modal = document.getElementById('winner-modal');
+      document.getElementById('modal-icon').textContent = icon;
+      document.getElementById('modal-player-name').textContent = winnerName;
+      document.getElementById('modal-subtext').textContent = subtext;
+
+      modal.classList.remove('hidden');
+
+      // Trigger Confetti Blast
+      triggerConfetti();
+
+      // Reset and re-trigger timer bar animation
+      const bar = document.querySelector('.modal-timer-fill');
+      bar.style.animation = 'none';
+      void bar.offsetWidth; // Trigger reflow
+      bar.style.animation = 'timerCountdown 5s linear forwards';
+
+      clearTimeout(modalTimer);
+      modalTimer = setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 5000);
+    }
+
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 120, spread: 85, origin: { y: 0.6 } });
+      }
+    }
+
+    /* =========================================
        NAVIGATION LOGIC
     ========================================= */
     function openGame(screenId) {
@@ -709,12 +839,6 @@
       } else if (screenId === 'rps') {
         document.getElementById('rps-screen').classList.remove('hidden');
         resetRpsScores();
-      }
-    }
-
-    function triggerConfetti() {
-      if (typeof confetti === 'function') {
-        confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
       }
     }
 
@@ -800,7 +924,7 @@
       if (tttMode === 'ai') {
         tttCurrentTurn = tttAiSymbol;
         tttIsPlayable = false;
-        document.getElementById('ttt-game-status').textContent = "AI chinthikkunnu... 🤖";
+        document.getElementById('ttt-game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
         
         setTimeout(() => {
           const aiMove = getTttAIMove();
@@ -814,12 +938,12 @@
           } else {
             tttCurrentTurn = tttHumanSymbol;
             tttIsPlayable = true;
-            document.getElementById('ttt-game-status').textContent = `Ningalude oozham (${tttHumanSymbol})`;
+            document.getElementById('ttt-game-status').textContent = `നിങ്ങളുടെ ഊഴം (${tttHumanSymbol})`;
           }
         }, 350);
       } else {
         tttCurrentTurn = (tttCurrentTurn === "X") ? "O" : "X";
-        document.getElementById('ttt-game-status').textContent = `Player ${tttCurrentTurn}-nte oozham`;
+        document.getElementById('ttt-game-status').textContent = `പ്ലെയർ ${tttCurrentTurn}-ന്റെ ഊഴം`;
       }
     }
 
@@ -867,7 +991,7 @@
     function finishTttGame(winner, winResult) {
       tttIsPlayable = false;
       if (winner === "draw") {
-        document.getElementById('ttt-game-status').textContent = "Kali samanilayil! 🤝";
+        document.getElementById('ttt-game-status').textContent = "കളി സമനിലയിൽ! 🤝";
         tttScores.draw++;
       } else {
         if (winResult) {
@@ -876,17 +1000,18 @@
         }
         if (tttMode === 'ai') {
           if (winner === tttHumanSymbol) {
-            document.getElementById('ttt-game-status').textContent = "🎉 Ningal jayichu!";
+            document.getElementById('ttt-game-status').textContent = "🎉 നിങ്ങൾ ജയിച്ചു!";
             tttScores.p1++;
-            triggerConfetti();
+            showFullscreenWinner("YOU WON!", "നിങ്ങൾ AI-യെ പരാജയപ്പെടുത്തി!");
           } else {
-            document.getElementById('ttt-game-status').textContent = "🤖 AI jayichu!";
+            document.getElementById('ttt-game-status').textContent = "🤖 AI ജയിച്ചു!";
             tttScores.p2++;
+            showFullscreenWinner("SMART AI WON!", "AI ഈ റൗണ്ട് വിജയിച്ചു!", "🤖");
           }
         } else {
-          document.getElementById('ttt-game-status').textContent = `🎉 Player ${winner} jayichu!`;
+          document.getElementById('ttt-game-status').textContent = `🎉 പ്ലെയർ ${winner} ജയിച്ചു!`;
           if (winner === "X") tttScores.p1++; else tttScores.p2++;
-          triggerConfetti();
+          showFullscreenWinner(`PLAYER ${winner} WON!`, `പ്ലെയർ ${winner} ഈ റൗണ്ട് നേടി!`);
         }
       }
       document.getElementById('ttt-val-p1').textContent = tttScores.p1;
@@ -908,18 +1033,18 @@
       if (tttMode === 'ai') {
         if (tttHumanSymbol === 'O') {
           tttIsPlayable = false;
-          document.getElementById('ttt-game-status').textContent = "AI chinthikkunnu... 🤖";
+          document.getElementById('ttt-game-status').textContent = "AI ചിന്തിക്കുന്നു... 🤖";
           setTimeout(() => {
             playTttStep(4, 'X');
             tttCurrentTurn = 'O';
             tttIsPlayable = true;
-            document.getElementById('ttt-game-status').textContent = "Ningalude oozham (O)";
+            document.getElementById('ttt-game-status').textContent = "നിങ്ങളുടെ ഊഴം (O)";
           }, 350);
         } else {
-          document.getElementById('ttt-game-status').textContent = "Ningalude oozham (X)";
+          document.getElementById('ttt-game-status').textContent = "നിങ്ങളുടെ ഊഴം (X)";
         }
       } else {
-        document.getElementById('ttt-game-status').textContent = "Player X-nte oozham";
+        document.getElementById('ttt-game-status').textContent = "പ്ലെയർ X-ന്റെ ഊഴം";
       }
     }
 
@@ -969,7 +1094,7 @@
 
     function shareToWhatsApp() {
       const siteUrl = "https://shameel11-coder.github.io";
-      const message = `🔥 Njaan Shameel-nte Tic-Tac-Toe game-il score vaari!\n\n🎮 Score:\n👉 You: ${tttScores.p1} | AI: ${tttScores.p2} | Draw: ${tttScores.draw}\n\nDhairyamundengil tholppichu kaanikk!\n🔗 ${siteUrl}`;
+      const message = `🔥 ഞാൻ Shameel-ന്റെ Tic-Tac-Toe ഗെയിമിൽ സ്കോർ അടിച്ചു തൂക്കി!\n\n🎮 നിലവിലെ സ്കോർ:\n👉 You: ${tttScores.p1} | AI: ${tttScores.p2} | Draw: ${tttScores.draw}\n\nധൈര്യമുണ്ടെങ്കിൽ ഈ Unbeatable AI-യെ തോൽപ്പിച്ചു കാണിക്ക്!\n🔗 ${siteUrl}`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
     }
 
@@ -1027,9 +1152,9 @@
 
     function updateMemStatus() {
       if (memMode === 'ai') {
-        document.getElementById('mem-status').textContent = (memTurn === 1) ? "Ningalude oozham! Card thurakkoo 🧠" : "AI chinthikkunnu... 🤖";
+        document.getElementById('mem-status').textContent = (memTurn === 1) ? "നിങ്ങളുടെ ഊഴം! കാർഡ് തുറക്കൂ 🧠" : "AI ചിന്തിക്കുന്നു... 🤖";
       } else {
-        document.getElementById('mem-status').textContent = `Player ${memTurn}-nte oozham! 🧠`;
+        document.getElementById('mem-status').textContent = `പ്ലെയർ ${memTurn}-ന്റെ ഊഴം! 🧠`;
       }
     }
 
@@ -1062,15 +1187,20 @@
         document.getElementById('mem-p2-score').textContent = memScores.p2;
         memFlippedCards = [];
 
+        // Check if all pairs are matched
         if (memScores.p1 + memScores.p2 === 8) {
           if (memScores.p1 > memScores.p2) {
-            document.getElementById('mem-status').textContent = (memMode === 'ai') ? "🎉 Ningal AI-ye tholppichu!" : "🎉 Player 1 jayichu!";
-            triggerConfetti();
+            const winner = (memMode === 'ai') ? "YOU WON!" : "PLAYER 1 WON!";
+            document.getElementById('mem-status').textContent = `🎉 ${winner}`;
+            showFullscreenWinner(winner, "എല്ലാ കാർഡുകളും വിജയകരമായി കണ്ടെത്തി! 🧠");
           } else if (memScores.p2 > memScores.p1) {
-            document.getElementById('mem-status').textContent = (memMode === 'ai') ? "🤖 AI jayichu!" : "🎉 Player 2 jayichu!";
+            const winner = (memMode === 'ai') ? "AI WON!" : "PLAYER 2 WON!";
+            document.getElementById('mem-status').textContent = `🤖 ${winner}`;
+            showFullscreenWinner(winner, "കൂടുതൽ ജോടികൾ ഉണ്ടാക്കി വിജയിച്ചു!", (memMode === 'ai') ? "🤖" : "🏆");
           } else {
-            document.getElementById('mem-status').textContent = "Samanilayaayi! 🤝";
+            document.getElementById('mem-status').textContent = "സമനിലയായി! 🤝";
           }
+          setTimeout(initMemoryGame, 5000);
           return;
         }
 
@@ -1180,7 +1310,7 @@
         if (!rpsP1Choice) {
           rpsP1Choice = choice;
           document.getElementById('rps-player-hand').textContent = '🔒';
-          document.getElementById('rps-status').textContent = "Player 1 select cheythu! Ini Player 2 aayudham select cheyyoo 👇";
+          document.getElementById('rps-status').textContent = "Player 1 തിരഞ്ഞെടുത്തു! ഇനി Player 2 ആയുധം തിരഞ്ഞെടുക്കൂ 👇";
         } else {
           const p2Choice = choice;
           evaluateRpsRound(rpsP1Choice, p2Choice);
@@ -1194,7 +1324,7 @@
       document.getElementById('rps-ai-hand').textContent = rpsEmojis[c2];
 
       if (c1 === c2) {
-        document.getElementById('rps-status').textContent = "Round samanila! 🤝";
+        document.getElementById('rps-status').textContent = "റൗണ്ട് സമനില! 🤝";
         rpsScores.draw++;
       } else if (
         (c1 === 'rock' && c2 === 'scissors') ||
@@ -1202,10 +1332,10 @@
         (c1 === 'scissors' && c2 === 'paper')
       ) {
         rpsScores.p1++;
-        document.getElementById('rps-status').textContent = (rpsMode === 'ai') ? "Round ningal nedi! 🎯" : "Round Player 1 nedi! 🎯";
+        document.getElementById('rps-status').textContent = (rpsMode === 'ai') ? "റൗണ്ട് നിങ്ങൾ നേടി! 🎯" : "റൗണ്ട് Player 1 നേടി! 🎯";
       } else {
         rpsScores.p2++;
-        document.getElementById('rps-status').textContent = (rpsMode === 'ai') ? "Round AI nedi! 🤖" : "Round Player 2 nedi! 🎯";
+        document.getElementById('rps-status').textContent = (rpsMode === 'ai') ? "റൗണ്ട് AI നേടി! 🤖" : "റൗണ്ട് Player 2 നേടി! 🎯";
       }
 
       document.getElementById('rps-p1-score').textContent = `${rpsScores.p1} / 5`;
@@ -1215,20 +1345,20 @@
       // 5 POINTS REACHED CHECK
       if (rpsScores.p1 >= 5 || rpsScores.p2 >= 5) {
         rpsMatchOver = true;
-        toggleRpsButtons(false); // Disable buttons so score won't go above 5
+        toggleRpsButtons(false);
 
-        const winnerName = (rpsScores.p1 >= 5) 
-          ? ((rpsMode === 'ai') ? "Ningal" : "Player 1") 
-          : ((rpsMode === 'ai') ? "AI" : "Player 2");
+        const isP1 = rpsScores.p1 >= 5;
+        const winnerHeadline = isP1 
+          ? ((rpsMode === 'ai') ? "YOU WON!" : "PLAYER 1 WON!")
+          : ((rpsMode === 'ai') ? "AI WON!" : "PLAYER 2 WON!");
 
-        document.getElementById('rps-status').textContent = `🏆 MATCH WINNER! ${winnerName} 5 points nedi jayichu! 🎉`;
-        triggerConfetti();
+        const icon = (!isP1 && rpsMode === 'ai') ? "🤖" : "🏆";
+        showFullscreenWinner(winnerHeadline, "ആദ്യം 5 പോയിന്റ് നേടി മാച്ച് വിജയിച്ചു!", icon);
 
-        // 3.5 seconds kazhinju auto reset to 0/5
         setTimeout(() => {
           resetRpsScores();
           toggleRpsButtons(true);
-        }, 3500);
+        }, 5000);
       }
     }
 
@@ -1242,9 +1372,8 @@
       document.getElementById('rps-p2-score').textContent = '0 / 5';
       document.getElementById('rps-player-hand').textContent = '❓';
       document.getElementById('rps-ai-hand').textContent = '❓';
-      document.getElementById('rps-status').textContent = 'Aadyam 5 points nedunnavar jayikkum! 🏆';
+      document.getElementById('rps-status').textContent = 'ആദ്യം 5 പോയിന്റ് നേടുന്നയാൾ ജയിക്കും! 🏆';
     }
   </script>
 </body>
 </html>
-
