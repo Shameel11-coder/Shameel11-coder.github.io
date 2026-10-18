@@ -18,11 +18,11 @@
 
   <style>
     :root {
-      --bg-gradient: radial-gradient(circle at 50% 15%, #18153b 0%, #080811 70%, #030408 100%);
-      --accent-color: #38bdf8;
-      --card-bg: rgba(15, 23, 42, 0.9);
-      --card-border: rgba(56, 189, 248, 0.25);
-      --text-main: #f8fafc;
+      --bg-gradient: radial-gradient(circle at 50% 10%, #1e1145 0%, #0a0618 65%, #030108 100%);
+      --accent: #38bdf8;
+      --card-bg: rgba(22, 14, 46, 0.82);
+      --card-border: rgba(147, 51, 234, 0.35);
+      --text: #f8fafc;
     }
 
     * {
@@ -36,27 +36,24 @@
 
     body {
       background: var(--bg-gradient);
-      color: var(--text-main);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 10px;
+      padding: 12px 10px;
       overflow-x: hidden;
     }
 
     .hidden { display: none !important; }
 
     /* =========================================
-       5-SECOND WINNER FULLSCREEN MODAL
+       5-SECOND WINNER MODAL
     ========================================= */
     #winner-modal {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(3, 7, 18, 0.95);
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(4, 2, 12, 0.94);
       backdrop-filter: blur(14px);
       z-index: 9999;
       display: flex;
@@ -94,29 +91,21 @@
     .modal-name {
       font-size: 1.3rem;
       font-weight: 800;
-      color: var(--accent-color);
+      color: var(--accent);
       margin-top: 4px;
     }
 
-    .modal-desc {
-      font-size: 0.9rem;
-      color: #94a3b8;
-      margin-top: 6px;
-    }
+    .modal-desc { font-size: 0.9rem; color: #94a3b8; margin-top: 6px; }
 
     .modal-timer-bar {
-      width: 150px;
-      height: 6px;
-      background: #1e293b;
-      border-radius: 9999px;
-      margin-top: 20px;
-      overflow: hidden;
+      width: 150px; height: 6px;
+      background: #1e293b; border-radius: 9999px;
+      margin-top: 20px; overflow: hidden;
     }
 
     .modal-timer-fill {
-      width: 100%;
-      height: 100%;
-      background: var(--accent-color);
+      width: 100%; height: 100%;
+      background: var(--accent);
       animation: timerBar 5s linear forwards;
     }
 
@@ -126,75 +115,134 @@
     }
 
     /* =========================================
-       ARCADE HUB / HEADER
+       MODERN ARCADE HUB SCREEN (2-COLUMN GRID)
     ========================================= */
     #hub-screen {
       width: 100%;
-      max-width: 420px;
+      max-width: 430px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       animation: fadeIn 0.25s ease;
       padding-bottom: 20px;
     }
 
-    .hub-header { text-align: center; margin-top: 4px; }
+    .hub-header {
+      text-align: center;
+      margin-top: 4px;
+      position: relative;
+    }
+
     .hub-title {
-      font-size: 1.85rem;
+      font-size: 1.8rem;
       font-weight: 900;
-      background: linear-gradient(135deg, #38bdf8, #a855f7, #ec4899);
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 50%, #f43f5e 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: 0.8px;
+      text-shadow: 0 0 25px rgba(192, 132, 252, 0.3);
+    }
+
+    .hub-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 999px;
+      margin-top: 4px;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .hub-subtitle { font-size: 0.8rem; color: #94a3b8; font-weight: 600; }
 
-    .game-list {
+    /* 2-Column Grid Layout */
+    .game-grid {
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
 
-    .game-card {
-      width: 100%;
+    .game-tile {
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
-      border-radius: 18px;
-      padding: 12px 14px;
+      border-radius: 20px;
+      padding: 16px 12px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 14px;
+      text-align: center;
+      gap: 8px;
       cursor: pointer;
-      color: inherit;
-      text-align: left;
-      transition: all 0.15s ease;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      outline: none;
     }
 
-    .game-card:active {
-      transform: scale(0.97);
-      border-color: var(--accent-color);
+    .game-tile::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 70px; height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    .game-icon-box {
-      font-size: 1.8rem;
-      min-width: 50px;
-      height: 50px;
-      background: #060a12;
-      border-radius: 14px;
+    .game-tile:active {
+      transform: scale(0.96);
+      border-color: #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+
+    .tile-icon-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(30, 20, 60, 0.9), rgba(10, 5, 25, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255,255,255,0.08);
-      flex-shrink: 0;
+      font-size: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
-    .game-meta { flex: 1; }
-    .game-title { font-size: 1rem; font-weight: 800; color: #ffffff; }
-    .game-desc { font-size: 0.72rem; color: #94a3b8; margin-top: 1px; }
-    .game-arrow { font-size: 1.2rem; color: var(--accent-color); font-weight: 900; }
+    .tile-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .tile-tag {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .tile-play-btn {
+      margin-top: 4px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 5px 14px;
+      border-radius: 10px;
+      border: none;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35);
+    }
 
     /* COMMON PLAY WRAPPERS */
     .play-screen {
@@ -217,7 +265,7 @@
     .nav-btn {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      color: var(--text-main);
+      color: var(--text);
       padding: 7px 12px;
       border-radius: 12px;
       font-size: 0.8rem;
@@ -232,7 +280,7 @@
       border-radius: 9999px;
       font-size: 0.82rem;
       font-weight: 800;
-      color: var(--accent-color);
+      color: var(--accent);
     }
 
     .mode-pill-bar {
@@ -280,7 +328,7 @@
     .score-title { font-size: 0.7rem; color: #94a3b8; font-weight: 600; }
     .score-val { font-size: 1.35rem; font-weight: 900; color: #38bdf8; }
 
-    /* TIC TAC TOE BOARD */
+    /* TIC TAC TOE */
     .board-wrapper {
       position: relative;
       width: 100%;
@@ -360,7 +408,7 @@
     .mem-card.flipped { background: #1e293b; border-color: #38bdf8; }
     .mem-card.matched { background: #064e3b; border-color: #34d399; }
 
-    /* RPS STYLES */
+    /* RPS */
     .rps-battlefield {
       width: 100%;
       background: #0b1120;
@@ -373,8 +421,7 @@
     }
 
     .rps-hand-display {
-      width: 70px;
-      height: 70px;
+      width: 70px; height: 70px;
       background: #060a14;
       border: 2px solid #1e293b;
       border-radius: 50%;
@@ -401,7 +448,7 @@
     .rps-btn-emoji { font-size: 2rem; }
     .rps-btn-label { font-size: 0.75rem; font-weight: 700; color: #e2e8f0; }
 
-    /* CANVAS FOR ARCADE (CAR, FLAPPY, KNIFE) */
+    /* CANVAS GAMES */
     canvas {
       background: #070b14;
       border: 1.5px solid var(--card-border);
@@ -423,7 +470,7 @@
       border-radius: 14px;
       cursor: pointer;
     }
-    .touch-btn:active { background: var(--accent-color); }
+    .touch-btn:active { background: var(--accent); }
     .nitro-btn { background: #dc2626 !important; border-color: #ef4444 !important; font-size: 0.9rem !important; }
 
     @keyframes fadeIn {
@@ -446,73 +493,61 @@
   </div>
 
   <!-- =========================================
-       CENTRAL ARCADE HUB SCREEN (6 GAMES)
+       MODERN ARCADE HUB SCREEN (2-COLUMN GRID)
   ========================================= -->
   <div id="hub-screen">
     <div class="hub-header">
-      <div class="hub-title">SHAMEEL MEGA ARCADE 🎮</div>
-      <div class="hub-subtitle">Ningalkk ishtamulla game select cheyyuka!</div>
+      <div class="hub-title">SHAMEEL MEGA ARCADE</div>
+      <div class="hub-badge">Select a Game to Play</div>
     </div>
 
-    <div class="game-list">
+    <div class="game-grid">
       <!-- 1. Tic Tac Toe 3D -->
-      <button type="button" class="game-card" onclick="openGameScreen('ttt')">
-        <div class="game-icon-box">❌</div>
-        <div class="game-meta">
-          <div class="game-title">Tic-Tac-Toe 3D</div>
-          <div class="game-desc">Unbeatable Smart AI & 2 Player Mode</div>
-        </div>
-        <div class="game-arrow">➔</div>
+      <button type="button" class="game-tile" onclick="openGameScreen('ttt')">
+        <div class="tile-icon-box">❌</div>
+        <div class="tile-title">Tic-Tac-Toe</div>
+        <div class="tile-tag">Smart AI & 2P</div>
+        <div class="tile-play-btn">Play Now ▶</div>
       </button>
 
       <!-- 2. Memory Card Flip -->
-      <button type="button" class="game-card" onclick="openGameScreen('memory')">
-        <div class="game-icon-box">🧠</div>
-        <div class="game-meta">
-          <div class="game-title">Memory Card Flip</div>
-          <div class="game-desc">Cards marichu matching jodi kandupidikkuka</div>
-        </div>
-        <div class="game-arrow">➔</div>
+      <button type="button" class="game-tile" onclick="openGameScreen('memory')">
+        <div class="tile-icon-box">🧠</div>
+        <div class="tile-title">Memory Flip</div>
+        <div class="tile-tag">Brain Match 4x4</div>
+        <div class="tile-play-btn">Play Now ▶</div>
       </button>
 
       <!-- 3. Rock Paper Scissors -->
-      <button type="button" class="game-card" onclick="openGameScreen('rps')">
-        <div class="game-icon-box">✊</div>
-        <div class="game-meta">
-          <div class="game-title">Rock Paper Scissors</div>
-          <div class="game-desc">First to 5 Points match (AI & 2P)</div>
-        </div>
-        <div class="game-arrow">➔</div>
+      <button type="button" class="game-tile" onclick="openGameScreen('rps')">
+        <div class="tile-icon-box">✊</div>
+        <div class="tile-title">R-P-S Battle</div>
+        <div class="tile-tag">First to 5 Points</div>
+        <div class="tile-play-btn">Play Now ▶</div>
       </button>
 
       <!-- 4. Turbo Car Racer -->
-      <button type="button" class="game-card" onclick="openGameScreen('car')">
-        <div class="game-icon-box">🏎️</div>
-        <div class="game-meta">
-          <div class="game-title">Turbo Car Racer</div>
-          <div class="game-desc">Dodge traffic, coins & Nitro boost!</div>
-        </div>
-        <div class="game-arrow">➔</div>
+      <button type="button" class="game-tile" onclick="openGameScreen('car')">
+        <div class="tile-icon-box">🏎️</div>
+        <div class="tile-title">Turbo Racer</div>
+        <div class="tile-tag">Dodge & Nitro</div>
+        <div class="tile-play-btn">Play Now ▶</div>
       </button>
 
-      <!-- 5. Flappy Bird (With Real Bird) -->
-      <button type="button" class="game-card" onclick="openGameScreen('flappy')">
-        <div class="game-icon-box">🐦</div>
-        <div class="game-meta">
-          <div class="game-title">Flappy Bird Original</div>
-          <div class="game-desc">Tap to fly bird through pipes!</div>
-        </div>
-        <div class="game-arrow">➔</div>
+      <!-- 5. Flappy Bird -->
+      <button type="button" class="game-tile" onclick="openGameScreen('flappy')">
+        <div class="tile-icon-box">🐦</div>
+        <div class="tile-title">Flappy Bird</div>
+        <div class="tile-tag">Fly Through Pipes</div>
+        <div class="tile-play-btn">Play Now ▶</div>
       </button>
 
-      <!-- 6. Knife Hit / Dart Master -->
-      <button type="button" class="game-card" onclick="openGameScreen('knife')">
-        <div class="game-icon-box">🎯</div>
-        <div class="game-meta">
-          <div class="game-title">Knife Hit / Dart Master</div>
-          <div class="game-desc">Throw knives onto spinning board!</div>
-        </div>
-        <div class="game-arrow">➔</div>
+      <!-- 6. Knife Hit -->
+      <button type="button" class="game-tile" onclick="openGameScreen('knife')">
+        <div class="tile-icon-box">🎯</div>
+        <div class="tile-title">Knife Master</div>
+        <div class="tile-tag">Spinning Target</div>
+        <div class="tile-play-btn">Play Now ▶</div>
       </button>
     </div>
   </div>
@@ -1007,12 +1042,10 @@
       birdVel = -5.5;
     }
 
-    // AUTHENTIC VECTOR DRAWING OF FLAPPY BIRD (NOT A BALL!)
     function drawRealFlappyBird(x, y, vel) {
       flappyCtx.save();
       flappyCtx.translate(x, y);
 
-      // Tilt bird based on velocity
       let tilt = Math.max(-0.5, Math.min(0.7, vel * 0.1));
       flappyCtx.rotate(tilt);
 
@@ -1034,7 +1067,7 @@
       flappyCtx.fill();
       flappyCtx.stroke();
 
-      // Big Eye (White circle + black pupil)
+      // Eye
       flappyCtx.fillStyle = '#ffffff';
       flappyCtx.beginPath();
       flappyCtx.arc(7, -5, 5.5, 0, Math.PI * 2);
@@ -1046,7 +1079,7 @@
       flappyCtx.arc(9, -5, 2.5, 0, Math.PI * 2);
       flappyCtx.fill();
 
-      // Beak / Lips (Orange)
+      // Beak (Orange)
       flappyCtx.fillStyle = '#f97316';
       flappyCtx.beginPath();
       flappyCtx.moveTo(11, -1);
@@ -1079,10 +1112,9 @@
       flappyCtx.fillStyle = '#22c55e';
       for (let i = pipes.length - 1; i >= 0; i--) {
         const p = pipes[i]; p.x -= 2.2;
-        // Top pipe
         flappyCtx.fillRect(p.x, 0, 48, p.top);
         flappyCtx.strokeRect(p.x, 0, 48, p.top);
-        // Bottom pipe
+
         const bottomY = p.top + 120;
         flappyCtx.fillRect(p.x, bottomY, 48, flappyCanvas.height - bottomY);
         flappyCtx.strokeRect(p.x, bottomY, 48, flappyCanvas.height - bottomY);
@@ -1092,7 +1124,6 @@
           document.getElementById('flappy-score').textContent = flScore;
         }
 
-        // Collision Check
         if (60 + 14 > p.x && 60 - 14 < p.x + 48) {
           if (birdY - 12 < p.top || birdY + 12 > bottomY) isFlappyOver = true;
         }
@@ -1101,7 +1132,6 @@
 
       if (birdY < 0 || birdY > flappyCanvas.height) isFlappyOver = true;
 
-      // Draw the real Bird 🐦
       drawRealFlappyBird(60, birdY, birdVel);
 
       if (!isFlappyOver) {
