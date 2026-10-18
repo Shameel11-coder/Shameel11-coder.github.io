@@ -12,7 +12,8 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Shameel's Mega Arcade Zone 🎮</title>
+  <title>Shameel's Playzone 🎮</title>
+  <meta name="description" content="Shameel's Playzone - Play Tic-Tac-Toe, Flappy Bird, Turbo Car Racer, Knife Hit and more online mini games for free!">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -47,9 +48,7 @@
 
     .hidden { display: none !important; }
 
-    /* =========================================
-       5-SECOND WINNER MODAL
-    ========================================= */
+    /* 5-SECOND WINNER MODAL */
     #winner-modal {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -114,9 +113,7 @@
       to { width: 0%; }
     }
 
-    /* =========================================
-       MODERN ARCADE HUB SCREEN (2-COLUMN GRID)
-    ========================================= */
+    /* MODERN 2-COLUMN HUB */
     #hub-screen {
       width: 100%;
       max-width: 430px;
@@ -135,7 +132,7 @@
     }
 
     .hub-title {
-      font-size: 1.8rem;
+      font-size: 1.85rem;
       font-weight: 900;
       background: linear-gradient(135deg, #38bdf8 0%, #c084fc 50%, #f43f5e 100%);
       -webkit-background-clip: text;
@@ -158,7 +155,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* 2-Column Grid Layout */
     .game-grid {
       width: 100%;
       display: grid;
@@ -481,9 +477,7 @@
 </head>
 <body>
 
-  <!-- =========================================
-       5-SECOND WINNER MODAL
-  ========================================= -->
+  <!-- 5-SECOND WINNER MODAL -->
   <div id="winner-modal" class="hidden">
     <div class="modal-trophy">🏆</div>
     <div class="modal-headline">WINNER!</div>
@@ -492,12 +486,10 @@
     <div class="modal-timer-bar"><div class="modal-timer-fill"></div></div>
   </div>
 
-  <!-- =========================================
-       MODERN ARCADE HUB SCREEN (2-COLUMN GRID)
-  ========================================= -->
+  <!-- MODERN 2-COLUMN HUB -->
   <div id="hub-screen">
     <div class="hub-header">
-      <div class="hub-title">SHAMEEL MEGA ARCADE</div>
+      <div class="hub-title">SHAMEEL'S PLAYZONE</div>
       <div class="hub-badge">Select a Game to Play</div>
     </div>
 
@@ -552,9 +544,7 @@
     </div>
   </div>
 
-  <!-- =========================================
-       1. TIC TAC TOE SCREEN
-  ========================================= -->
+  <!-- 1. TIC TAC TOE SCREEN -->
   <div id="screen-ttt" class="play-screen hidden">
     <div class="play-navbar">
       <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
@@ -581,9 +571,7 @@
     </div>
   </div>
 
-  <!-- =========================================
-       2. MEMORY SCREEN
-  ========================================= -->
+  <!-- 2. MEMORY SCREEN -->
   <div id="screen-memory" class="play-screen hidden">
     <div class="play-navbar">
       <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
@@ -603,9 +591,7 @@
     <div class="memory-grid" id="mem-grid"></div>
   </div>
 
-  <!-- =========================================
-       3. ROCK PAPER SCISSORS SCREEN
-  ========================================= -->
+  <!-- 3. ROCK PAPER SCISSORS SCREEN -->
   <div id="screen-rps" class="play-screen hidden">
     <div class="play-navbar">
       <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
@@ -634,9 +620,7 @@
     </div>
   </div>
 
-  <!-- =========================================
-       4. TURBO CAR RACER SCREEN
-  ========================================= -->
+  <!-- 4. TURBO CAR RACER SCREEN -->
   <div id="screen-car" class="play-screen hidden">
     <div class="play-navbar">
       <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
@@ -651,9 +635,7 @@
     </div>
   </div>
 
-  <!-- =========================================
-       5. FLAPPY BIRD SCREEN (WITH REAL BIRD 🐦)
-  ========================================= -->
+  <!-- 5. FLAPPY BIRD SCREEN -->
   <div id="screen-flappy" class="play-screen hidden">
     <div class="play-navbar">
       <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
@@ -664,9 +646,7 @@
     <div style="font-size:0.75rem; color:#94a3b8; font-weight:600;">സ്ക്രീനിൽ ടാപ്പ് ചെയ്ത് പക്ഷിയെ പറത്തൂ! 🐦👆</div>
   </div>
 
-  <!-- =========================================
-       6. KNIFE HIT SCREEN
-  ========================================= -->
+  <!-- 6. KNIFE HIT SCREEN -->
   <div id="screen-knife" class="play-screen hidden">
     <div class="play-navbar">
       <button class="nav-btn" onclick="returnToHub()">🏠 Home</button>
@@ -678,9 +658,7 @@
   </div>
 
   <script>
-    /* =========================================
-       WINNER MODAL
-    ========================================= */
+    /* WINNER MODAL */
     let winModalTimer = null;
     function showWinnerModal(name, desc = "Kidilanaayi jayichu! 🎉") {
       const modal = document.getElementById('winner-modal');
@@ -698,9 +676,7 @@
       winModalTimer = setTimeout(() => { modal.classList.add('hidden'); }, 5000);
     }
 
-    /* =========================================
-       NAVIGATION LOGIC
-    ========================================= */
+    /* NAVIGATION LOGIC */
     const allScreens = ['hub-screen', 'screen-ttt', 'screen-memory', 'screen-rps', 'screen-car', 'screen-flappy', 'screen-knife'];
 
     function openGameScreen(id) {
@@ -735,9 +711,7 @@
       document.getElementById('hub-screen').classList.remove('hidden');
     }
 
-    /* =========================================
-       1. TIC TAC TOE
-    ========================================= */
+    /* 1. TIC TAC TOE */
     let tttMode = 'ai';
     let tttBoard = ["","","","","","","","",""];
     let tttTurn = "X";
@@ -799,7 +773,8 @@
       else if (wInfo.t === 'c') { const x = (wInfo.i === 0) ? w*0.19 : (wInfo.i === 1) ? w*0.5 : w*0.81; x1 = x; y1 = h*0.08; x2 = x; y2 = h*0.92; }
       else if (wInfo.t === 'd') { if (wInfo.i === 0) { x1 = w*0.1; y1 = h*0.1; x2 = w*0.9; y2 = h*0.9; } else { x1 = w*0.9; y1 = h*0.1; x2 = w*0.1; y2 = h*0.9; } }
       const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x1); line.setAttribute('y1', y1); line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+      line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
       line.setAttribute('class', 'strike-line');
       line.style.stroke = (p === 'X') ? '#38bdf8' : '#f43f5e';
       svg.appendChild(line);
@@ -840,9 +815,7 @@
       return empty[Math.floor(Math.random() * empty.length)];
     }
 
-    /* =========================================
-       2. MEMORY CARD GAME
-    ========================================= */
+    /* 2. MEMORY CARD GAME */
     const memIcons = ['🚀','⚽','💎','🎮','🔥','👑','🍕','🤖'];
     let memCards = [], memFlipped = [], memScores = { p1: 0, p2: 0 }, memTurn = 1, memMode = 'ai', memLock = false, aiMem = {};
 
@@ -913,9 +886,7 @@
       setTimeout(() => flipCard(un[1]), 500);
     }
 
-    /* =========================================
-       3. ROCK PAPER SCISSORS (FIRST TO 5)
-    ========================================= */
+    /* 3. ROCK PAPER SCISSORS */
     const rpsEmojis = { rock: '✊', paper: '✋', scissors: '✌️' };
     let rpsMode = 'ai', rpsScores = { p1: 0, draw: 0, p2: 0 }, rpsP1Choice = null;
 
@@ -975,9 +946,7 @@
       document.getElementById('rps-status').textContent = 'Aadyam 5 points nedunnavar jayikkum! 🏆';
     }
 
-    /* =========================================
-       4. TURBO CAR RACER
-    ========================================= */
+    /* 4. TURBO CAR RACER */
     const carCanvas = document.getElementById('car-canvas');
     const carCtx = carCanvas.getContext('2d');
     let carAnimId = null, carLane = 1, lanesX = [55, 170, 285], carScore = 0, carSpeed = 4.5, carEnemies = [], carCoins = [], roadY = 0, isCarOver = false;
@@ -1023,9 +992,7 @@
       if (!isCarOver) carAnimId = requestAnimationFrame(loopCar);
     }
 
-    /* =========================================
-       5. FLAPPY BIRD (AUTHENTIC BIRD GRAPHICS 🐦)
-    ========================================= */
+    /* 5. FLAPPY BIRD */
     const flappyCanvas = document.getElementById('flappy-canvas');
     const flappyCtx = flappyCanvas.getContext('2d');
     let flappyAnimId = null, birdY = 180, birdVel = 0, pipes = [], flScore = 0, isFlappyOver = false, wingAngle = 0;
@@ -1049,7 +1016,6 @@
       let tilt = Math.max(-0.5, Math.min(0.7, vel * 0.1));
       flappyCtx.rotate(tilt);
 
-      // Body (Yellow Oval)
       flappyCtx.fillStyle = '#facc15';
       flappyCtx.beginPath();
       flappyCtx.ellipse(0, 0, 16, 13, 0, 0, Math.PI * 2);
@@ -1058,7 +1024,6 @@
       flappyCtx.lineWidth = 1.5;
       flappyCtx.stroke();
 
-      // Wing (White & Orange)
       wingAngle += 0.2;
       let wingOffset = Math.sin(wingAngle) * 3;
       flappyCtx.fillStyle = '#ffffff';
@@ -1067,7 +1032,6 @@
       flappyCtx.fill();
       flappyCtx.stroke();
 
-      // Eye
       flappyCtx.fillStyle = '#ffffff';
       flappyCtx.beginPath();
       flappyCtx.arc(7, -5, 5.5, 0, Math.PI * 2);
@@ -1079,7 +1043,6 @@
       flappyCtx.arc(9, -5, 2.5, 0, Math.PI * 2);
       flappyCtx.fill();
 
-      // Beak (Orange)
       flappyCtx.fillStyle = '#f97316';
       flappyCtx.beginPath();
       flappyCtx.moveTo(11, -1);
@@ -1089,7 +1052,6 @@
       flappyCtx.fill();
       flappyCtx.stroke();
 
-      // Cheek blush
       flappyCtx.fillStyle = '#fb7185';
       flappyCtx.beginPath();
       flappyCtx.arc(3, 4, 3, 0, Math.PI * 2);
@@ -1147,9 +1109,7 @@
       }
     }
 
-    /* =========================================
-       6. KNIFE HIT / DART MASTER
-    ========================================= */
+    /* 6. KNIFE HIT */
     const knifeCanvas = document.getElementById('knife-canvas');
     const knifeCtx = knifeCanvas.getContext('2d');
     let knifeAnimId = null, tAngle = 0, kKnives = [], kLeft = 6, kStage = 1, kThrow = null, isKnifeOver = false;
